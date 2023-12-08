@@ -1,12 +1,12 @@
 CC=clang
 CFLAGS=-Wall -Wextra
-OBJS=hashmap.o
+OBJS=hashtable.o
 
 all: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) test.c -o test 
 
-hashmap.o:
-	$(CC) $(CFLAGS) -c hashmap.c -o hashmap.o
+hashtable.o:
+	$(CC) $(CFLAGS) -c hashtable.c -o hashtable.o
 
 clean:
 	rm -f *.o
