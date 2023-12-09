@@ -6,6 +6,7 @@
 #include "hashtable.h"
 
 // TODO: fix increasing table size when table grows, what to do when hash() % max_size changes?
+// TODO: generalize to support more types, unions?
 
 /**
  * djb2 hash function
@@ -55,7 +56,17 @@ void ht_free(ht *table) {
 
 void ht_print(ht *table) {
     for (size_t i = 0; i < table->max_entries; ++i) {
-        printf("[%zu]: key: %s, value: %s\n", i, table->entries[i]->key, table->entries[i]->value);
+        if (table->entries[i] == NULL) {
+            printf("[%zu]: --empty--\n", i);
+        } else {
+            ht_entry *entry = table->entries[i];
+            printf("[%zu]: key: %s, value: %s", i, entry->key, entry->value);
+            while (entry->next != NULL) {
+                entry = entry->next;
+                printf(" -> key: %s, value: %s", entry->key, entry->value);
+            }
+            putchar('\n');
+        }
     }
 }
 
@@ -78,12 +89,21 @@ char *ht_get(ht *table, char *key) {
 void ht_put(ht *table, char *key, char *value) {
     uint32_t hash_index = hash(key, strlen(key)) % table->max_entries;
     ht_entry *existing_entry = table->entries[hash_index];
-    if (existing_entry != NULL) {
+
+    if (existing_entry == NULL) {
+        ht_entry *new_entry = malloc(sizeof(ht_entry*));
+        new_entry->key = key;
+        new_entry->value = value;
+        table->entries[hash_index] = new_entry;
+        return;
+    }
+
+    if (existing_entry->key == key) {
         existing_entry->value = value;
     } else {
         ht_entry *new_entry = malloc(sizeof(ht_entry*));
         new_entry->key = key;
         new_entry->value = value;
-        table->entries[hash_index] = new_entry;
+        existing_entry->next = new_entry;
     }
 }
