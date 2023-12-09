@@ -1,24 +1,32 @@
 #include "hashtable.h"
+#include <assert.h>
 #include <stdio.h>
+#include <string.h>
+
+void test_hashtable() {
+    ht *table = ht_init(5);
+    ht_put(table, "asd", "YOYO");
+    assert(table->n_entries == 1);
+    ht_put(table, "asd", "YAYA");
+    assert(table->n_entries == 1);
+    ht_put(table, "qwerty", "123");
+    assert(table->n_entries == 2);
+    ht_put(table, "qwertz", "BABA");
+    assert(table->n_entries == 3);
+    ht_put(table, "qwertyb", "POPO");
+    assert(table->n_entries == 4);
+
+    ht_print(table);
+    printf("%d\n", table->n_entries);
+
+    assert(strcmp(ht_get(table, "asd"), "YAYA") == 0);
+    assert(strcmp(ht_get(table, "qwerty"), "123") == 0);
+    assert(strcmp(ht_get(table, "qwertz"), "BABA") == 0);
+    assert(table->max_entries == 10);
+
+    ht_free(table);
+}
 
 int main() {
-    ht *table = ht_init(1);
-    ht_print(table);
-    printf("---------------------\n");
-    ht_put(table, "ASD", "yoyo");
-    ht_print(table);
-    printf("---------------------\n");
-    ht_put(table, "ASD", "baba");
-    ht_print(table);
-    printf("---------------------\n");
-    ht_put(table, "gogo", "yoyo");
-    ht_print(table);
-    printf("---------------------\n");
-    ht_put(table, "popo", "yoyo");
-    char *res = ht_get(table, "ASD");
-    ht_print(table);
-    ht_expand(table);
-    printf("---------------------\n");
-    ht_print(table);
-    ht_free(table);
+    test_hashtable();
 }

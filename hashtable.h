@@ -5,7 +5,6 @@
 typedef struct ht_entry {
     char *key;
     char *value;
-    struct ht_entry *next;
 } ht_entry;
 
 typedef struct ht {
@@ -14,8 +13,7 @@ typedef struct ht {
     uint32_t max_entries;
 } ht;
 
-
-uint32_t hash(char *key, uint32_t key_size);
+uint32_t hash(char *key);
 ht *ht_init(uint32_t init_size);
 void ht_free(ht *table);
 void ht_expand(ht *table);
