@@ -7,11 +7,12 @@
 
 // TODO: fix increasing table size when table grows, what to do when hash() % max_size changes?
 // TODO: generalize to support more types, unions?
+// TODO: remove strlen calls
 
 /**
  * djb2 hash function
  *
- * @return index into a hash table
+ * @return index into a hash table (needs to be %'d by table size)
  */
 uint32_t hash(char *key, uint32_t key_size) {
     uint32_t hash = 5381;
@@ -54,6 +55,35 @@ void ht_free(ht *table) {
     free(table);
 }
 
+/**
+ * Doubles the size of a hash table
+ *
+ * @param table hash table to expand the size of
+ */
+void ht_expand(ht *table) {
+    uint32_t new_max_entries = table->max_entries * 2;
+    table->entries = realloc(table->entries, sizeof(ht_entry *) * new_max_entries);
+
+    // Loop through table and reindex based on new size
+    for (size_t i = 0; i < table->max_entries; ++i) {
+        if (table->entries[i] == NULL) {
+            continue;
+        }
+
+        ht_entry *entry = table->entries[i];
+        table->entries[i] = NULL; // TODO: memory management
+        while (entry != NULL) {
+            uint32_t new_index = hash(entry->key, strlen(entry->key)) % new_max_entries;
+            table->entries[new_index] = entry;
+            ht_entry *next = entry->next;
+            entry->next = NULL;
+            entry = next;
+        }
+    }
+
+    table->max_entries = new_max_entries;
+}
+
 void ht_print(ht *table) {
     for (size_t i = 0; i < table->max_entries; ++i) {
         if (table->entries[i] == NULL) {
@@ -87,6 +117,10 @@ char *ht_get(ht *table, char *key) {
 }
 
 void ht_put(ht *table, char *key, char *value) {
+    if (++table->n_entries > table->max_entries / 2) {
+        ht_expand(table);
+    }
+
     uint32_t hash_index = hash(key, strlen(key)) % table->max_entries;
     ht_entry *existing_entry = table->entries[hash_index];
 
