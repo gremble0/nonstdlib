@@ -2,7 +2,7 @@ CC=clang
 CFLAGS=-Wall -Wextra
 OBJS=hashtable.o
 
-all: $(OBJS)
+all: clean $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) test.c -o test 
 
 hashtable.o:

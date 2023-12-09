@@ -1,8 +1,8 @@
-#include <stdint.h>
-#include <stdio.h>
-
-extern uint32_t djb2(char *key, uint32_t key_size);
+#include "hashtable.h"
 
 int main() {
-    printf("hello world %d\n", djb2("yo", 2));
+    ht *table = ht_init(10000);
+    ht_put(table, "ASD", "yoyo");
+    char *res = ht_get(table, "ASD");
+    ht_free(table);
 }
