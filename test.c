@@ -79,6 +79,19 @@ void test_stack(void) {
     free(val1);
     free(val2);
     free(val3);
+
+    char *val4 = malloc(sizeof(char));
+    uint64_t *val5 = malloc(sizeof(uint64_t));
+    *val4 = 't';
+    *val5 = 1000;
+    stack_push(s, val4);
+    stack_push(s, val5);
+    
+    assert(*(uint64_t *)stack_pop(s) == 1000);
+    assert(*(char *)stack_pop(s) == 't');
+
+    free(val4);
+    free(val5);
     stack_free(s);
 }
 
