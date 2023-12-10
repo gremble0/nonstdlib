@@ -46,12 +46,34 @@ iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh"
 
 void test_stack(void) {
     stack *s = stack_init();
-    uint32_t *val = malloc(sizeof(uint32_t));
-    *val = 4;
-    stack_push(s, val);
-    printf("%u\n", s->size);
-    stack_pop(s);
-    printf("%u\n", s->size);
+
+    uint32_t *val1 = malloc(sizeof(uint32_t));
+    uint32_t *val2 = malloc(sizeof(uint32_t));
+    uint32_t *val3 = malloc(sizeof(uint32_t));
+    *val1 = 1;
+    *val2 = 2;
+    *val3 = 3;
+    stack_push(s, val1);
+    stack_push(s, val2);
+    stack_push(s, val3);
+
+    assert(s->size == 3);
+    assert(*(uint32_t *)stack_get(s, 0) == 3);
+    assert(*(uint32_t *)stack_get(s, 1) == 2);
+    assert(*(uint32_t *)stack_get(s, 2) == 1);
+
+    val1 = stack_pop(s);
+    val2 = stack_pop(s);
+    val3 = stack_pop(s);
+    assert(*val1 == 3);
+    assert(*val2 == 2);
+    assert(*val3 == 1);
+    assert(stack_pop(s) == NULL);
+
+    free(val1);
+    free(val2);
+    free(val3);
+    stack_free(s);
 }
 
 int main() {

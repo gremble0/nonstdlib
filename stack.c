@@ -22,20 +22,38 @@ stack *stack_init(void) {
  * @param s stack to free allocated memory for
  */
 void stack_free(stack *s) {
+    if (s->size == 0) {
+        free(s);
+        return;
+    }
+
     stack_entry *entry = s->first;
     while (entry->next != NULL) {
         stack_entry *next = entry->next;
-        free(entry);
         free(entry->value);
+        free(entry);
         entry = next;
     }
 
-    free(entry);
     free(s);
 }
 
 /**
- * Pops first entry off the stack and returns it
+ * Prints contents of given stack to stdout
+ *
+ * @param s stack to get contents from
+ */
+void stack_print(stack *s) {
+    stack_entry *entry = s->first;
+    uint32_t index = 0;
+    while (entry != NULL) {
+        printf("[%u]: %p\n", index++, entry->value);
+        entry = entry->next;
+    }
+}
+
+/**
+ * Pops first entry off the stack and returns it. Returned value needs to be freed
  *
  * @param s stack to pop from
  */
@@ -43,10 +61,12 @@ void *stack_pop(stack *s) {
     if (s->size == 0) {
         return NULL;
     }
+
     stack_entry *popped = s->first;
     s->first = s->first->next;
     --s->size;
-    return popped;
+    free(popped);
+    return popped->value;
 }
 
 /**
