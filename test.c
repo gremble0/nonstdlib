@@ -62,12 +62,18 @@ void test_stack(void) {
     assert(*(uint32_t *)stack_get(s, 1) == 2);
     assert(*(uint32_t *)stack_get(s, 2) == 1);
 
-    val1 = stack_pop(s);
-    val2 = stack_pop(s);
-    val3 = stack_pop(s);
-    assert(*val1 == 3);
-    assert(*val2 == 2);
-    assert(*val3 == 1);
+    uint32_t *popped1 = stack_pop(s);
+    uint32_t *popped2 = stack_pop(s);
+    uint32_t *popped3 = stack_pop(s);
+
+    assert(s->size == 0);
+    assert(*popped1 == 3);
+    assert(*popped2 == 2);
+    assert(*popped3 == 1);
+
+    assert(popped3 == val1);
+    assert(popped2 == val2);
+    assert(popped1 == val3);
     assert(stack_pop(s) == NULL);
 
     free(val1);

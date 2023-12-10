@@ -45,6 +45,11 @@ void stack_free(stack *s) {
  */
 void stack_print(stack *s) {
     stack_entry *entry = s->first;
+    if (s->size == 0) {
+        printf("--empty stack--\n");
+        return;
+    }
+
     uint32_t index = 0;
     while (entry != NULL) {
         printf("[%u]: %p\n", index++, entry->value);
@@ -63,10 +68,11 @@ void *stack_pop(stack *s) {
     }
 
     stack_entry *popped = s->first;
-    s->first = s->first->next;
+    void *ret = popped->value;
+    s->first = popped->next;
     --s->size;
     free(popped);
-    return popped->value;
+    return ret;
 }
 
 /**
