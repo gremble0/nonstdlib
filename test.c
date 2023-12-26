@@ -5,6 +5,7 @@
 
 #include "stack.h"
 #include "hashtable.h"
+#include "quicksort.h"
 
 void test_hashtable(void) {
     ht *table = ht_init(5);
@@ -39,7 +40,6 @@ hfruilwehrfiluaweriulhweuirlhweiurhuweuiruhiweuhruqwueirlweihfilweufqwelfhiuweih
 iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh");
     assert(table->n_entries == 6);
     assert(table->max_entries == 20);
-    ht_print(table);
 
     ht_free(table);
 }
@@ -95,7 +95,13 @@ void test_stack(void) {
     stack_free(s);
 }
 
+void test_quicksort() {
+    int nums[] = { 4, 2, 1, 3, 99 };
+    quicksort(nums, sizeof(nums)/sizeof(nums[0]));
+}
+
 int main() {
-    // test_hashtable();
+    test_hashtable();
     test_stack();
+    test_quicksort();
 }
