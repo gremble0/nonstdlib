@@ -95,7 +95,7 @@ void test_stack(void) {
     stack_free(s);
 }
 
-void test_quicksort() {
+void test_quicksort(void) {
     int nums[] = { 7, 2, 1, 6, 8, 5, 3, 4 };
     const int nums_size = sizeof(nums)/sizeof(nums[0]);
     int sorted[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -121,7 +121,7 @@ void test_quicksort() {
     }
 }
 
-void test_bubblesort() {
+void test_bubblesort(void) {
     int nums[] = { 5, 1, 4, 2, 8 };
     const int nums_size = sizeof(nums)/sizeof(nums[0]);
     int sorted[] = { 1, 2, 4, 5, 8 };
@@ -141,12 +141,12 @@ void test_bubblesort() {
     }
 }
 
-void test_sort() {
+void test_sort(void) {
     test_quicksort();
     test_bubblesort();
 }
 
-int main() {
+int main(void) {
     test_hashtable();
     test_stack();
     test_sort();
