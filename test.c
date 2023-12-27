@@ -96,8 +96,29 @@ void test_stack(void) {
 }
 
 void test_quicksort() {
-    int nums[] = { 4, 2, 1, 3, 99 };
-    quicksort(nums, sizeof(nums)/sizeof(nums[0]));
+    int nums[] = { 7, 2, 1, 6, 8, 5, 3, 4 };
+    const int nums_size = sizeof(nums)/sizeof(nums[0]);
+    int sorted[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+    int nums2[] = { 5555, 1, 22, 421, 0, 155, -14, -95 };
+    const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
+    int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
+
+    swap(nums, 0, 4);
+    int swapped[] = { 8, 2, 1, 6, 7, 5, 3, 4 };
+    for (int i = 0; i < nums_size; i++) {
+        assert(nums[i] == swapped[i]);
+    }
+
+    quicksort(nums, nums_size);
+    for (int i = 0; i < nums_size; i++) {
+        assert(nums[i] == sorted[i]);
+    }
+
+    quicksort(nums2, nums2_size);
+    for (int i = 0; i < nums2_size; i++) {
+        assert(nums2[i] == sorted2[i]);
+    }
 }
 
 int main() {
