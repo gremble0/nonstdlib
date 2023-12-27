@@ -14,18 +14,6 @@ void swap(int buf[], int i, int j) {
 }
 
 /**
- * Wrapper function around the actual implementation of the quicksort algorithm
- * so that consumers don't need to specify the initial start value which is
- * always zero
- *
- * @param buf     array to be sorted
- * @param bufsize size of the array to sort
- */
-void quicksort(int buf[], int bufsize) {
-    quicksort_impl(buf, 0, bufsize);
-}
-
-/**
  * Recursive implementation of the quicksort algorithm
  *
  * @param buf   array to sort
@@ -60,6 +48,18 @@ void quicksort_impl(int buf[], int start, int end) {
         quicksort_impl(buf, start, left_i);
         quicksort_impl(buf, left_i + 1, end);
     }
+}
+
+/**
+ * Wrapper function around the actual implementation of the quicksort algorithm
+ * so that consumers don't need to specify the initial start value which is
+ * always zero
+ *
+ * @param buf     array to be sorted
+ * @param bufsize size of the array to sort
+ */
+void quicksort(int buf[], int bufsize) {
+    quicksort_impl(buf, 0, bufsize);
 }
 
 /**
