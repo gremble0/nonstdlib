@@ -5,7 +5,7 @@
 
 #include "stack.h"
 #include "hashtable.h"
-#include "quicksort.h"
+#include "sort.h"
 
 void test_hashtable(void) {
     ht *table = ht_init(5);

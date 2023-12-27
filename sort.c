@@ -1,5 +1,4 @@
-#include "quicksort.h"
-#include <stdio.h>
+#include "sort.h"
 
 /**
  * Helper function to swap 2 elements in an array
@@ -63,6 +62,10 @@ void quicksort_impl(int buf[], int start, int end) {
     }
 }
 
+/**
+ * @param buf     array to be sorted
+ * @param bufsize size of the array to sort
+ */
 void bubblesort(int buf[], int bufsize) {
     char swapped = 0;
     // Loop through each number
