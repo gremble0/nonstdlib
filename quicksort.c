@@ -1,4 +1,18 @@
 #include "quicksort.h"
+#include <stdio.h>
+
+/**
+ * Helper function to swap 2 elements in an array
+ *
+ * @param buf array to swap elements in
+ * @param i   index of first element to swap
+ * @param j   index of second element to swap
+ */
+void swap(int buf[], int i, int j) {
+    int at_i = buf[i];
+    buf[i] = buf[j];
+    buf[j] = at_i;
+}
 
 /**
  * Wrapper function around the actual implementation of the quicksort algorithm
@@ -49,15 +63,21 @@ void quicksort_impl(int buf[], int start, int end) {
     }
 }
 
-/**
- * Helper function to swap 2 elements in an array
- *
- * @param buf array to swap elements in
- * @param i   index of first element to swap
- * @param j   index of second element to swap
- */
-void swap(int buf[], int i, int j) {
-    int at_i = buf[i];
-    buf[i] = buf[j];
-    buf[j] = at_i;
+void bubblesort(int buf[], int bufsize) {
+    char swapped = 0;
+    // Loop through each number
+    for (int i = 0; i < bufsize - 1; i++) {
+        // Propogate as far down the array as we can one index at a time
+        for (int j = i; j < bufsize - 1 && buf[j] > buf[j + 1]; j++) {
+            swap(buf, j, j + 1);
+            swapped = 1;
+        }
+    }
+
+    if (swapped) {
+        // After one full iteration of the array, we know we have moved at least one
+        // element to the end of the array, so we can decrement the bufsize for the
+        // next recursive call
+        bubblesort(buf, bufsize - 1);
+    }
 }

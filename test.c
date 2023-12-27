@@ -121,8 +121,29 @@ void test_quicksort() {
     }
 }
 
+void test_bubblesort() {
+    int nums[] = { 5, 1, 4, 2, 8 };
+    const int nums_size = sizeof(nums)/sizeof(nums[0]);
+    int sorted[] = { 1, 2, 4, 5, 8 };
+
+    int nums2[] = { 5555, 1, 22, 421, 0, 155, -14, -95 };
+    const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
+    int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
+
+    bubblesort(nums, nums_size);
+    for (int i = 0; i < nums_size; i++) {
+        assert(nums[i] == sorted[i]);
+    }
+
+    bubblesort(nums2, nums2_size);
+    for (int i = 0; i < nums2_size; i++) {
+        assert(nums2[i] == sorted2[i]);
+    }
+}
+
 int main() {
     test_hashtable();
     test_stack();
     test_quicksort();
+    test_bubblesort();
 }
