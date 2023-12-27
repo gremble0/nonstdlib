@@ -89,7 +89,7 @@ void bubblesort(int buf[], int bufsize) {
     for (int i = 0; i < bufsize - 1; i++) {
         // Propogate as far down the array as we can one index at a time
         // (We could also use an if test to only swap once, but then we would
-        // just have to do more recusrive calls instead)
+        // just have to do more recursive calls instead)
         for (int j = i; j < bufsize - 1 && buf[j] > buf[j + 1]; j++) {
             swap(buf, j, j + 1);
             swapped = 1;

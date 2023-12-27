@@ -28,11 +28,11 @@ uint32_t hash(char *key) {
  * @param init_size the initial size of the hash table, can be changed by ht_put
  * @return a malloc'd hash table
  */
-ht *ht_init(uint32_t init_max_entries) {
-    ht *new_ht = malloc(sizeof(ht));
+ht_t *ht_init(uint32_t init_max_entries) {
+    ht_t *new_ht = malloc(sizeof(ht_t));
     new_ht->n_entries = 0;
     new_ht->max_entries = init_max_entries;
-    new_ht->entries = malloc(sizeof(ht_entry) * init_max_entries);
+    new_ht->entries = malloc(sizeof(htentry_t) * init_max_entries);
 
     for (size_t i = 0; i < init_max_entries; ++i) {
         new_ht->entries[i] = NULL;
@@ -46,7 +46,7 @@ ht *ht_init(uint32_t init_max_entries) {
  *
  * @param table table to free memory for
  */
-void ht_free(ht *table) {
+void ht_free(ht_t *table) {
     for (size_t i = 0; i < table->max_entries; ++i) {
         free(table->entries[i]);
     }
@@ -60,10 +60,10 @@ void ht_free(ht *table) {
  *
  * @param table hash table to expand the size of
  */
-void ht_expand(ht *table) {
+void ht_expand(ht_t *table) {
     uint32_t prev_max_entries = table->max_entries;
     table->max_entries *= 2;
-    table->entries = realloc(table->entries, sizeof(ht_entry) * table->max_entries);
+    table->entries = realloc(table->entries, sizeof(htentry_t) * table->max_entries);
     table->n_entries = 0; // Will be incremented in the loop by calling ht_put
 
     // Loop through table and reindex based on new size
@@ -72,26 +72,26 @@ void ht_expand(ht *table) {
             continue;
         }
 
-        ht_entry *entry = table->entries[i];
+        htentry_t *entry = table->entries[i];
         table->entries[i] = NULL; // TODO: memory management
         ht_put(table, entry->key, entry->value);
     }
 }
 
-void ht_print(ht *table) {
+void ht_print(ht_t *table) {
     for (size_t i = 0; i < table->max_entries; ++i) {
         if (table->entries[i] == NULL) {
             printf("[%zu]: --empty--\n", i);
         } else {
-            ht_entry *entry = table->entries[i];
+            htentry_t *entry = table->entries[i];
             printf("[%zu]: key: %s, value: %s\n", i, entry->key, entry->value);
         }
     }
 }
 
-char *ht_get(ht *table, char *key) {
+char *ht_get(ht_t *table, char *key) {
     uint32_t index = hash(key) % table->max_entries;
-    ht_entry *entry = table->entries[index];
+    htentry_t *entry = table->entries[index];
     if (entry == NULL) {
         return NULL;
     }
@@ -106,16 +106,16 @@ char *ht_get(ht *table, char *key) {
     return entry->value;
 }
 
-void ht_put(ht *table, char *key, char *value) {
+void ht_put(ht_t *table, char *key, char *value) {
     if (table->n_entries + 1 > table->max_entries / 2) {
         ht_expand(table);
     }
 
     uint32_t hash_index = hash(key) % table->max_entries;
-    ht_entry *existing_entry = table->entries[hash_index];
+    htentry_t *existing_entry = table->entries[hash_index];
 
     if (existing_entry == NULL) {
-        ht_entry *new_entry = malloc(sizeof(ht_entry));
+        htentry_t *new_entry = malloc(sizeof(htentry_t));
         new_entry->key = key;
         new_entry->value = value;
         table->entries[hash_index] = new_entry;
@@ -128,7 +128,7 @@ void ht_put(ht *table, char *key, char *value) {
         return;
     }
 
-    ht_entry *new_entry = malloc(sizeof(ht_entry));
+    htentry_t *new_entry = malloc(sizeof(htentry_t));
     new_entry->key = key;
     new_entry->value = value;
 

@@ -5,18 +5,20 @@
 typedef struct ht_entry {
     char *key;
     char *value;
-} ht_entry;
+} htentry_t;
 
 typedef struct ht {
-    ht_entry **entries;
+    htentry_t **entries;
     uint32_t n_entries;
     uint32_t max_entries;
-} ht;
+} ht_t;
+
+ht_t *ht_init(uint32_t init_size);
+void ht_free(ht_t *table);
+
+char *ht_get(ht_t *table, char *key);
+void ht_put(ht_t *table, char *key, char *value);
+void ht_print(ht_t *table);
 
 uint32_t hash(char *key);
-ht *ht_init(uint32_t init_size);
-void ht_free(ht *table);
-void ht_expand(ht *table);
-void ht_print(ht *table);
-char *ht_get(ht *table, char *key);
-void ht_put(ht *table, char *key, char *value);
+void ht_expand(ht_t *table);

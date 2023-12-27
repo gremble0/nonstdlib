@@ -8,7 +8,7 @@
 #include "sort.h"
 
 void test_hashtable(void) {
-    ht *table = ht_init(5);
+    ht_t *table = ht_init(5);
     ht_put(table, "asd", "YOYO");
     assert(table->n_entries == 1);
     ht_put(table, "asd", "YAYA");
@@ -104,12 +104,6 @@ void test_quicksort(void) {
     const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
     int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
 
-    swap(nums, 0, 4);
-    int swapped[] = { 8, 2, 1, 6, 7, 5, 3, 4 };
-    for (int i = 0; i < nums_size; i++) {
-        assert(nums[i] == swapped[i]);
-    }
-
     sort(nums, nums_size, QUICKSORT);
     for (int i = 0; i < nums_size; i++) {
         assert(nums[i] == sorted[i]);
@@ -142,6 +136,21 @@ void test_bubblesort(void) {
 }
 
 void test_sort(void) {
+    int nums[] = { 7, 2, 1, 6, 8, 5, 3, 4 };
+    const int nums_size = sizeof(nums)/sizeof(nums[0]);
+
+    swap(nums, 0, 4);
+    int swapped[] = { 8, 2, 1, 6, 7, 5, 3, 4 };
+    for (int i = 0; i < nums_size; i++) {
+        assert(nums[i] == swapped[i]);
+    }
+
+    swap(nums, 0, nums_size - 1);
+    int swapped2[] = { 4, 2, 1, 6, 7, 5, 3, 8 };
+    for (int i = 0; i < nums_size; i++) {
+        assert(nums[i] == swapped2[i]);
+    }
+
     test_quicksort();
     test_bubblesort();
 }
