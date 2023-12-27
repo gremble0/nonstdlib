@@ -1,5 +1,10 @@
 #include "sort.h"
 
+/**
+ * @param buf     array to sort
+ * @param bufsize size of array to sort
+ * @param sa      what sorting algorithm to use for sorting
+ */
 void sort(int buf[], int bufsize, sorting_algorithm sa) {
     switch (sa) {
     case BUBBLESORT:
@@ -43,16 +48,19 @@ void quicksort_impl(int buf[], int start, int end) {
     while (buf[left_i] < pivot) {
         left_i++;
     }
-
-    // Increment right_i until buf[right_i] is less than pivot
+    // Decrement right_i until buf[right_i] is less than pivot
     while (buf[right_i] > pivot) {
         right_i--;
     }
 
     if (left_i < right_i) {
+        // If left_i < right_i there are still more elements smaller than the pivot
+        // that need to be moved to the front of the array
         swap(buf, left_i, right_i);
         quicksort_impl(buf, start, end);
     } else {
+        // Otherwise we are done with this partition and we continue splitting
+        // the array into 2 new partitions and sort them
         swap(buf, left_i, end - 1); // swap left with pivot
         quicksort_impl(buf, start, left_i);
         quicksort_impl(buf, left_i + 1, end);
@@ -80,6 +88,8 @@ void bubblesort(int buf[], int bufsize) {
     // Loop through each number
     for (int i = 0; i < bufsize - 1; i++) {
         // Propogate as far down the array as we can one index at a time
+        // (We could also use an if test to only swap once, but then we would
+        // just have to do more recusrive calls instead)
         for (int j = i; j < bufsize - 1 && buf[j] > buf[j + 1]; j++) {
             swap(buf, j, j + 1);
             swapped = 1;
