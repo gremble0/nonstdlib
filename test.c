@@ -110,12 +110,12 @@ void test_quicksort() {
         assert(nums[i] == swapped[i]);
     }
 
-    quicksort(nums, nums_size);
+    sort(nums, nums_size, QUICKSORT);
     for (int i = 0; i < nums_size; i++) {
         assert(nums[i] == sorted[i]);
     }
 
-    quicksort(nums2, nums2_size);
+    sort(nums2, nums2_size, QUICKSORT);
     for (int i = 0; i < nums2_size; i++) {
         assert(nums2[i] == sorted2[i]);
     }
@@ -130,20 +130,24 @@ void test_bubblesort() {
     const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
     int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
 
-    bubblesort(nums, nums_size);
+    sort(nums, nums_size, BUBBLESORT);
     for (int i = 0; i < nums_size; i++) {
         assert(nums[i] == sorted[i]);
     }
 
-    bubblesort(nums2, nums2_size);
+    sort(nums2, nums2_size, BUBBLESORT);
     for (int i = 0; i < nums2_size; i++) {
         assert(nums2[i] == sorted2[i]);
     }
 }
 
+void test_sort() {
+    test_quicksort();
+    test_bubblesort();
+}
+
 int main() {
     test_hashtable();
     test_stack();
-    test_quicksort();
-    test_bubblesort();
+    test_sort();
 }

@@ -1,5 +1,14 @@
 #include "sort.h"
 
+void sort(int buf[], int bufsize, sorting_algorithm sa) {
+    switch (sa) {
+    case BUBBLESORT:
+        bubblesort(buf, bufsize);
+    case QUICKSORT:
+        quicksort(buf, bufsize);
+    }
+}
+
 /**
  * Helper function to swap 2 elements in an array
  *
