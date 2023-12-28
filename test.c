@@ -42,6 +42,10 @@ iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh"
     assert(table->max_entries == 20);
 
     ht_free(table);
+
+    printf("------------------------------------------\n");
+    printf("\033[0;32mAll hash table data structure tests passed\033[0;37m\n");
+    printf("------------------------------------------\n");
 }
 
 void test_stack(void) {
@@ -93,30 +97,13 @@ void test_stack(void) {
     free(val4);
     free(val5);
     stack_free(s);
+
+    printf("------------------------------------------\n");
+    printf("\033[0;32mAll stack data structure tests passed\033[0;37m\n");
+    printf("------------------------------------------\n");
 }
 
-// TODO generic sorting test function
-void test_quicksort(void) {
-    int nums[] = { 7, 2, 1, 6, 8, 5, 3, 4 };
-    const int nums_size = sizeof(nums)/sizeof(nums[0]);
-    int sorted[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-
-    int nums2[] = { 5555, 1, 22, 421, 0, 155, -14, -95 };
-    const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
-    int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
-
-    sort(nums, nums_size, QUICKSORT);
-    for (int i = 0; i < nums_size; i++) {
-        assert(nums[i] == sorted[i]);
-    }
-
-    sort(nums2, nums2_size, QUICKSORT);
-    for (int i = 0; i < nums2_size; i++) {
-        assert(nums2[i] == sorted2[i]);
-    }
-}
-
-void test_bubblesort(void) {
+void test_sort(sorting_algorithm sa) {
     int nums[] = { 5, 1, 4, 2, 8 };
     const int nums_size = sizeof(nums)/sizeof(nums[0]);
     int sorted[] = { 1, 2, 4, 5, 8 };
@@ -125,58 +112,29 @@ void test_bubblesort(void) {
     const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
     int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
 
-    sort(nums, nums_size, BUBBLESORT);
+    // int nums3[] = { 1, 1, 2 };
+    // const int nums3_size = sizeof(nums3)/sizeof(nums3[0]);
+    // int sorted3[] = { 1, 1, 2 };
+
+    sort(nums, nums_size, sa);
     for (int i = 0; i < nums_size; i++) {
         assert(nums[i] == sorted[i]);
     }
 
-    sort(nums2, nums2_size, BUBBLESORT);
+    sort(nums2, nums2_size, sa);
     for (int i = 0; i < nums2_size; i++) {
         assert(nums2[i] == sorted2[i]);
     }
+
+    // sort(nums3, nums3_size, sa);
+    // for (int i = 0; i < nums3_size; i++) {
+    //     assert(nums3[i] == sorted3[i]);
+    // }
+
+    printf("\033[0;32mTest successful for sorting algorithm %d\033[0;37m\n", sa);
 }
 
-void test_insertionsort(void) {
-    int nums[] = { 5, 1, 4, 2, 8 };
-    const int nums_size = sizeof(nums)/sizeof(nums[0]);
-    int sorted[] = { 1, 2, 4, 5, 8 };
-
-    int nums2[] = { 5555, 1, 22, 421, 0, 155, -14, -95 };
-    const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
-    int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
-
-    sort(nums, nums_size, INSERTIONSORT);
-    for (int i = 0; i < nums_size; i++) {
-        assert(nums[i] == sorted[i]);
-    }
-
-    sort(nums2, nums2_size, INSERTIONSORT);
-    for (int i = 0; i < nums2_size; i++) {
-        assert(nums2[i] == sorted2[i]);
-    }
-}
-
-void test_selectionsort(void) {
-    int nums[] = { 5, 1, 4, 2, 8 };
-    const int nums_size = sizeof(nums)/sizeof(nums[0]);
-    int sorted[] = { 1, 2, 4, 5, 8 };
-
-    int nums2[] = { 5555, 1, 22, 421, 0, 155, -14, -95 };
-    const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
-    int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
-
-    sort(nums, nums_size, SELECTIONSORT);
-    for (int i = 0; i < nums_size; i++) {
-        assert(nums[i] == sorted[i]);
-    }
-
-    sort(nums2, nums2_size, SELECTIONSORT);
-    for (int i = 0; i < nums2_size; i++) {
-        assert(nums2[i] == sorted2[i]);
-    }
-}
-
-void test_sort(void) {
+void test_all_sorts(void) {
     int nums[] = { 7, 2, 1, 6, 8, 5, 3, 4 };
     const int nums_size = sizeof(nums)/sizeof(nums[0]);
 
@@ -192,14 +150,17 @@ void test_sort(void) {
         assert(nums[i] == swapped2[i]);
     }
 
-    test_quicksort();
-    test_bubblesort();
-    test_insertionsort();
-    test_selectionsort();
+    for (int i = 0; i < NUM_SORT_ALGOS; ++i) {
+        test_sort(i);
+    }
+
+    printf("------------------------------------------\n");
+    printf("\033[0;32mAll sorting algorithms tests passed\033[0;37m\n");
+    printf("------------------------------------------\n");
 }
 
 int main(void) {
     test_hashtable();
     test_stack();
-    test_sort();
+    test_all_sorts();
 }

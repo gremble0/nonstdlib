@@ -5,6 +5,9 @@ typedef enum {
     BUBBLESORT,
     INSERTIONSORT,
     SELECTIONSORT,
+
+    // Just to emulate a foreach
+    NUM_SORT_ALGOS,
 } sorting_algorithm;
 
 void sort(int buf[], int bufsize, sorting_algorithm sa);
