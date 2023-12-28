@@ -16,6 +16,9 @@ void sort(int buf[], int bufsize, sorting_algorithm sa) {
     case INSERTIONSORT:
         insertionsort(buf, bufsize);
         break;
+    case SELECTIONSORT:
+        selectionsort(buf, bufsize);
+        break;
     }
 }
 
@@ -119,5 +122,23 @@ void insertionsort(int buf[], int bufsize) {
         for (int j = i; buf[j - 1] > buf[j] && j > 0; --j) {
             swap(buf, j - 1, j);
         }
+    }
+}
+
+/**
+ * @param buf     array to be sorted
+ * @param bufsize size of the array to sort
+ */
+void selectionsort(int buf[], int bufsize) {
+    // Index of smallest number seen in current iteration
+    int min_i = 0;
+    for (int i = 0; i < bufsize;) {
+        for (int j = i; j < bufsize; ++j) {
+            if (buf[j] < buf[min_i]) {
+                min_i = j;
+            }
+        }
+        swap(buf, min_i, i);
+        min_i = ++i;
     }
 }
