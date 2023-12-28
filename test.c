@@ -8,6 +8,8 @@
 #include "sort.h"
 
 void test_hashtable(void) {
+    printf("Testing hash table data structure...\n");
+
     ht_t *table = ht_init(5);
     ht_put(table, "asd", "YOYO");
     assert(table->n_entries == 1);
@@ -43,12 +45,11 @@ iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh"
 
     ht_free(table);
 
-    printf("------------------------------------------\n");
     printf("\033[0;32mAll hash table data structure tests passed\033[0;37m\n");
-    printf("------------------------------------------\n");
 }
 
 void test_stack(void) {
+    printf("Testing stack data structure...\n");
     stack *s = stack_init();
 
     uint32_t *val1 = malloc(sizeof(uint32_t));
@@ -98,9 +99,7 @@ void test_stack(void) {
     free(val5);
     stack_free(s);
 
-    printf("------------------------------------------\n");
     printf("\033[0;32mAll stack data structure tests passed\033[0;37m\n");
-    printf("------------------------------------------\n");
 }
 
 void test_sort(sorting_algorithm sa) {
@@ -135,6 +134,7 @@ void test_sort(sorting_algorithm sa) {
 }
 
 void test_all_sorts(void) {
+    printf("Testing sorting algorithms...\n");
     int nums[] = { 7, 2, 1, 6, 8, 5, 3, 4 };
     const int nums_size = sizeof(nums)/sizeof(nums[0]);
 
@@ -154,13 +154,15 @@ void test_all_sorts(void) {
         test_sort(i);
     }
 
-    printf("------------------------------------------\n");
     printf("\033[0;32mAll sorting algorithms tests passed\033[0;37m\n");
-    printf("------------------------------------------\n");
 }
 
 int main(void) {
+    printf("------------------------------------------\n");
     test_hashtable();
+    printf("------------------------------------------\n");
     test_stack();
+    printf("------------------------------------------\n");
     test_all_sorts();
+    printf("------------------------------------------\n");
 }
