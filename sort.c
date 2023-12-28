@@ -51,11 +51,11 @@ void quicksort_impl(int buf[], int start, int end) {
     int left_i = 0, right_i = end - 1;
     // Increment left_i until buf[left_i] is greater than pivot
     while (buf[left_i] < pivot) {
-        left_i++;
+        ++left_i;
     }
     // Decrement right_i until buf[right_i] is less than pivot
     while (buf[right_i] > pivot) {
-        right_i--;
+        --right_i;
     }
 
     if (left_i < right_i) {
@@ -91,11 +91,11 @@ void quicksort(int buf[], int bufsize) {
 void bubblesort(int buf[], int bufsize) {
     char swapped = 0;
     // Loop through each number
-    for (int i = 0; i < bufsize - 1; i++) {
+    for (int i = 0; i < bufsize - 1; ++i) {
         // Propogate as far down the array as we can one index at a time
         // (We could also use an if test to only swap once, but then we would
         // just have to do more recursive calls instead)
-        for (int j = i; buf[j] > buf[j + 1] && j < bufsize - 1; j++) {
+        for (int j = i; buf[j] > buf[j + 1] && j < bufsize - 1; ++j) {
             swap(buf, j, j + 1);
             swapped = 1;
         }
@@ -115,8 +115,8 @@ void bubblesort(int buf[], int bufsize) {
  * @param bufsize size of the array to sort
  */
 void insertionsort(int buf[], int bufsize) {
-    for (int i = 1; i < bufsize; i++) {
-        for (int j = i; buf[j - 1] > buf[j] && j > 0; j--) {
+    for (int i = 1; i < bufsize; ++i) {
+        for (int j = i; buf[j - 1] > buf[j] && j > 0; --j) {
             swap(buf, j - 1, j);
         }
     }
