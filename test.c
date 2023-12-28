@@ -135,6 +135,28 @@ void test_bubblesort(void) {
     }
 }
 
+void test_insertionsort(void) {
+    int nums[] = { 5, 1, 4, 2, 8 };
+    const int nums_size = sizeof(nums)/sizeof(nums[0]);
+    int sorted[] = { 1, 2, 4, 5, 8 };
+
+    int nums2[] = { 5555, 1, 22, 421, 0, 155, -14, -95 };
+    const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
+    int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
+
+    sort(nums, nums_size, INSERTIONSORT);
+    for (int i = 0; i < nums_size; i++) {
+        assert(nums[i] == sorted[i]);
+    }
+    puts("");
+
+    sort(nums2, nums2_size, INSERTIONSORT);
+    for (int i = 0; i < nums2_size; i++) {
+        assert(nums2[i] == sorted2[i]);
+    }
+}
+
+
 void test_sort(void) {
     int nums[] = { 7, 2, 1, 6, 8, 5, 3, 4 };
     const int nums_size = sizeof(nums)/sizeof(nums[0]);
@@ -153,6 +175,7 @@ void test_sort(void) {
 
     test_quicksort();
     test_bubblesort();
+    test_insertionsort();
 }
 
 int main(void) {

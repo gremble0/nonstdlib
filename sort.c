@@ -9,8 +9,13 @@ void sort(int buf[], int bufsize, sorting_algorithm sa) {
     switch (sa) {
     case BUBBLESORT:
         bubblesort(buf, bufsize);
+        break;
     case QUICKSORT:
         quicksort(buf, bufsize);
+        break;
+    case INSERTIONSORT:
+        insertionsort(buf, bufsize);
+        break;
     }
 }
 
@@ -90,7 +95,7 @@ void bubblesort(int buf[], int bufsize) {
         // Propogate as far down the array as we can one index at a time
         // (We could also use an if test to only swap once, but then we would
         // just have to do more recursive calls instead)
-        for (int j = i; j < bufsize - 1 && buf[j] > buf[j + 1]; j++) {
+        for (int j = i; buf[j] > buf[j + 1] && j < bufsize - 1; j++) {
             swap(buf, j, j + 1);
             swapped = 1;
         }
@@ -101,5 +106,18 @@ void bubblesort(int buf[], int bufsize) {
         // element to the end of the array, so we can decrement the bufsize for the
         // next recursive call
         bubblesort(buf, bufsize - 1);
+    }
+}
+
+
+/**
+ * @param buf     array to be sorted
+ * @param bufsize size of the array to sort
+ */
+void insertionsort(int buf[], int bufsize) {
+    for (int i = 1; i < bufsize; i++) {
+        for (int j = i; buf[j - 1] > buf[j] && j > 0; j--) {
+            swap(buf, j - 1, j);
+        }
     }
 }
