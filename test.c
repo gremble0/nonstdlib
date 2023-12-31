@@ -111,9 +111,9 @@ void test_sort(sorting_algorithm sa) {
     const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
     int sorted2[] = { -95, -14, 0, 1, 22, 155, 421, 5555 };
 
-    // int nums3[] = { 1, 1, 2 };
-    // const int nums3_size = sizeof(nums3)/sizeof(nums3[0]);
-    // int sorted3[] = { 1, 1, 2 };
+    int nums3[] = { 1, -1, 1, 5, 2, 3, -1, 2, -1 };
+    const int nums3_size = sizeof(nums3)/sizeof(nums3[0]);
+    int sorted3[] = { -1, -1, -1, 1, 1, 2, 2, 3, 5 };
 
     sort(nums, nums_size, sa);
     for (int i = 0; i < nums_size; i++) {
@@ -125,10 +125,10 @@ void test_sort(sorting_algorithm sa) {
         assert(nums2[i] == sorted2[i]);
     }
 
-    // sort(nums3, nums3_size, sa);
-    // for (int i = 0; i < nums3_size; i++) {
-    //     assert(nums3[i] == sorted3[i]);
-    // }
+    sort(nums3, nums3_size, sa);
+    for (int i = 0; i < nums3_size; i++) {
+        assert(nums3[i] == sorted3[i]);
+    }
 
     printf("\033[0;32mTest successful for sorting algorithm %d\033[0;37m\n", sa);
 }
