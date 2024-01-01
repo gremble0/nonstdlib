@@ -6,6 +6,7 @@
 #include "stack.h"
 #include "hashtable.h"
 #include "sort.h"
+#include "array.h"
 
 void test_hashtable(void) {
     printf("Testing hash table data structure...\n");
@@ -157,6 +158,15 @@ void test_all_sorts(void) {
     printf("\033[0;32mAll sorting algorithms tests passed\033[0;37m\n");
 }
 
+void test_arr(void) {
+    printf("Testing array functions...\n");
+    int nums[] = { 1, 2, 3, 4 };
+    int target = 2;
+
+    assert(arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &target, sizeof(int)));
+    printf("\033[0;32mAll array function tests passed\033[0;37m\n");
+}
+
 int main(void) {
     printf("------------------------------------------\n");
     test_hashtable();
@@ -164,5 +174,7 @@ int main(void) {
     test_stack();
     printf("------------------------------------------\n");
     test_all_sorts();
+    printf("------------------------------------------\n");
+    test_arr();
     printf("------------------------------------------\n");
 }
