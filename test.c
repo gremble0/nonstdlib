@@ -161,9 +161,22 @@ void test_all_sorts(void) {
 void test_arr(void) {
     printf("Testing array functions...\n");
     int nums[] = { 1, 2, 3, 4 };
-    int target = 2;
+    int present1 = 1;
+    int present2 = 2;
+    int present3 = 3;
+    int present4 = 4;
+    int absent1 = 0;
+    int absent2 = 5;
 
-    assert(arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &target, sizeof(int)));
+    assert(arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &present1, sizeof(int)));
+    assert(arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &present2, sizeof(int)));
+    assert(arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &present3, sizeof(int)));
+    assert(arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &present4, sizeof(int)));
+    assert(!arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &absent1, sizeof(int)));
+    assert(!arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &absent2, sizeof(int)));
+
+    printf("\033[0;32mAll arr_contains tests passed\033[0;37m\n");
+
     printf("\033[0;32mAll array function tests passed\033[0;37m\n");
 }
 
