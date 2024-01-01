@@ -13,8 +13,8 @@ typedef struct stack {
 } stack;
 
 stack *stack_init(void);
-void stack_free(stack *s);
-void stack_print(stack *s);
-void *stack_pop(stack *s);
-void *stack_get(stack *s, uint32_t index);
-void stack_push(stack *s, void *value);
+void   stack_free(stack *s);
+void   stack_print(stack *s);
+void  *stack_pop(stack *s);
+void  *stack_get(stack *s, uint32_t index);
+void   stack_push(stack *s, void *value);
