@@ -212,13 +212,25 @@ void test_arr_contains(void) {
 
 void test_arr_swap(void) {
     int nums[] = { 1, 2, 3 };
-    for (size_t i = 0; i < sizeof(nums)/sizeof(nums[0]); ++i) {
-        printf("%d ", nums[i]);
-    }
     arr_swap(nums, 0, 1, sizeof(int));
-    for (size_t i = 0; i < sizeof(nums)/sizeof(nums[0]); ++i) {
-        printf("%d ", nums[i]);
-    }
+
+    assert(nums[0] == 2);
+    assert(nums[1] == 1);
+    assert(nums[2] == 3);
+
+    char chars[] = { 'a', 'b', 'c', 'd' };
+    arr_swap(chars, 1, 3, sizeof(char));
+    assert(chars[0] == 'a');
+    assert(chars[1] == 'd');
+    assert(chars[2] == 'c');
+    assert(chars[3] == 'b');
+
+    char *strings[] = { "hello", "this", "is", "nonstdlib" };
+    arr_swap(strings, 0, 1, sizeof(char*));
+    assert(strcmp(strings[0], "this") == 0);
+    assert(strcmp(strings[1], "hello") == 0);
+    assert(strcmp(strings[2], "is") == 0);
+    assert(strcmp(strings[3], "nonstdlib") == 0);
 }
 
 void test_arr(void) {

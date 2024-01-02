@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <string.h>
 
 #include "array.h"
@@ -7,6 +6,7 @@ void arr_swap(void *arr, int i, int j, size_t arr_type_size) {
     char *a = (char*)arr;
     char temp[arr_type_size];
 
+    // TODO: maybe do this ourselves instead of using string.h
     // Copy contents of a[i] into temporary buffer
     memcpy(temp, a + i, arr_type_size);
     // Copy a[j] into a[i]
@@ -27,6 +27,7 @@ int arr_contains(void *arr, size_t arr_size, void *val, size_t arr_type_size) {
     char *v = (char*)val;
 
     for (size_t i = 0; i < arr_size; ++i) {
+        // TODO: maybe do this ourselves instead of using string.h
         // Move i * val_type_size and compare val_type_size bytes each iteration
         // We have to do it like this because "generics" in C is quite janky
         if (memcmp(&a[i * arr_type_size], v, arr_type_size) == 0) {
