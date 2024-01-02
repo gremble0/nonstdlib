@@ -158,8 +158,7 @@ void test_all_sorts(void) {
     printf("\033[0;32mAll sorting algorithms tests passed\033[0;37m\n");
 }
 
-void test_arr(void) {
-    printf("Testing array functions...\n");
+void test_arr_contains(void) {
     int nums[] = { 1, 2, 3, 4 };
     int present1 = 1;
     int present2 = 2;
@@ -176,7 +175,57 @@ void test_arr(void) {
     assert(!arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &absent2, sizeof(int)));
 
     printf("\033[0;32mAll arr_contains tests passed\033[0;37m\n");
+}
 
+// void test_arr_reverse(void) {
+//     int nums[] = { 1, 2, 3, 4, 5, 6 };
+//     const int nums_size = sizeof(nums)/sizeof(nums[0]);
+//     int nums_reversed[] = { 6, 5, 4, 3, 2, 1 };
+//
+//     char chars[] = { 'a', 'b', 'c' };
+//     const size_t chars_size = sizeof(chars)/sizeof(chars[0]);
+//     char chars_reversed[] = { 'c', 'b', 'a' };
+//
+//     char *strings[] = { "hello", "my", "name", "is", "herman" };
+//     const int strings_size = sizeof(strings)/sizeof(strings[0]);
+//     char *strings_reversed[] = { "herman", "is", "name", "my", "hello" };
+//
+//     arr_reverse(nums, nums_size);
+//     for (size_t i = 0; i < nums_size; ++i) {
+//         // printf("%d\n", nums[i]);
+//         assert(nums[i] == nums_reversed[i]);
+//     }
+//
+//     // arr_reverse(strings, strings_size);
+//     // for (size_t i = 0; i < strings_size; ++i) {
+//     //     printf("%s\n", strings[i]);
+//     // }
+//
+//     // arr_reverse(chars, chars_size);
+//     for (size_t i = 0; i < chars_size; ++i) {
+//         printf("%c\n", chars[i]);
+//         // assert(chars[i] == chars_reversed[i]);
+//     }
+//
+//     printf("\033[0;32mAll arr_reversed tests passed\033[0;37m\n");
+// }
+
+void test_arr_swap(void) {
+    int nums[] = { 1, 2, 3 };
+    for (size_t i = 0; i < sizeof(nums)/sizeof(nums[0]); ++i) {
+        printf("%d ", nums[i]);
+    }
+    arr_swap(nums, 0, 1, sizeof(int));
+    for (size_t i = 0; i < sizeof(nums)/sizeof(nums[0]); ++i) {
+        printf("%d ", nums[i]);
+    }
+}
+
+void test_arr(void) {
+    printf("Testing array functions...\n");
+    test_arr_contains();
+    test_arr_swap();
+    // test_arr_reverse();
     printf("\033[0;32mAll array function tests passed\033[0;37m\n");
 }
 
