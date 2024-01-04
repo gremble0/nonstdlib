@@ -37,6 +37,7 @@ void arr_reverse(void *arr, size_t arr_size, size_t arr_type_size) {
  * @param arr_size      size of arr
  * @param val           value to check if exists in arr
  * @param arr_type_size amount of bytes used for each element in arr
+ * @return              1 if arr contains val 0 if not
  */
 int arr_contains(void *arr, size_t arr_size, void *val, size_t arr_type_size) {
     // Cast void* to single byte pointers so we can multiply it by val_type_size
