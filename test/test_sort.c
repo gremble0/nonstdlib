@@ -57,4 +57,3 @@ void test_all_sorts(void) {
 
     printf("\033[0;32mAll sorting algorithms tests passed\033[0;37m\n");
 }
-

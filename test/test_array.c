@@ -87,4 +87,3 @@ void test_arr(void) {
     test_arr_reverse();
     printf("\033[0;32mAll array function tests passed\033[0;37m\n");
 }
-

@@ -57,4 +57,3 @@ void test_stack(void) {
 
     printf("\033[0;32mAll stack data structure tests passed\033[0;37m\n");
 }
-

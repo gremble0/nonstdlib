@@ -44,4 +44,3 @@ iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh"
 
     printf("\033[0;32mAll hash table data structure tests passed\033[0;37m\n");
 }
-
