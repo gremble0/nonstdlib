@@ -31,6 +31,12 @@ void arr_reverse(void *arr, size_t arr_size, size_t arr_type_size) {
     }
 }
 
+void arr_clear(void *arr, size_t arr_size, size_t arr_type_size) {
+    for (size_t i = 0; i < arr_size; ++i) {
+        memset(arr + i * arr_type_size, 0, arr_type_size);
+    }
+}
+
 /**
  * @param arr           array to check in
  * @param arr_size      size of arr
