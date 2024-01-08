@@ -36,20 +36,6 @@ void test_sort(sorting_algorithm sa) {
 
 void test_all_sorts(void) {
     printf("Testing sorting algorithms...\n");
-    int nums[] = { 7, 2, 1, 6, 8, 5, 3, 4 };
-    const int nums_size = sizeof(nums)/sizeof(nums[0]);
-
-    swap(nums, 0, 4);
-    int swapped[] = { 8, 2, 1, 6, 7, 5, 3, 4 };
-    for (int i = 0; i < nums_size; i++) {
-        assert(nums[i] == swapped[i]);
-    }
-
-    swap(nums, 0, nums_size - 1);
-    int swapped2[] = { 4, 2, 1, 6, 7, 5, 3, 8 };
-    for (int i = 0; i < nums_size; i++) {
-        assert(nums[i] == swapped2[i]);
-    }
 
     for (int i = 0; i < NUM_SORT_ALGOS; ++i) {
         test_sort(i);

@@ -1,4 +1,5 @@
 #include "sort.h"
+#include "array.h"
 
 /**
  * @brief Sort an array using some sorting algorithm
@@ -27,19 +28,6 @@ void sort(int buf[], int bufsize, sorting_algorithm sa) {
 }
 
 /**
- * @brief Helper function to swap 2 elements in an array
- *
- * @param buf array to swap elements in
- * @param i   index of first element to swap
- * @param j   index of second element to swap
- */
-void swap(int buf[], int i, int j) {
-    int at_i = buf[i];
-    buf[i] = buf[j];
-    buf[j] = at_i;
-}
-
-/**
  * @brief Recursive implementation of the quicksort algorithm
  *
  * @param buf   array to sort
@@ -64,12 +52,12 @@ void quicksort_impl(int buf[], int start, int end) {
     if (left_i < right_i) {
         // If left_i < right_i there are still more elements smaller than the pivot
         // that need to be moved to the front of the array
-        swap(buf, left_i, right_i);
+        arr_swap(buf, left_i, right_i, sizeof(int));
         quicksort_impl(buf, start, end);
     } else {
         // Otherwise we are done with this partition and we continue splitting
         // the array into 2 new partitions and sort them
-        swap(buf, left_i, end - 1); // swap left with pivot
+        arr_swap(buf, left_i, end - 1, sizeof(int)); // swap left with pivot
         quicksort_impl(buf, start, left_i);
         quicksort_impl(buf, left_i + 1, end);
     }
@@ -101,7 +89,7 @@ void bubblesort(int buf[], int bufsize) {
         // (We could also use an if test to only swap once, but then we would
         // just have to do more recursive calls instead)
         for (int j = i; buf[j] > buf[j + 1] && j < bufsize - 1; ++j) {
-            swap(buf, j, j + 1);
+            arr_swap(buf, j, j + 1, sizeof(int));
             swapped = 1;
         }
     }
@@ -124,7 +112,7 @@ void bubblesort(int buf[], int bufsize) {
 void insertionsort(int buf[], int bufsize) {
     for (int i = 1; i < bufsize; ++i) {
         for (int j = i; buf[j - 1] > buf[j] && j > 0; --j) {
-            swap(buf, j - 1, j);
+            arr_swap(buf, j - 1, j, sizeof(int));
         }
     }
 }
@@ -144,7 +132,7 @@ void selectionsort(int buf[], int bufsize) {
                 min_i = j;
             }
         }
-        swap(buf, min_i, i);
+        arr_swap(buf, min_i, i, sizeof(int));
         min_i = ++i;
     }
 }
