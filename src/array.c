@@ -13,7 +13,6 @@
 void arr_swap(void *arr, int i, int j, size_t arr_type_size) {
     char temp[arr_type_size];
 
-    // TODO: maybe do this ourselves instead of using string.h
     // Copy contents of a[i] into temporary buffer
     memcpy(temp, arr + i * arr_type_size, arr_type_size);
     // Copy a[j] into a[i]
