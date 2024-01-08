@@ -54,6 +54,34 @@ void test_arr_reverse(void) {
     printf("\033[0;32mAll arr_reversed tests passed\033[0;37m\n");
 }
 
+void test_arr_clear(void) {
+    int nums[] = { 1, 2, 3, 4, 5, 6 };
+    const int nums_size = sizeof(nums)/sizeof(nums[0]);
+
+    char chars[] = { 'a', 'b', 'c' };
+    const size_t chars_size = sizeof(chars)/sizeof(chars[0]);
+
+    char *strings[] = { "hello", "this", "is", "nonstdlib" };
+    const int strings_size = sizeof(strings)/sizeof(strings[0]);
+
+    arr_clear(nums, nums_size, sizeof(int));
+    for (size_t i = 0; i < nums_size; ++i) {
+        assert(nums[i] == 0);
+    }
+
+    arr_clear(chars, chars_size, sizeof(char));
+    for (size_t i = 0; i < chars_size; ++i) {
+        assert(chars[i] == 0);
+    }
+
+    arr_clear(strings, strings_size, sizeof(char*));
+    for (size_t i = 0; i < strings_size; ++i) {
+        assert(strings[i] == 0);
+    }
+
+    printf("\033[0;32mAll arr_clear tests passed\033[0;37m\n");
+}
+
 void test_arr_swap(void) {
     int nums[] = { 1, 2, 3 };
     arr_swap(nums, 0, 1, sizeof(int));
@@ -84,6 +112,7 @@ void test_arr(void) {
     printf("Testing array functions...\n");
     test_arr_contains();
     test_arr_swap();
+    test_arr_clear();
     test_arr_reverse();
     printf("\033[0;32mAll array function tests passed\033[0;37m\n");
 }

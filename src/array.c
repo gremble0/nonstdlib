@@ -31,6 +31,11 @@ void arr_reverse(void *arr, size_t arr_size, size_t arr_type_size) {
     }
 }
 
+/**
+ * @param arr array to clear
+ * @param arr_size size of arr
+ * @param arr_type_size amount of bytes used for each element in arr
+ */
 void arr_clear(void *arr, size_t arr_size, size_t arr_type_size) {
     for (size_t i = 0; i < arr_size; ++i) {
         memset(arr + i * arr_type_size, 0, arr_type_size);
@@ -48,7 +53,6 @@ int arr_contains(void *arr, size_t arr_size, void *val, size_t arr_type_size) {
     for (size_t i = 0; i < arr_size; ++i) {
         // TODO: maybe do this ourselves instead of using string.h
         // Move i * val_type_size and compare val_type_size bytes each iteration
-        // We have to do it like this because "generics" in C is quite janky
         if (memcmp(&arr[i * arr_type_size], val, arr_type_size) == 0) {
             return 1;
         }
