@@ -3,6 +3,8 @@
 #include "array.h"
 
 /**
+ * @brief Swap elements at index i and j within an array
+ *
  * @param arr           array to swap elements in
  * @param i             index into arr of first element to swap
  * @param j             index into arr of second element to swap
@@ -21,6 +23,8 @@ void arr_swap(void *arr, int i, int j, size_t arr_type_size) {
 }
 
 /**
+ * @brief Reverse the array in place
+ *
  * @param arr           array to reverse
  * @param arr_size      size of arr
  * @param arr_type_size amount of bytes used for each element in arr
@@ -32,6 +36,8 @@ void arr_reverse(void *arr, size_t arr_size, size_t arr_type_size) {
 }
 
 /**
+ * @brief Clear the array by filling it with 0s
+ *
  * @param arr array to clear
  * @param arr_size size of arr
  * @param arr_type_size amount of bytes used for each element in arr
@@ -43,6 +49,8 @@ void arr_clear(void *arr, size_t arr_size, size_t arr_type_size) {
 }
 
 /**
+ * @brief Check if value is present in array
+ *
  * @param arr           array to check in
  * @param arr_size      size of arr
  * @param val           value to check if exists in arr

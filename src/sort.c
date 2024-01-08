@@ -1,6 +1,8 @@
 #include "sort.h"
 
 /**
+ * @brief Sort an array using some sorting algorithm
+ *
  * @param buf     array to sort
  * @param bufsize size of array to sort
  * @param sa      what sorting algorithm to use for sorting
@@ -25,7 +27,7 @@ void sort(int buf[], int bufsize, sorting_algorithm sa) {
 }
 
 /**
- * Helper function to swap 2 elements in an array
+ * @brief Helper function to swap 2 elements in an array
  *
  * @param buf array to swap elements in
  * @param i   index of first element to swap
@@ -38,7 +40,7 @@ void swap(int buf[], int i, int j) {
 }
 
 /**
- * Recursive implementation of the quicksort algorithm
+ * @brief Recursive implementation of the quicksort algorithm
  *
  * @param buf   array to sort
  * @param start the start index in the array for this iteration of recursion
@@ -74,9 +76,9 @@ void quicksort_impl(int buf[], int start, int end) {
 }
 
 /**
- * Wrapper function around the actual implementation of the quicksort algorithm
- * so that consumers don't need to specify the initial start value which is
- * always zero
+ * @brief Wrapper function around the actual implementation of the quicksort
+ *        algorithm so that consumers don't need to specify the initial start
+ *        value which is always zero
  *
  * @param buf     array to be sorted
  * @param bufsize size of the array to sort
@@ -86,6 +88,8 @@ void quicksort(int buf[], int bufsize) {
 }
 
 /**
+ * @brief Semi recursive implementation of bubblesort
+ *
  * @param buf     array to be sorted
  * @param bufsize size of the array to sort
  */
@@ -112,6 +116,8 @@ void bubblesort(int buf[], int bufsize) {
 
 
 /**
+ * @brief Iterative implementation of insertionsort
+ *
  * @param buf     array to be sorted
  * @param bufsize size of the array to sort
  */
@@ -124,6 +130,8 @@ void insertionsort(int buf[], int bufsize) {
 }
 
 /**
+ * @brief Iterative implementation of selection sort
+ *
  * @param buf     array to be sorted
  * @param bufsize size of the array to sort
  */

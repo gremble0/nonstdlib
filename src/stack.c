@@ -4,7 +4,7 @@
 #include "stack.h"
 
 /**
- * Initialiazes an empty stack data structure
+ * @brief Initialiazes an empty stack data structure
  *
  * @return an empty stack
  */
@@ -17,7 +17,7 @@ stack *stack_init(void) {
 }
 
 /**
- * Frees memory allocated for a stack and all its entries
+ * @brief Frees memory allocated for a stack and all its entries
  *
  * @param s stack to free allocated memory for
  */
@@ -39,7 +39,7 @@ void stack_free(stack *s) {
 }
 
 /**
- * Prints contents of given stack to stdout
+ * @brief Prints contents of given stack to stdout
  *
  * @param s stack to get contents from
  */
@@ -58,7 +58,8 @@ void stack_print(stack *s) {
 }
 
 /**
- * Pops first entry off the stack and returns it. Returned value needs to be freed
+ * @brief Pops first entry off the stack and returns it. Returned value needs
+ *        to be freed
  *
  * @param s stack to pop from
  */
@@ -76,7 +77,7 @@ void *stack_pop(stack *s) {
 }
 
 /**
- * Gets an entry at the given index into a stack
+ * @brief Gets an entry at the given index into a stack
  *
  * @param s stack to get entry from
  * @param index index into stack to get entry at
@@ -96,7 +97,7 @@ void *stack_get(stack *s, uint32_t index) {
 }
 
 /**
- * Pushes an entry onto the front of the stack
+ * @brief Pushes an entry onto the front of the stack
  *
  * @param s stack to push into
  * @param value what to push onto the stack, needs to be malloc'd beforehand

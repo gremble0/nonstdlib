@@ -10,7 +10,7 @@
 // TODO: remove strlen calls
 
 /**
- * djb2 hash function
+ * @brief djb2 hash function
  *
  * @return index into a hash table (needs to be %'d by table size)
  */
@@ -25,6 +25,8 @@ uint32_t hash(char *key) {
 }
 
 /**
+ * @brief Initialize an empty hash table allocated on the heap
+ *
  * @param init_size the initial size of the hash table, can be changed by ht_put
  * @return a malloc'd hash table
  */
@@ -42,7 +44,7 @@ ht_t *ht_init(uint32_t init_max_entries) {
 }
 
 /**
- * frees memory allocated for hash table
+ * @brief frees memory allocated for hash table
  *
  * @param table table to free memory for
  */
@@ -56,7 +58,7 @@ void ht_free(ht_t *table) {
 }
 
 /**
- * Doubles the size of a hash table
+ * @brief Doubles the size of a hash table
  *
  * @param table hash table to expand the size of
  */
@@ -78,6 +80,11 @@ void ht_expand(ht_t *table) {
     }
 }
 
+/**
+ * @brief Print contents of hash table
+ *
+ * @param table table to print
+ */
 void ht_print(ht_t *table) {
     for (size_t i = 0; i < table->max_entries; ++i) {
         if (table->entries[i] == NULL) {
@@ -89,6 +96,13 @@ void ht_print(ht_t *table) {
     }
 }
 
+/**
+ * @brief Get an element from a hash table
+ *
+ * @param table table to get from
+ * @param key key to get
+ * @return value of the given key
+ */
 char *ht_get(ht_t *table, char *key) {
     uint32_t index = hash(key) % table->max_entries;
     htentry_t *entry = table->entries[index];
@@ -106,6 +120,13 @@ char *ht_get(ht_t *table, char *key) {
     return entry->value;
 }
 
+/**
+ * @brief Put (insert) a value into a hash table
+ *
+ * @param table table to put into
+ * @param key key to put in
+ * @param value value to put in
+ */
 void ht_put(ht_t *table, char *key, char *value) {
     if (table->n_entries + 1 > table->max_entries / 2) {
         ht_expand(table);
