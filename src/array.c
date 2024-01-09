@@ -67,3 +67,31 @@ int arr_contains(void *arr, size_t arr_size, void *val, size_t arr_type_size) {
 
     return 0;
 }
+
+/**
+ * @brief Checks if all elements in two arrays are equal, if array is nested
+ *        only compare pointers in first level array.
+ *
+ * @param arr1 first array to compare
+ * @param arr1_size size of arr1
+ * @param arr2 second array to compare
+ * @param arr2_size size of arr2
+ * @param arr_type_size amount of bytes used for each element in arr
+ * @return 1 if arrays are equal 0 if not
+ */
+int arr_equals(void *arr1, size_t arr1_size,
+               void *arr2, size_t arr2_size,
+               size_t arr_type_size) {
+    if (arr1_size != arr2_size) {
+        return 0;
+    }
+
+    for (size_t i = 0; i < arr1_size; ++i) {
+        if (memcmp(&arr1[i * arr_type_size],
+                   &arr2[i * arr_type_size], arr_type_size) != 0) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
