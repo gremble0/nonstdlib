@@ -28,6 +28,47 @@ void sort(int buf[], int bufsize, sorting_algorithm sa) {
 }
 
 /**
+ * @brief Semi recursive implementation of bubblesort
+ *
+ * @param buf     array to be sorted
+ * @param bufsize size of the array to sort
+ */
+void bubblesort(int buf[], int bufsize) {
+    char swapped = 0;
+    // Loop through each number
+    for (int i = 0; i < bufsize - 1; ++i) {
+        // Propogate as far down the array as we can one index at a time
+        // (We could also use an if test to only swap once, but then we would
+        // just have to do more recursive calls instead)
+        for (int j = i; buf[j] > buf[j + 1] && j < bufsize - 1; ++j) {
+            arr_swap(buf, j, j + 1, sizeof(int));
+            swapped = 1;
+        }
+    }
+
+    if (swapped) {
+        // After one full iteration of the array, we know we have moved at least one
+        // element to the end of the array, so we can decrement the bufsize for the
+        // next recursive call
+        bubblesort(buf, bufsize - 1);
+    }
+}
+
+/**
+ * @brief Iterative implementation of insertionsort
+ *
+ * @param buf     array to be sorted
+ * @param bufsize size of the array to sort
+ */
+void insertionsort(int buf[], int bufsize) {
+    for (int i = 1; i < bufsize; ++i) {
+        for (int j = i; buf[j - 1] > buf[j] && j > 0; --j) {
+            arr_swap(buf, j - 1, j, sizeof(int));
+        }
+    }
+}
+
+/**
  * @brief Recursive implementation of the quicksort algorithm
  *
  * @param buf   array to sort
@@ -73,48 +114,6 @@ void quicksort_impl(int buf[], int start, int end) {
  */
 void quicksort(int buf[], int bufsize) {
     quicksort_impl(buf, 0, bufsize);
-}
-
-/**
- * @brief Semi recursive implementation of bubblesort
- *
- * @param buf     array to be sorted
- * @param bufsize size of the array to sort
- */
-void bubblesort(int buf[], int bufsize) {
-    char swapped = 0;
-    // Loop through each number
-    for (int i = 0; i < bufsize - 1; ++i) {
-        // Propogate as far down the array as we can one index at a time
-        // (We could also use an if test to only swap once, but then we would
-        // just have to do more recursive calls instead)
-        for (int j = i; buf[j] > buf[j + 1] && j < bufsize - 1; ++j) {
-            arr_swap(buf, j, j + 1, sizeof(int));
-            swapped = 1;
-        }
-    }
-
-    if (swapped) {
-        // After one full iteration of the array, we know we have moved at least one
-        // element to the end of the array, so we can decrement the bufsize for the
-        // next recursive call
-        bubblesort(buf, bufsize - 1);
-    }
-}
-
-
-/**
- * @brief Iterative implementation of insertionsort
- *
- * @param buf     array to be sorted
- * @param bufsize size of the array to sort
- */
-void insertionsort(int buf[], int bufsize) {
-    for (int i = 1; i < bufsize; ++i) {
-        for (int j = i; buf[j - 1] > buf[j] && j > 0; --j) {
-            arr_swap(buf, j - 1, j, sizeof(int));
-        }
-    }
 }
 
 /**
