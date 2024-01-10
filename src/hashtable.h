@@ -3,8 +3,8 @@
 #include <stdint.h>
 
 typedef struct ht_entry {
-    char *key;
-    char *value;
+    const char *key;
+    const char *value;
 } htentry_t;
 
 typedef struct ht {
@@ -16,9 +16,9 @@ typedef struct ht {
 ht_t *ht_init(uint32_t init_size);
 void ht_free(ht_t *table);
 
-char *ht_get(ht_t *table, char *key);
-void ht_put(ht_t *table, char *key, char *value);
+const char *ht_get(ht_t *table, const char *key);
+void ht_put(ht_t *table, const char *key, const char *value);
 void ht_print(ht_t *table);
 
-uint32_t hash(char *key);
+uint32_t hash(const char *key);
 void ht_expand(ht_t *table);

@@ -14,7 +14,7 @@
  *
  * @return index into a hash table (needs to be %'d by table size)
  */
-uint32_t hash(char *key) {
+uint32_t hash(const char *key) {
     uint32_t hash = 5381;
 
     for (size_t i = 0; i < strlen(key); ++i) {
@@ -103,7 +103,7 @@ void ht_print(ht_t *table) {
  * @param key key to get
  * @return value of the given key
  */
-char *ht_get(ht_t *table, char *key) {
+const char *ht_get(ht_t *table, const char *key) {
     uint32_t index = hash(key) % table->max_entries;
     htentry_t *entry = table->entries[index];
     if (entry == NULL) {
@@ -127,7 +127,7 @@ char *ht_get(ht_t *table, char *key) {
  * @param key key to put in
  * @param value value to put in
  */
-void ht_put(ht_t *table, char *key, char *value) {
+void ht_put(ht_t *table, const char *key, const char *value) {
     if (table->n_entries + 1 > table->max_entries / 2) {
         ht_expand(table);
     }

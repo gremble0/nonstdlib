@@ -2,8 +2,10 @@
 
 #include <stdint.h>
 
+// TODO: make linked list
+
 typedef struct stack_entry {
-    void *value;
+    const void *value;
     struct stack_entry *next;
 } stack_entry;
 
