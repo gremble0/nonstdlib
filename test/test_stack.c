@@ -23,9 +23,9 @@ void test_stack(void) {
     assert(*(uint32_t *)stack_get(s, 1) == 2);
     assert(*(uint32_t *)stack_get(s, 2) == 1);
 
-    uint32_t *popped1 = stack_pop(s);
-    uint32_t *popped2 = stack_pop(s);
-    uint32_t *popped3 = stack_pop(s);
+    const uint32_t *popped1 = stack_pop(s);
+    const uint32_t *popped2 = stack_pop(s);
+    const uint32_t *popped3 = stack_pop(s);
 
     assert(s->size == 0);
     assert(*popped1 == 3);

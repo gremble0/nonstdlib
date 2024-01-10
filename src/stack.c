@@ -30,7 +30,7 @@ void stack_free(stack *s) {
     stack_entry *entry = s->first;
     while (entry->next != NULL) {
         stack_entry *next = entry->next;
-        free(entry->value);
+        free((char*)entry->value);
         free(entry);
         entry = next;
     }
@@ -63,13 +63,13 @@ void stack_print(stack *s) {
  *
  * @param s stack to pop from
  */
-void *stack_pop(stack *s) {
+const void *stack_pop(stack *s) {
     if (s->size == 0) {
         return NULL;
     }
 
     stack_entry *popped = s->first;
-    void *ret = popped->value;
+    const void *ret = popped->value;
     s->first = popped->next;
     --s->size;
     free(popped);
@@ -82,7 +82,7 @@ void *stack_pop(stack *s) {
  * @param s stack to get entry from
  * @param index index into stack to get entry at
  */
-void *stack_get(stack *s, uint32_t index) {
+const void *stack_get(stack *s, uint32_t index) {
     if (index >= s->size) {
         fprintf(stderr, "stack_get(): index %u out of bounds", index);
         return NULL;
