@@ -3,38 +3,6 @@
 #include "array.h"
 
 /**
- * @brief Swap elements at index i and j within an array
- *
- * @param arr           array to swap elements in
- * @param i             index into arr of first element to swap
- * @param j             index into arr of second element to swap
- * @param arr_type_size amount of bytes used for each element in arr
- */
-void arr_swap(void *arr, int i, int j, size_t arr_type_size) {
-    char temp[arr_type_size];
-
-    // Copy contents of a[i] into temporary buffer
-    memcpy(temp, arr + i * arr_type_size, arr_type_size);
-    // Copy a[j] into a[i]
-    memcpy(arr + i * arr_type_size, arr + j * arr_type_size, arr_type_size);
-    // Copy contents of temp into a[j]
-    memcpy(arr + j * arr_type_size, temp, arr_type_size);
-}
-
-/**
- * @brief Reverse the array in place
- *
- * @param arr           array to reverse
- * @param arr_size      size of arr
- * @param arr_type_size amount of bytes used for each element in arr
- */
-void arr_reverse(void *arr, size_t arr_size, size_t arr_type_size) {
-    for (size_t i = 0; i < arr_size / 2; ++i) {
-        arr_swap(arr, i, arr_size - 1 - i, arr_type_size);
-    }
-}
-
-/**
  * @brief Clear the array by filling it with 0s
  *
  * @param arr array to clear
@@ -94,4 +62,36 @@ int arr_equals(void *arr1, size_t arr1_size,
     }
 
     return 1;
+}
+
+/**
+ * @brief Reverse the array in place
+ *
+ * @param arr           array to reverse
+ * @param arr_size      size of arr
+ * @param arr_type_size amount of bytes used for each element in arr
+ */
+void arr_reverse(void *arr, size_t arr_size, size_t arr_type_size) {
+    for (size_t i = 0; i < arr_size / 2; ++i) {
+        arr_swap(arr, i, arr_size - 1 - i, arr_type_size);
+    }
+}
+
+/**
+ * @brief Swap elements at index i and j within an array
+ *
+ * @param arr           array to swap elements in
+ * @param i             index into arr of first element to swap
+ * @param j             index into arr of second element to swap
+ * @param arr_type_size amount of bytes used for each element in arr
+ */
+void arr_swap(void *arr, int i, int j, size_t arr_type_size) {
+    char temp[arr_type_size];
+
+    // Copy contents of a[i] into temporary buffer
+    memcpy(temp, arr + i * arr_type_size, arr_type_size);
+    // Copy a[j] into a[i]
+    memcpy(arr + i * arr_type_size, arr + j * arr_type_size, arr_type_size);
+    // Copy contents of temp into a[j]
+    memcpy(arr + j * arr_type_size, temp, arr_type_size);
 }

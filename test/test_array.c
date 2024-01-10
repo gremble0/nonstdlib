@@ -4,6 +4,34 @@
 
 #include "array.h"
 
+void test_arr_clear(void) {
+    int nums[] = { 1, 2, 3, 4, 5, 6 };
+    const int nums_size = sizeof(nums)/sizeof(nums[0]);
+
+    char chars[] = { 'a', 'b', 'c' };
+    const size_t chars_size = sizeof(chars)/sizeof(chars[0]);
+
+    char *strings[] = { "hello", "this", "is", "nonstdlib" };
+    const int strings_size = sizeof(strings)/sizeof(strings[0]);
+
+    arr_clear(nums, nums_size, sizeof(int));
+    for (size_t i = 0; i < nums_size; ++i) {
+        assert(nums[i] == 0);
+    }
+
+    arr_clear(chars, chars_size, sizeof(char));
+    for (size_t i = 0; i < chars_size; ++i) {
+        assert(chars[i] == 0);
+    }
+
+    arr_clear(strings, strings_size, sizeof(char*));
+    for (size_t i = 0; i < strings_size; ++i) {
+        assert(strings[i] == 0);
+    }
+
+    printf("\033[0;32mAll arr_clear tests passed\033[0;37m\n");
+}
+
 void test_arr_contains(void) {
     int nums[] = { 1, 2, 3, 4 };
     int present1 = 1;
@@ -21,6 +49,35 @@ void test_arr_contains(void) {
     assert(!arr_contains(nums, sizeof(nums)/sizeof(nums[0]), &absent2, sizeof(int)));
 
     printf("\033[0;32mAll arr_contains tests passed\033[0;37m\n");
+}
+
+void test_arr_equals(void) {
+    int nums[] = { 1, 2, 3, 4, 5, 6 };
+    const int nums_size = sizeof(nums)/sizeof(nums[0]);
+
+    int nums2[] = { 1, 2, 3, 4, 5, 6 };
+    const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
+
+    char chars[] = { 'a', 'b', 'c' };
+    const size_t chars_size = sizeof(chars)/sizeof(chars[0]);
+
+    assert(arr_equals(nums, nums_size, nums2, nums2_size, sizeof(int)) == 1);
+    assert(arr_equals(nums, nums_size, nums, nums_size, sizeof(int)) == 1);
+    assert(arr_equals(nums, nums_size, chars, chars_size, sizeof(int)) == 0);
+
+    int *nested[] = { nums, nums2 };
+    const size_t nested_size = sizeof(nested)/sizeof(nested[0]);
+
+    int nested2[][7] = { { 1, 2, 3, 4, 5, 6 }, { 1, 2, 3, 4, 5, 6 } };
+    const size_t nested2_size = sizeof(nested2)/sizeof(nested2[0]);
+
+    int *nested3[] = { nums, nums2 };
+    const size_t nested3_size = sizeof(nested3)/sizeof(nested3[0]);
+
+    assert(arr_equals(nested, nested_size, nested2, nested2_size, sizeof(int)) == 0);
+    assert(arr_equals(nested, nested_size, nested3, nested3_size, sizeof(int)) == 1);
+
+    printf("\033[0;32mAll arr_equals tests passed\033[0;37m\n");
 }
 
 void test_arr_reverse(void) {
@@ -52,63 +109,6 @@ void test_arr_reverse(void) {
     }
 
     printf("\033[0;32mAll arr_reversed tests passed\033[0;37m\n");
-}
-
-void test_arr_clear(void) {
-    int nums[] = { 1, 2, 3, 4, 5, 6 };
-    const int nums_size = sizeof(nums)/sizeof(nums[0]);
-
-    char chars[] = { 'a', 'b', 'c' };
-    const size_t chars_size = sizeof(chars)/sizeof(chars[0]);
-
-    char *strings[] = { "hello", "this", "is", "nonstdlib" };
-    const int strings_size = sizeof(strings)/sizeof(strings[0]);
-
-    arr_clear(nums, nums_size, sizeof(int));
-    for (size_t i = 0; i < nums_size; ++i) {
-        assert(nums[i] == 0);
-    }
-
-    arr_clear(chars, chars_size, sizeof(char));
-    for (size_t i = 0; i < chars_size; ++i) {
-        assert(chars[i] == 0);
-    }
-
-    arr_clear(strings, strings_size, sizeof(char*));
-    for (size_t i = 0; i < strings_size; ++i) {
-        assert(strings[i] == 0);
-    }
-
-    printf("\033[0;32mAll arr_clear tests passed\033[0;37m\n");
-}
-
-void test_arr_equals(void) {
-    int nums[] = { 1, 2, 3, 4, 5, 6 };
-    const int nums_size = sizeof(nums)/sizeof(nums[0]);
-
-    int nums2[] = { 1, 2, 3, 4, 5, 6 };
-    const int nums2_size = sizeof(nums2)/sizeof(nums2[0]);
-
-    char chars[] = { 'a', 'b', 'c' };
-    const size_t chars_size = sizeof(chars)/sizeof(chars[0]);
-
-    assert(arr_equals(nums, nums_size, nums2, nums2_size, sizeof(int)) == 1);
-    assert(arr_equals(nums, nums_size, nums, nums_size, sizeof(int)) == 1);
-    assert(arr_equals(nums, nums_size, chars, chars_size, sizeof(int)) == 0);
-
-    int *nested[] = { nums, nums2 };
-    const size_t nested_size = sizeof(nested)/sizeof(nested[0]);
-
-    int nested2[][7] = { { 1, 2, 3, 4, 5, 6 }, { 1, 2, 3, 4, 5, 6 } };
-    const size_t nested2_size = sizeof(nested2)/sizeof(nested2[0]);
-
-    int *nested3[] = { nums, nums2 };
-    const size_t nested3_size = sizeof(nested3)/sizeof(nested3[0]);
-
-    assert(arr_equals(nested, nested_size, nested2, nested2_size, sizeof(int)) == 0);
-    assert(arr_equals(nested, nested_size, nested3, nested3_size, sizeof(int)) == 1);
-
-    printf("\033[0;32mAll arr_equals tests passed\033[0;37m\n");
 }
 
 void test_arr_swap(void) {
