@@ -92,7 +92,7 @@ void type##_ht_expand(type##_ht_t *table) {                                     
                                                                                               \
         type##_ht_entry_t *entry = table->entries[i];                                         \
         table->entries[i] = NULL; /* TODO: memory management */                               \
-        type##_ht_put(table, entry->key, entry->value);                             /* !! */ \
+        type##_ht_put(table, entry->key, entry->value);                                       \
     }                                                                                         \
 }                                                                                             \
                                                                                               \
@@ -117,7 +117,7 @@ const type *type##_ht_get(type##_ht_t *table, const char *key) {                
         entry = table->entries[index++];                                                      \
     }                                                                                         \
                                                                                               \
-    return entry->value;                                                        /* !! */     \
+    return entry->value;                                                                      \
 }                                                                                             \
                                                                                               \
 /**                                                                                           \
@@ -138,7 +138,7 @@ void type##_ht_put(type##_ht_t *table, const char *key, const type *value) {    
     if (existing_entry == NULL) {                                                             \
         type##_ht_entry_t *new_entry = malloc(sizeof(type##_ht_entry_t));                     \
         new_entry->key = key;                                                                 \
-        new_entry->value = value;                                                            \
+        new_entry->value = value;                                                             \
         table->entries[hash_index] = new_entry;                                               \
         ++table->n_entries;                                                                   \
         return;                                                                               \
