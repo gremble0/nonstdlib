@@ -9,10 +9,10 @@ typedef struct list_t {
     size_t max_size;   // What is the current maximum amount of elements (can be increased)
 } list_t;
 
-void  list_append(list_t *list, void *val);
-void  list_clear(list_t *list);
-int   list_contains(list_t *list, void *val);
-void  list_remove(list_t *list, void *val);
-void  list_reverse(list_t *list);
+void list_append(list_t *list, void *val);
+void list_clear(list_t *list);
+int list_contains(list_t *list, void *val);
+void list_remove(list_t *list, void *val);
+void list_reverse(list_t *list);
 void *list_pop(list_t *list);
-void  list_swap(list_t *list, int i, int j);
+void list_swap(list_t *list, int i, int j);
