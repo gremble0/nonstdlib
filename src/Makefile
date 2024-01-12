@@ -1,7 +1,7 @@
 CC=clang
 CFLAGS=-Wall -Wextra
 OBJS=hashtable.o stack.o sort.o array.o
-LIB=nonstdlib.a
+LIB=libnonstdlib.a
 
 all: $(OBJS)
 	ar rcs $(LIB) $(OBJS)
