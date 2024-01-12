@@ -153,7 +153,7 @@ void ht_put(ht_t *table, const char *key, const char *value) {
     new_entry->key = key;
     new_entry->value = value;
 
-    while (table->entries[++hash_index] != NULL) {}
+    while (table->entries[++hash_index] != NULL);
 
     table->entries[hash_index] = new_entry;
     ++table->n_entries;
