@@ -91,7 +91,7 @@ void ht_print(ht_t *table) {
             printf("[%zu]: --empty--\n", i);
         } else {
             ht_entry_t *entry = table->entries[i];
-            printf("[%zu]: key: %s, value: %s\n", i, entry->key, entry->value);
+            printf("[%zu]: key: %s, value: %p\n", i, entry->key, entry->value);
         }
     }
 }
@@ -103,7 +103,7 @@ void ht_print(ht_t *table) {
  * @param key key to get
  * @return value of the given key
  */
-const char *ht_get(ht_t *table, const char *key) {
+const void *ht_get(ht_t *table, const char *key) {
     uint32_t index = hash(key) % table->max_entries;
     ht_entry_t *entry = table->entries[index];
     if (entry == NULL) {
@@ -127,7 +127,7 @@ const char *ht_get(ht_t *table, const char *key) {
  * @param key key to put in
  * @param value value to put in
  */
-void ht_put(ht_t *table, const char *key, const char *value) {
+void ht_put(ht_t *table, const char *key, const void *value) {
     if (table->n_entries + 1 > table->max_entries / 2) {
         ht_expand(table);
     }

@@ -4,7 +4,7 @@
 
 typedef struct ht_entry {
     const char *key;
-    const char *value;
+    const void *value;
 } ht_entry_t;
 
 typedef struct ht_t {
@@ -16,8 +16,8 @@ typedef struct ht_t {
 ht_t *ht_init(uint32_t init_size);
 void ht_free(ht_t *table);
 
-const char *ht_get(ht_t *table, const char *key);
-void ht_put(ht_t *table, const char *key, const char *value);
+const void *ht_get(ht_t *table, const char *key);
+void ht_put(ht_t *table, const char *key, const void *value);
 void ht_print(ht_t *table);
 
 uint32_t hash(const char *key);

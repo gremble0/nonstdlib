@@ -40,6 +40,11 @@ iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh"
     assert(table->n_entries == 6);
     assert(table->max_entries == 20);
 
+    int a = 2;
+    ht_put(table, "jig", &a);
+    assert(*(int*)ht_get(table, "jig") == 2);
+    assert(ht_get(table, "doesnt_exist") == NULL);
+
     ht_free(table);
 
     printf("\033[0;32mAll hash table data structure tests passed\033[0;37m\n");
