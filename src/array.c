@@ -10,9 +10,7 @@
  * @param type_size amount of bytes used for each element in arr
  */
 void arr_clear(void *arr, size_t arr_size, size_t type_size) {
-    for (size_t i = 0; i < arr_size; ++i) {
-        memset(arr + i * type_size, 0, type_size);
-    }
+    memset(arr, 0, type_size * arr_size);
 }
 
 /**
