@@ -1,6 +1,6 @@
 CC=clang
 CFLAGS=-Wall -Wextra
-OBJS=hashtable.o stack.o sort.o array.o
+OBJS=hashtable.o stack.o sort.o array.o list.o
 LIB=libnonstdlib.a
 
 all: $(OBJS)
@@ -17,6 +17,9 @@ quicksort.o:
 
 array.o:
 	$(CC) $(CFLAGS) -c array.c -o array.o
+
+list.o:
+	$(CC) $(CFLAGS) -c list.c -o list.o
 
 clean:
 	rm -f *.o
