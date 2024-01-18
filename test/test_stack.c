@@ -6,6 +6,7 @@
 
 void test_stack(void) {
     printf("Testing stack data structure...\n");
+
     stack *s = stack_init();
 
     uint32_t *val1 = malloc(sizeof(uint32_t));

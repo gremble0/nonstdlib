@@ -37,6 +37,26 @@ void list_append(list_t *list, const void *val) {
 }
 
 /**
+ * @brief Clear all values in list
+ *
+ * @param list list to clear
+ */
+void list_clear(list_t *list) {
+    memset(list->values, 0, list->cur_size * list->type_size);
+    list->cur_size = 0;
+}
+
+/**
+ * @brief Free all variables bound to a list
+ *
+ * @param list list to free
+ */
+void list_free(list_t *list) {
+    free(list->values);
+    free(list);
+}
+
+/**
  * @brief Get a value in a list in O(1) time complexity
  *
  * @param list list to index
