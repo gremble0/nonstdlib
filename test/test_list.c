@@ -4,8 +4,41 @@
 
 #include "list.h"
 
+void test_list_append(void) {
+    list_t *list = list_init(5, sizeof(char*));
+
+    list_append(list, "a");
+    list_append(list, "asd");
+    list_append(list, "asd");
+    list_append(list, "asd");
+
+    assert(list->cur_size == 4);
+    assert(memcmp("a", list_get(list, 0), list->type_size) == 0);
+    assert(memcmp("b", list_get(list, 0), list->type_size) != 0);
+    assert(memcmp("asd", list_get(list, 0), list->type_size) != 0);
+
+    assert(memcmp("asd", list_get(list, 1), list->type_size) == 0);
+    assert(memcmp("asd", list_get(list, 2), list->type_size) == 0);
+    assert(memcmp("asd", list_get(list, 3), list->type_size) == 0);
+
+    list_t *list2 = list_init(10, sizeof(int));
+    const int a = 2;
+    const int b = 44;
+    list_append(list2, &a);
+    list_append(list2, &b);
+
+    assert(memcmp(&a, list_get(list2, 0), list2->type_size) == 0);
+    assert(memcmp(&b, list_get(list2, 0), list2->type_size) != 0);
+
+    assert(memcmp(&a, list_get(list2, 1), list2->type_size) != 0);
+    assert(memcmp(&b, list_get(list2, 1), list2->type_size) == 0);
+
+    printf("\033[0;32mAll list_append tests passed\033[0;37m\n");
+}
+
 void test_list(void) {
     printf("Testing list data structure...\n");
+    test_list_append();
 
     list_t *list = list_init(5, sizeof(char*));
 

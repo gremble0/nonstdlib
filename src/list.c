@@ -21,7 +21,7 @@ list_t *list_init(const int init_size, const size_t type_size) {
 }
 
 /**
- * @brief Append a value to the end of a list
+ * @brief Append a value to the end of a list by copying the bytes in val
  *
  * @param list list to append onto
  * @param val value to append onto the list
