@@ -55,7 +55,7 @@ void list_clear(list_t *list) {
  */
 int list_contains(list_t *list, const void *val) {
     for (size_t i = 0; i < list->cur_size; ++i) {
-        if (memcmp(list->values + i *list->type_size, val, list->type_size)) {
+        if (memcmp(list->values + i * list->type_size, val, list->type_size) == 0) {
             return 1;
         }
     }
