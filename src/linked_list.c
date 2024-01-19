@@ -4,6 +4,32 @@
 #include "linked_list.h"
 
 /**
+ * @brief Appends a value to the end of a linked list
+ *
+ * @param ll linked list to append onto
+ * @param value value to append
+ */
+void ll_append(ll_t *ll, const void *value) {
+    ll_entry_t *new = malloc(sizeof(ll_entry_t));
+    new->value = value;
+    new->next = NULL;
+
+    ll_entry_t *iter = ll->first;
+    if (iter == NULL) {
+        ll->first = new;
+        ++ll->size;
+        return;
+    }
+
+    while (iter->next != NULL) {
+        iter = iter->next;
+    }
+
+    iter->next = new;
+    ++ll->size;
+}
+
+/**
  * @brief Initializes an empty linked list
  *
  * @return an empty linked list
@@ -87,10 +113,10 @@ const void *ll_seek(ll_t *ll, int index) {
  * @param s linked list to push into
  * @param value what to push onto the linked list, needs to be malloc'd beforehand
  */
-void ll_append(ll_t *ll, void *value) {
-    ll_entry_t *new_entry = malloc(sizeof(ll_entry_t));
-    new_entry->value = value;
-    new_entry->next = ll->first;
-    ll->first = new_entry;
+void ll_push(ll_t *ll, const void *value) {
+    ll_entry_t *new = malloc(sizeof(ll_entry_t));
+    new->value = value;
+    new->next = ll->first;
+    ll->first = new;
     ++ll->size;
 }
