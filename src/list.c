@@ -47,6 +47,23 @@ void list_clear(list_t *list) {
 }
 
 /**
+ * @brief Checks if a value is present in a list
+ *
+ * @param list list to check in
+ * @param val value to check for
+ * @return 1 if present 0 if not
+ */
+int list_contains(list_t *list, const void *val) {
+    for (size_t i = 0; i < list->cur_size; ++i) {
+        if (memcmp(list->values + i *list->type_size, val, list->type_size)) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+/**
  * @brief Free all variables bound to a list
  *
  * @param list list to free
