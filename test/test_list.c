@@ -11,8 +11,10 @@ void test_list_append(void) {
     list_append(list, "asd");
     list_append(list, "asd");
     list_append(list, "asd");
+    list_append(list, "asd");
+    list_append(list, "asd");
 
-    assert(list->cur_size == 4);
+    assert(list->cur_size == 6);
     assert(memcmp("a", list_get(list, 0), list->type_size) == 0);
     assert(memcmp("b", list_get(list, 0), list->type_size) != 0);
     assert(memcmp("asd", list_get(list, 0), list->type_size) != 0);

@@ -3,7 +3,7 @@
 #include <stddef.h>
 
 typedef struct list_t {
-    void *values;     // List of all values
+    void **values;    // List of all values
     size_t type_size; // Size of one value in the list
     size_t cur_size;  // How many values are currently in the list
     size_t max_size;  // What is the current maximum amount of elements (can be increased)

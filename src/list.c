@@ -28,8 +28,8 @@ list_t *list_init(const int init_size, const size_t type_size) {
  */
 void list_append(list_t *list, const void *val) {
     if (list->cur_size == list->max_size) {
-        list->values = realloc(list, list->max_size * 2);
-        list->max_size = list->max_size * 2;
+        list->max_size *= 2;
+        list->values = realloc(list->values, list->max_size);
     }
 
     memcpy(list->values + list->cur_size * list->type_size, val, list->type_size);
