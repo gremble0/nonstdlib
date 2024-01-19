@@ -80,7 +80,5 @@ void list_free(list_t *list) {
  * @param index index into list
  */
 void *list_get(list_t *list, const int index) {
-    void *ret = malloc(sizeof(void*));
-    memcpy(ret, list->values + index * list->type_size, list->type_size);
-    return ret;
+    return list->values + index * list->type_size;
 }
