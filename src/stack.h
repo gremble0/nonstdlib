@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-// TODO: make linked list
+// TODO: make linked list, make this not linked list
 
 typedef struct stack_entry {
     const void *value;

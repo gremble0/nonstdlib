@@ -49,7 +49,9 @@ void test_stack(void) {
     stack_push(s, val4);
     stack_push(s, val5);
     
+    assert(*(uint64_t *)stack_peek(s) == 1000);
     assert(*(uint64_t *)stack_pop(s) == 1000);
+    assert(*(char *)stack_peek(s) == 't');
     assert(*(char *)stack_pop(s) == 't');
 
     free(val4);
