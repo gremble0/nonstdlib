@@ -1,6 +1,6 @@
 CC=clang
 CFLAGS=-Wall -Wextra
-OBJS=hashtable.o stack.o sort.o array.o list.o
+OBJS=hashtable.o linked_list.o sort.o array.o list.o
 LIB=libnonstdlib.a
 
 all: $(OBJS)
@@ -9,8 +9,8 @@ all: $(OBJS)
 hashtable.o:
 	$(CC) $(CFLAGS) -c hashtable.c -o hashtable.o
 
-stack.o:
-	$(CC) $(CFLAGS) -c stack.c -o stack.o
+linked_list.o:
+	$(CC) $(CFLAGS) -c linked_list.c -o linked_list.o
 
 quicksort.o:
 	$(CC) $(CFLAGS) -c sort.c -o sort.o

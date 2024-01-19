@@ -5,7 +5,7 @@
 #include "test_hashtable_generic.c"
 #include "test_list.c"
 #include "test_sort.c"
-#include "test_stack.c"
+#include "test_linked_list.c"
 
 int main(void) {
     printf("------------------------------------------\n");
@@ -19,6 +19,6 @@ int main(void) {
     printf("------------------------------------------\n");
     test_all_sorts();
     printf("------------------------------------------\n");
-    test_stack();
+    test_linked_list();
     printf("------------------------------------------\n");
 }
