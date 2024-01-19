@@ -58,6 +58,15 @@ void stack_print(stack *s) {
 }
 
 /**
+ * @brief Get the first element in the stack without modifying it
+ *
+ * @param s stack to get element from
+ */
+const void *stack_peek(stack *s) {
+    return s->first->value;
+}
+
+/**
  * @brief Pops first entry off the stack and returns it. Returned value needs
  *        to be freed
  *

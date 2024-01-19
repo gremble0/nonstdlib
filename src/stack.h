@@ -17,6 +17,7 @@ typedef struct stack {
 stack *stack_init(void);
 void stack_free(stack *s);
 void stack_print(stack *s);
+const void *stack_peek(stack *s);
 const void *stack_pop(stack *s);
 const void *stack_get(stack *s, uint32_t index);
 void stack_push(stack *s, void *value);
