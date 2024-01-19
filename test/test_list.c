@@ -34,7 +34,22 @@ void test_list_append(void) {
     assert(memcmp(&b, list_get(list2, 1), list2->type_size) == 0);
 
     list_free(list);
-    printf("\033[0;32mAll list_append tests passed\033[0;37m\n");
+    printf("\033[0;32mTests for list_append passed\033[0;37m\n");
+}
+
+void test_list_clear(void) {
+    list_t *list = list_init(5, sizeof(char*));
+
+    list_append(list, "abc");
+    list_append(list, "abc");
+    list_append(list, "abc");
+    list_append(list, "abc");
+    assert(list->cur_size == 4);
+    list_clear(list);
+    assert(list->cur_size == 0);
+
+    list_free(list);
+    printf("\033[0;32mTests for list_clear passed\033[0;37m\n");
 }
 
 void test_list_contains(void) {
@@ -50,13 +65,13 @@ void test_list_contains(void) {
     assert(list_contains(list, &b) == 1);
 
     list_free(list);
-    printf("\033[0;32mAll list tests passed\033[0;37m\n");
+    printf("\033[0;32mTests for list_contains passed\033[0;37m\n");
 }
 
 void test_list(void) {
     printf("Testing list data structure...\n");
     test_list_append();
+    test_list_clear();
     test_list_contains();
-
     printf("\033[0;32mAll list tests passed\033[0;37m\n");
 }
