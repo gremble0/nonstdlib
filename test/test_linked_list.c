@@ -6,7 +6,7 @@
 #include "linked_list.h"
 
 void test_ll_push(void) {
-    ll_t *ll = ll_init();
+    ll_t *ll = ll_init(sizeof(char *));
 
     ll_push(ll, "a");
     ll_push(ll, "b");
@@ -22,7 +22,7 @@ void test_ll_push(void) {
 }
 
 void test_ll_pop(void) {
-    ll_t *ll = ll_init();
+    ll_t *ll = ll_init(sizeof(int));
 
     const int a = 1;
     const int b = 2;
@@ -46,8 +46,8 @@ void test_ll_pop(void) {
 }
 
 void test_linked_list(void) {
-    printf("Testing stack data structure...\n");
+    printf("Testing linked list...\n");
     test_ll_push();
     test_ll_pop();
-    printf("\033[0;32mAll stack data structure tests passed\033[0;37m\n");
+    printf("\033[0;32mAll linked list tests passed\033[0;37m\n");
 }

@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "linked_list.h"
 
 /**
- * @brief Appends a value to the end of a linked list (index ll->cur_size - 1)
+ * @brief Appends a value to the end of a linked list (index ll->cur_size - 1).
+ *        Mallocs and copies ll->type_size bytes from value into the linked list
+ *        entries value
  *
  * @param ll linked list to append onto
  * @param value value to append
  */
 void ll_append(ll_t *ll, const void *value) {
     ll_entry_t *new = malloc(sizeof(ll_entry_t));
-    new->value = value;
+    new->value = malloc(ll->type_size);
+    memcpy(new->value, value, ll->type_size);
     new->next = NULL;
 
     ll_entry_t *iter = ll->first;
@@ -34,9 +38,10 @@ void ll_append(ll_t *ll, const void *value) {
  *
  * @return an empty linked list
  */
-ll_t *ll_init(void) {
+ll_t *ll_init(size_t type_size) {
     ll_t *ll = malloc(sizeof(ll_t));
     ll->cur_size = 0;
+    ll->type_size = type_size;
     ll->first = NULL;
 
     return ll;
@@ -56,6 +61,7 @@ void ll_free(ll_t *ll) {
     ll_entry_t *entry = ll->first;
     while (entry->next != NULL) {
         ll_entry_t *next = entry->next;
+        free(entry->value);
         free(entry);
         entry = next;
     }
@@ -68,7 +74,7 @@ void ll_free(ll_t *ll) {
  *
  * @param s linked list to get element from
  */
-const void *ll_peek(ll_t *ll) {
+void *ll_peek(ll_t *ll) {
     return ll->first->value;
 }
 
@@ -78,15 +84,16 @@ const void *ll_peek(ll_t *ll) {
  *
  * @param s linked list to pop from
  */
-const void *ll_pop(ll_t *ll) {
+void *ll_pop(ll_t *ll) {
     if (ll->cur_size == 0) {
         return NULL;
     }
 
     ll_entry_t *popped = ll->first;
-    const void *ret = popped->value;
+    void *ret = popped->value;
     ll->first = popped->next;
     --ll->cur_size;
+
     free(popped);
     return ret;
 }
@@ -97,7 +104,7 @@ const void *ll_pop(ll_t *ll) {
  * @param s linked list to get value from
  * @param index how far into the linked list to seek
  */
-const void *ll_seek(ll_t *ll, int index) {
+void *ll_seek(ll_t *ll, int index) {
     ll_entry_t *entry = ll->first;
     while (index-- > 0) {
         entry = entry->next;
@@ -107,14 +114,17 @@ const void *ll_seek(ll_t *ll, int index) {
 }
 
 /**
- * @brief Pushes an entry onto the front of the linked list (index 0)
+ * @brief Pushes an entry onto the front of the linked list (index 0). 
+ *        Mallocs and copies ll->type_size bytes from value into the
+ *        linked list entries value
  *
  * @param s linked list to push into
  * @param value what to push onto the linked list
  */
 void ll_push(ll_t *ll, const void *value) {
     ll_entry_t *new = malloc(sizeof(ll_entry_t));
-    new->value = value;
+    new->value = malloc(ll->type_size);
+    memcpy(new->value, value, ll->type_size);
     new->next = ll->first;
     ll->first = new;
     ++ll->cur_size;
