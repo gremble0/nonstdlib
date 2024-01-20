@@ -1,11 +1,29 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "linked_list.h"
 
+void test_ll_push(void) {
+    ll_t *ll = ll_init();
+
+    ll_push(ll, "a");
+    ll_push(ll, "b");
+    ll_push(ll, "c");
+
+    assert(strcmp(ll_seek(ll, 0), "c") == 0);
+    assert(strcmp(ll_seek(ll, 1), "b") == 0);
+    assert(strcmp(ll_seek(ll, 2), "a") == 0);
+
+    // ll_free(ll);
+    printf("\033[0;32mTests for ll_push passed\033[0;37m\n");
+}
+
+// TODO: separate to more funcs
 void test_linked_list(void) {
     printf("Testing stack data structure...\n");
+    test_ll_push();
 
     ll_t *ll = ll_init();
 
