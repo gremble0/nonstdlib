@@ -11,7 +11,7 @@ typedef struct ll_entry_t {
 typedef struct ll_t {
     ll_entry_t *first;
     // TODO: ll_entry_t *last;
-    size_t size;
+    size_t cur_size;
 } ll_t;
 
 void ll_append(ll_t *ll, const void *value);

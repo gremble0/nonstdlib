@@ -4,7 +4,7 @@
 #include "linked_list.h"
 
 /**
- * @brief Appends a value to the end of a linked list
+ * @brief Appends a value to the end of a linked list (index ll->cur_size - 1)
  *
  * @param ll linked list to append onto
  * @param value value to append
@@ -17,7 +17,7 @@ void ll_append(ll_t *ll, const void *value) {
     ll_entry_t *iter = ll->first;
     if (iter == NULL) {
         ll->first = new;
-        ++ll->size;
+        ++ll->cur_size;
         return;
     }
 
@@ -26,7 +26,7 @@ void ll_append(ll_t *ll, const void *value) {
     }
 
     iter->next = new;
-    ++ll->size;
+    ++ll->cur_size;
 }
 
 /**
@@ -36,7 +36,7 @@ void ll_append(ll_t *ll, const void *value) {
  */
 ll_t *ll_init(void) {
     ll_t *ll = malloc(sizeof(ll_t));
-    ll->size = 0;
+    ll->cur_size = 0;
     ll->first = NULL;
 
     return ll;
@@ -48,7 +48,7 @@ ll_t *ll_init(void) {
  * @param s linked list to free allocated memory for
  */
 void ll_free(ll_t *ll) {
-    if (ll->size == 0) {
+    if (ll->cur_size == 0) {
         free(ll);
         return;
     }
@@ -56,7 +56,6 @@ void ll_free(ll_t *ll) {
     ll_entry_t *entry = ll->first;
     while (entry->next != NULL) {
         ll_entry_t *next = entry->next;
-        free((char*)entry->value);
         free(entry);
         entry = next;
     }
@@ -80,14 +79,14 @@ const void *ll_peek(ll_t *ll) {
  * @param s linked list to pop from
  */
 const void *ll_pop(ll_t *ll) {
-    if (ll->size == 0) {
+    if (ll->cur_size == 0) {
         return NULL;
     }
 
     ll_entry_t *popped = ll->first;
     const void *ret = popped->value;
     ll->first = popped->next;
-    --ll->size;
+    --ll->cur_size;
     free(popped);
     return ret;
 }
@@ -108,15 +107,15 @@ const void *ll_seek(ll_t *ll, int index) {
 }
 
 /**
- * @brief Pushes an entry onto the front of the linked list
+ * @brief Pushes an entry onto the front of the linked list (index 0)
  *
  * @param s linked list to push into
- * @param value what to push onto the linked list, needs to be malloc'd beforehand
+ * @param value what to push onto the linked list
  */
 void ll_push(ll_t *ll, const void *value) {
     ll_entry_t *new = malloc(sizeof(ll_entry_t));
     new->value = value;
     new->next = ll->first;
     ll->first = new;
-    ++ll->size;
+    ++ll->cur_size;
 }

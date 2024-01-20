@@ -16,7 +16,7 @@ void test_ll_push(void) {
     assert(strcmp(ll_seek(ll, 1), "b") == 0);
     assert(strcmp(ll_seek(ll, 2), "a") == 0);
 
-    // ll_free(ll);
+    ll_free(ll);
     printf("\033[0;32mTests for ll_push passed\033[0;37m\n");
 }
 
@@ -37,7 +37,7 @@ void test_linked_list(void) {
     ll_push(ll, val2);
     ll_push(ll, val3);
 
-    assert(ll->size == 3);
+    assert(ll->cur_size == 3);
     assert(*(int *)ll_seek(ll, 0) == 3);
     assert(*(int *)ll_seek(ll, 1) == 2);
     assert(*(int *)ll_seek(ll, 2) == 1);
@@ -46,7 +46,7 @@ void test_linked_list(void) {
     const int *popped2 = ll_pop(ll);
     const int *popped3 = ll_pop(ll);
 
-    assert(ll->size == 0);
+    assert(ll->cur_size == 0);
     assert(*popped1 == 3);
     assert(*popped2 == 2);
     assert(*popped3 == 1);
@@ -72,11 +72,11 @@ void test_linked_list(void) {
     assert(*(char *)ll_peek(ll) == 't');
     assert(*(char *)ll_pop(ll) == 't');
 
-    assert(ll->size == 0);
+    assert(ll->cur_size == 0);
     int *val6 = malloc(sizeof(int));
     *val6 = 2;
     ll_append(ll, val6);
-    assert(*(int *)ll_seek(ll, ll->size - 1) == 2);
+    assert(*(int *)ll_seek(ll, ll->cur_size - 1) == 2);
 
     free(val4);
     free(val5);
