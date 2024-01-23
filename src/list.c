@@ -1,7 +1,11 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "list.h"
+#include "sort.h"
+
+// TODO: -1, -2, etc. to index from the back of lists
 
 /**
  * @brief Initialize a malloc'd list with malloc'd list->values
@@ -81,4 +85,29 @@ void list_free(list_t *list) {
  */
 void *list_get(list_t *list, const int index) {
     return list->values + index * list->type_size;
+}
+
+/**
+ * @brief Prints the bytes at each index in the list
+ *
+ * @param list list to print bytes of
+ */
+void list_print(list_t *list) {
+    for (size_t i = 0; i < list->cur_size; ++i) {
+        printf("[%zu]: ", i);
+        void *at_i = list_get(list, i);
+        for (size_t j = 0; j < list->type_size; ++j) {
+            printf("%02x ", *(char *)(at_i + j));
+        }
+        putchar('\n');
+    }
+}
+
+/**
+ * @brief Sort the given list
+ *
+ * @param list list to be sorted
+ */
+void list_sort(list_t *list) {
+    sort(*list->values, list->cur_size, QUICKSORT);
 }

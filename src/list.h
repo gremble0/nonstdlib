@@ -18,4 +18,6 @@ list_t *list_init(const int init_size, const size_t type_size);
 void list_remove(list_t *list, const void *val);
 void list_reverse(list_t *list);
 void *list_pop(list_t *list);
+void list_print(list_t *list);
+void list_sort(list_t *list);
 void list_swap(list_t *list, int i, int j);
