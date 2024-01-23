@@ -1,7 +1,5 @@
 #pragma once
 
-// TODO generics with macros
-
 #define ht_prototype(type)                                                  \
 typedef struct type##_ht_entry_t {                                          \
     const char *key;                                                        \

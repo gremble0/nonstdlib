@@ -5,10 +5,6 @@
 
 #include "hashtable.h"
 
-// TODO: fix increasing table size when table grows, what to do when hash() % max_size changes?
-// TODO: generalize to support more types, unions?
-// TODO: remove strlen calls
-
 /**
  * @brief djb2 hash function
  *
