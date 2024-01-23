@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "list.h"
-#include "sort.h"
 
 // TODO: -1, -2, etc. to index from the back of lists
 
@@ -101,13 +100,4 @@ void list_print(list_t *list) {
         }
         putchar('\n');
     }
-}
-
-/**
- * @brief Sort the given list
- *
- * @param list list to be sorted
- */
-void list_sort(list_t *list) {
-    sort(*list->values, list->cur_size, QUICKSORT);
 }
