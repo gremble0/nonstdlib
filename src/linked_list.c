@@ -99,6 +99,25 @@ void *ll_pop(ll_t *ll) {
 }
 
 /**
+ * @brief Prints contents of given stack to stdout
+ *
+ * @param s stack to get contents from
+ */
+void ll_print(ll_t *ll) {
+    ll_entry_t *entry = ll->first;
+    if (ll->first == NULL) {
+        printf("--empty linked list--\n");
+        return;
+    }
+
+    int index = 0;
+    while (entry != NULL) {
+        printf("[%u]: %p ->\n", index++, entry->value);
+        entry = entry->next;
+    }
+}
+
+/**
  * @brief Gets value at index into linked list in O(n) time complexity
  *
  * @param s linked list to get value from
