@@ -14,13 +14,13 @@
  * @return a malloc'd list that should to be freed using list_free()
  */
 list_t *list_init(const int init_size, const size_t type_size) {
-    list_t *list = malloc(sizeof(list_t));
-    list->max_size = init_size;
-    list->cur_size = 0;
-    list->type_size = type_size;
-    list->values = malloc(init_size * type_size);
+  list_t *list = malloc(sizeof(list_t));
+  list->max_size = init_size;
+  list->cur_size = 0;
+  list->type_size = type_size;
+  list->values = malloc(init_size * type_size);
 
-    return list;
+  return list;
 }
 
 /**
@@ -30,13 +30,13 @@ list_t *list_init(const int init_size, const size_t type_size) {
  * @param val value to append onto the list
  */
 void list_append(list_t *list, const void *val) {
-    if (list->cur_size == list->max_size) {
-        list->max_size *= 2;
-        list->values = realloc(list->values, list->max_size);
-    }
+  if (list->cur_size == list->max_size) {
+    list->max_size *= 2;
+    list->values = realloc(list->values, list->max_size);
+  }
 
-    memcpy(list->values + list->cur_size * list->type_size, val, list->type_size);
-    ++list->cur_size;
+  memcpy(list->values + list->cur_size * list->type_size, val, list->type_size);
+  ++list->cur_size;
 }
 
 /**
@@ -45,8 +45,8 @@ void list_append(list_t *list, const void *val) {
  * @param list list to clear
  */
 void list_clear(list_t *list) {
-    memset(list->values, 0, list->cur_size * list->type_size);
-    list->cur_size = 0;
+  memset(list->values, 0, list->cur_size * list->type_size);
+  list->cur_size = 0;
 }
 
 /**
@@ -57,13 +57,13 @@ void list_clear(list_t *list) {
  * @return 1 if present 0 if not
  */
 int list_contains(list_t *list, const void *val) {
-    for (size_t i = 0; i < list->cur_size; ++i) {
-        if (memcmp(list->values + i * list->type_size, val, list->type_size) == 0) {
-            return 1;
-        }
+  for (size_t i = 0; i < list->cur_size; ++i) {
+    if (memcmp(list->values + i * list->type_size, val, list->type_size) == 0) {
+      return 1;
     }
+  }
 
-    return 0;
+  return 0;
 }
 
 /**
@@ -72,8 +72,8 @@ int list_contains(list_t *list, const void *val) {
  * @param list list to free
  */
 void list_free(list_t *list) {
-    free(list->values);
-    free(list);
+  free(list->values);
+  free(list);
 }
 
 /**
@@ -83,7 +83,7 @@ void list_free(list_t *list) {
  * @param index index into list
  */
 void *list_get(list_t *list, const int index) {
-    return list->values + index * list->type_size;
+  return list->values + index * list->type_size;
 }
 
 /**
@@ -92,12 +92,12 @@ void *list_get(list_t *list, const int index) {
  * @param list list to print bytes of
  */
 void list_print(list_t *list) {
-    for (size_t i = 0; i < list->cur_size; ++i) {
-        printf("[%zu]: ", i);
-        void *at_i = list_get(list, i);
-        for (size_t j = 0; j < list->type_size; ++j) {
-            printf("%02x ", *(char *)(at_i + j));
-        }
-        putchar('\n');
+  for (size_t i = 0; i < list->cur_size; ++i) {
+    printf("[%zu]: ", i);
+    void *at_i = list_get(list, i);
+    for (size_t j = 0; j < list->type_size; ++j) {
+      printf("%02x ", *(char *)(at_i + j));
     }
+    putchar('\n');
+  }
 }
