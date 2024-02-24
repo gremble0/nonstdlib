@@ -3,14 +3,14 @@
 #include <stdint.h>
 
 typedef struct ht_entry {
-    const char *key;
-    const void *value;
+  const char *key;
+  const void *value;
 } ht_entry_t;
 
 typedef struct ht_t {
-    ht_entry_t **entries;
-    uint32_t n_entries;
-    uint32_t max_entries;
+  ht_entry_t **entries;
+  uint32_t n_entries;
+  uint32_t max_entries;
 } ht_t;
 
 ht_t *ht_init(uint32_t init_size);

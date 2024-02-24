@@ -3,16 +3,16 @@
 #include <stddef.h>
 
 typedef struct ll_entry_t {
-    void *value;
-    struct ll_entry_t *next;
-    // TODO: struct ll_entry_t *prev;
+  void *value;
+  struct ll_entry_t *next;
+  // TODO: struct ll_entry_t *prev;
 } ll_entry_t;
 
 typedef struct ll_t {
-    ll_entry_t *first;
-    // TODO: ll_entry_t *last;
-    size_t cur_size;
-    size_t type_size;
+  ll_entry_t *first;
+  // TODO: ll_entry_t *last;
+  size_t cur_size;
+  size_t type_size;
 } ll_t;
 
 void ll_append(ll_t *ll, const void *value);
