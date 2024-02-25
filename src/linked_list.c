@@ -14,6 +14,7 @@ ll_t *ll_init(size_t type_size) {
   ll->cur_size = 0;
   ll->type_size = type_size;
   ll->first = NULL;
+  ll->last = NULL;
 
   return ll;
 }
@@ -51,7 +52,14 @@ void *ll_pop(ll_t *ll) {
  * @param s linked list to get value from
  * @param index how far into the linked list to seek
  */
-void *ll_seek(ll_t *ll, int index) {
+void *ll_seek(ll_t *ll, size_t index) {
+  // TODO seek from back if index is large
+
+  // Index out of bounds
+  if (index >= ll->cur_size) {
+    return NULL;
+  }
+
   ll_entry_t *entry = ll->first;
   while (index-- > 0) {
     entry = entry->next;
@@ -69,23 +77,21 @@ void *ll_seek(ll_t *ll, int index) {
  * @param value value to append
  */
 void ll_append(ll_t *ll, const void *value) {
+  // Initialize new ll_entry
   ll_entry_t *new = malloc(sizeof(ll_entry_t));
   new->value = malloc(ll->type_size);
   memcpy(new->value, value, ll->type_size);
   new->next = NULL;
+  new->prev = ll->last;
 
-  ll_entry_t *iter = ll->first;
-  if (iter == NULL) {
+  // Update pointers in ll
+  if (ll->first == NULL) {
     ll->first = new;
-    ++ll->cur_size;
-    return;
+  } else {
+    ll->last->next = new;
   }
 
-  while (iter->next != NULL) {
-    iter = iter->next;
-  }
-
-  iter->next = new;
+  ll->last = new;
   ++ll->cur_size;
 }
 
