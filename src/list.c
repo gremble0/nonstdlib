@@ -7,6 +7,23 @@
 // TODO: -1, -2, etc. to index from the back of lists
 
 /**
+ * @brief Checks if a value is present in a list
+ *
+ * @param list list to check in
+ * @param val value to check for
+ * @return 1 if present 0 if not
+ */
+int list_contains(list_t *list, const void *val) {
+  for (size_t i = 0; i < list->cur_size; ++i) {
+    if (memcmp(list->values + i * list->type_size, val, list->type_size) == 0) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+/**
  * @brief Initialize a malloc'd list with malloc'd list->values
  *
  * @param init_size initial max size of list
@@ -21,6 +38,30 @@ list_t *list_init(const int init_size, const size_t type_size) {
   list->values = malloc(init_size * type_size);
 
   return list;
+}
+
+/**
+ * @brief Pops the last element appended to the list
+ *
+ * @param list list to pop from
+ * @return whatever is present at the end of the list
+ */
+void *list_pop(list_t *list) {
+  if (list->cur_size == 0) {
+    return NULL;
+  }
+
+  return list->values[list->cur_size--];
+}
+
+/**
+ * @brief Get a value in a list in O(1) time complexity
+ *
+ * @param list list to index
+ * @param index index into list
+ */
+void *list_get(list_t *list, const int index) {
+  return list->values + index * list->type_size;
 }
 
 /**
@@ -50,23 +91,6 @@ void list_clear(list_t *list) {
 }
 
 /**
- * @brief Checks if a value is present in a list
- *
- * @param list list to check in
- * @param val value to check for
- * @return 1 if present 0 if not
- */
-int list_contains(list_t *list, const void *val) {
-  for (size_t i = 0; i < list->cur_size; ++i) {
-    if (memcmp(list->values + i * list->type_size, val, list->type_size) == 0) {
-      return 1;
-    }
-  }
-
-  return 0;
-}
-
-/**
  * @brief Free all variables bound to a list
  *
  * @param list list to free
@@ -74,16 +98,6 @@ int list_contains(list_t *list, const void *val) {
 void list_free(list_t *list) {
   free(list->values);
   free(list);
-}
-
-/**
- * @brief Get a value in a list in O(1) time complexity
- *
- * @param list list to index
- * @param index index into list
- */
-void *list_get(list_t *list, const int index) {
-  return list->values + index * list->type_size;
 }
 
 /**
