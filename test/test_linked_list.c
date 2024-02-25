@@ -11,11 +11,17 @@ void test_ll_append(void) {
   ll_append(ll, "a");
   ll_append(ll, "b");
   ll_append(ll, "c");
+  ll_append(ll, "d");
+  ll_append(ll, "e");
+  ll_append(ll, "f");
 
-  assert(ll->cur_size == 3);
+  assert(ll->cur_size == 6);
   assert(strcmp(ll_peek(ll), "a") == 0);
   assert(strcmp(ll_seek(ll, 1), "b") == 0);
   assert(strcmp(ll_seek(ll, 2), "c") == 0);
+  assert(strcmp(ll_seek(ll, 3), "d") == 0);
+  assert(strcmp(ll_seek(ll, 4), "e") == 0);
+  assert(strcmp(ll_seek(ll, 5), "f") == 0);
 
   ll_free(ll);
   printf("\033[0;32mTests for ll_append passed\033[0;37m\n");

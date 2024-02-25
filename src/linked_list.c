@@ -27,8 +27,8 @@ ll_t *ll_init(size_t type_size) {
 void *ll_peek(ll_t *ll) { return ll->first->value; }
 
 /**
- * @brief Pops first entry off the linked list and returns it. Returned value
- *        needs to be freed
+ * @brief Pops value of last entry added to the linked list and returns it.
+ * Returned value needs to be freed
  *
  * @param s linked list to pop from
  */
@@ -37,12 +37,15 @@ void *ll_pop(ll_t *ll) {
     return NULL;
   }
 
-  ll_entry_t *popped = ll->first;
+  ll_entry_t *popped = ll->last;
   void *ret = popped->value;
-  ll->first = popped->next;
-  --ll->cur_size;
 
+  ll->last = popped->prev;
+  ll->last->next = NULL;
+
+  --ll->cur_size;
   free(popped);
+
   return ret;
 }
 
@@ -53,19 +56,28 @@ void *ll_pop(ll_t *ll) {
  * @param index how far into the linked list to seek
  */
 void *ll_seek(ll_t *ll, size_t index) {
-  // TODO seek from back if index is large
-
   // Index out of bounds
   if (index >= ll->cur_size) {
     return NULL;
   }
 
-  ll_entry_t *entry = ll->first;
-  while (index-- > 0) {
-    entry = entry->next;
-  }
+  // Seek front to back if index is small, back to front if index is large
+  if (index <= ll->cur_size / 2) {
+    ll_entry_t *entry = ll->first;
+    while (index-- > 0) {
+      entry = entry->next;
+    }
 
-  return entry->value;
+    return entry->value;
+  } else {
+    index = ll->cur_size - index;
+    ll_entry_t *entry = ll->last;
+    while (--index > 0) {
+      entry = entry->prev;
+    }
+
+    return entry->value;
+  }
 }
 
 /**
@@ -103,6 +115,7 @@ void ll_append(ll_t *ll, const void *value) {
 void ll_free(ll_t *ll) {
   if (ll->cur_size == 0) {
     free(ll);
+
     return;
   }
 
