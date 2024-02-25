@@ -6,18 +6,27 @@
 #include "hashtable.h"
 
 /**
- * @brief djb2 hash function
+ * @brief Get an element from a hash table
  *
- * @return index into a hash table (needs to be %'d by table size)
+ * @param table table to get from
+ * @param key key to get
+ * @return value of the given key
  */
-uint32_t hash(const char *key) {
-  uint32_t hash = 5381;
-
-  for (size_t i = 0; i < strlen(key); ++i) {
-    hash = hash * 33 + key[i];
+const void *ht_get(ht_t *table, const char *key) {
+  uint32_t index = hash(key) % table->max_entries;
+  ht_entry_t *entry = table->entries[index];
+  if (entry == NULL) {
+    return NULL;
   }
 
-  return hash;
+  while (entry->key != key) {
+    if (entry == NULL) {
+      return NULL;
+    }
+    entry = table->entries[index++];
+  }
+
+  return entry->value;
 }
 
 /**
@@ -40,17 +49,18 @@ ht_t *ht_init(uint32_t init_max_entries) {
 }
 
 /**
- * @brief frees memory allocated for hash table
+ * @brief djb2 hash function
  *
- * @param table table to free memory for
+ * @return index into a hash table (needs to be %'d by table size)
  */
-void ht_free(ht_t *table) {
-  for (size_t i = 0; i < table->max_entries; ++i) {
-    free(table->entries[i]);
+uint32_t hash(const char *key) {
+  uint32_t hash = 5381;
+
+  for (size_t i = 0; i < strlen(key); ++i) {
+    hash = hash * 33 + key[i];
   }
 
-  free(table->entries);
-  free(table);
+  return hash;
 }
 
 /**
@@ -78,6 +88,20 @@ void ht_expand(ht_t *table) {
 }
 
 /**
+ * @brief frees memory allocated for hash table
+ *
+ * @param table table to free memory for
+ */
+void ht_free(ht_t *table) {
+  for (size_t i = 0; i < table->max_entries; ++i) {
+    free(table->entries[i]);
+  }
+
+  free(table->entries);
+  free(table);
+}
+
+/**
  * @brief Print contents of hash table
  *
  * @param table table to print
@@ -91,30 +115,6 @@ void ht_print(ht_t *table) {
       printf("[%zu]: key: %s, value: %p\n", i, entry->key, entry->value);
     }
   }
-}
-
-/**
- * @brief Get an element from a hash table
- *
- * @param table table to get from
- * @param key key to get
- * @return value of the given key
- */
-const void *ht_get(ht_t *table, const char *key) {
-  uint32_t index = hash(key) % table->max_entries;
-  ht_entry_t *entry = table->entries[index];
-  if (entry == NULL) {
-    return NULL;
-  }
-
-  while (entry->key != key) {
-    if (entry == NULL) {
-      return NULL;
-    }
-    entry = table->entries[index++];
-  }
-
-  return entry->value;
 }
 
 /**

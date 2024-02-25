@@ -12,30 +12,36 @@
     uint32_t max_entries;                                                      \
   } type##_ht_t;                                                               \
                                                                                \
-  type##_ht_t *type##_ht_init(uint32_t init_size);                             \
-  void type##_ht_free(type##_ht_t *table);                                     \
-                                                                               \
   const type *type##_ht_get(type##_ht_t *table, const char *key);              \
-  void type##_ht_put(type##_ht_t *table, const char *key, const type *value);  \
-  void type##_ht_print(type##_ht_t *table);                                    \
-                                                                               \
+  type##_ht_t *type##_ht_init(uint32_t init_size);                             \
   uint32_t type##_hash(const char *key);                                       \
-  void type##_ht_expand(type##_ht_t *table);
+  void type##_ht_expand(type##_ht_t *table);                                   \
+  void type##_ht_free(type##_ht_t *table);                                     \
+  void type##_ht_put(type##_ht_t *table, const char *key, const type *value);
 
 #define ht_impl(type)                                                          \
   /**                                                                          \
-   * @brief djb2 hash function                                                 \
+   * @brief Get an element from a hash table                                   \
    *                                                                           \
-   * @return index into a hash table (needs to be %'d by table size)           \
+   * @param table table to get from                                            \
+   * @param key key to get                                                     \
+   * @return value of the given key                                            \
    */                                                                          \
-  uint32_t type##_hash(const char *key) {                                      \
-    uint32_t hash = 5381;                                                      \
-                                                                               \
-    for (size_t i = 0; i < strlen(key); ++i) {                                 \
-      hash = hash * 33 + key[i];                                               \
+  const type *type##_ht_get(type##_ht_t *table, const char *key) {             \
+    uint32_t index = type##_hash(key) % table->max_entries;                    \
+    type##_ht_entry_t *entry = table->entries[index];                          \
+    if (entry == NULL) {                                                       \
+      return NULL;                                                             \
     }                                                                          \
                                                                                \
-    return hash;                                                               \
+    while (entry->key != key) {                                                \
+      if (entry == NULL) {                                                     \
+        return NULL;                                                           \
+      }                                                                        \
+      entry = table->entries[index++];                                         \
+    }                                                                          \
+                                                                               \
+    return entry->value;                                                       \
   }                                                                            \
                                                                                \
   /**                                                                          \
@@ -59,17 +65,18 @@
   }                                                                            \
                                                                                \
   /**                                                                          \
-   * @brief frees memory allocated for hash table                              \
+   * @brief djb2 hash function                                                 \
    *                                                                           \
-   * @param table table to free memory for                                     \
+   * @return index into a hash table (needs to be %'d by table size)           \
    */                                                                          \
-  void type##_ht_free(type##_ht_t *table) {                                    \
-    for (size_t i = 0; i < table->max_entries; ++i) {                          \
-      free(table->entries[i]);                                                 \
+  uint32_t type##_hash(const char *key) {                                      \
+    uint32_t hash = 5381;                                                      \
+                                                                               \
+    for (size_t i = 0; i < strlen(key); ++i) {                                 \
+      hash = hash * 33 + key[i];                                               \
     }                                                                          \
                                                                                \
-    free(table->entries);                                                      \
-    free(table);                                                               \
+    return hash;                                                               \
   }                                                                            \
                                                                                \
   /**                                                                          \
@@ -98,27 +105,17 @@
   }                                                                            \
                                                                                \
   /**                                                                          \
-   * @brief Get an element from a hash table                                   \
+   * @brief frees memory allocated for hash table                              \
    *                                                                           \
-   * @param table table to get from                                            \
-   * @param key key to get                                                     \
-   * @return value of the given key                                            \
+   * @param table table to free memory for                                     \
    */                                                                          \
-  const type *type##_ht_get(type##_ht_t *table, const char *key) {             \
-    uint32_t index = type##_hash(key) % table->max_entries;                    \
-    type##_ht_entry_t *entry = table->entries[index];                          \
-    if (entry == NULL) {                                                       \
-      return NULL;                                                             \
+  void type##_ht_free(type##_ht_t *table) {                                    \
+    for (size_t i = 0; i < table->max_entries; ++i) {                          \
+      free(table->entries[i]);                                                 \
     }                                                                          \
                                                                                \
-    while (entry->key != key) {                                                \
-      if (entry == NULL) {                                                     \
-        return NULL;                                                           \
-      }                                                                        \
-      entry = table->entries[index++];                                         \
-    }                                                                          \
-                                                                               \
-    return entry->value;                                                       \
+    free(table->entries);                                                      \
+    free(table);                                                               \
   }                                                                            \
                                                                                \
   /**                                                                          \

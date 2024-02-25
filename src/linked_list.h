@@ -15,11 +15,11 @@ typedef struct ll_t {
   size_t type_size;
 } ll_t;
 
-void ll_append(ll_t *ll, const void *value);
 ll_t *ll_init(size_t type_size);
-void ll_free(ll_t *ll);
 void *ll_peek(ll_t *ll);
 void *ll_pop(ll_t *ll);
-void ll_print(ll_t *ll);
 void *ll_seek(ll_t *ll, int index);
+void ll_append(ll_t *ll, const void *value);
+void ll_free(ll_t *ll);
+void ll_print(ll_t *ll);
 void ll_push(ll_t *ll, const void *value);
