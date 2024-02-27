@@ -24,10 +24,16 @@ ll_t *ll_init(size_t type_size) {
  *
  * @param s linked list to get element from
  */
-void *ll_peek(ll_t *ll) { return ll->first->value; }
+void *ll_peek(ll_t *ll) {
+  if (ll->first == NULL) {
+    return NULL;
+  }
+
+  return ll->first->value;
+}
 
 /**
- * @brief Pops value of last entry added to the linked list and returns it.
+ * @brief Removes last entry in the linked list and returns it.
  *
  * @param s linked list to pop from
  */
@@ -40,8 +46,34 @@ void *ll_pop(ll_t *ll) {
   void *ret = popped->value;
 
   ll->last = popped->prev;
-  if (popped->prev != NULL) {
+  if (ll->last == NULL) {
+    ll->first = NULL;
+  } else {
     ll->last->next = NULL;
+  }
+
+  --ll->cur_size;
+  free(popped);
+
+  return ret;
+}
+
+/**
+ * @brief Pops value of first entry in the linked list and returns it.
+ *
+ * @param s linked list to pop from
+ */
+void *ll_pop_front(ll_t *ll) {
+  if (ll->first == NULL) {
+    return NULL;
+  }
+
+  ll_entry_t *popped = ll->first;
+  void *ret = popped->value;
+
+  ll->first = popped->next;
+  if (popped->next != NULL) {
+    ll->first->next = NULL;
   }
 
   --ll->cur_size;
@@ -138,7 +170,7 @@ void ll_free(ll_t *ll) {
  */
 void ll_print(ll_t *ll) {
   ll_entry_t *entry = ll->first;
-  if (ll->first == NULL) {
+  if (entry == NULL) {
     printf("--empty linked list--\n");
     return;
   }

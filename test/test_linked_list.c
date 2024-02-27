@@ -37,14 +37,10 @@ void test_ll_push_pop(void) {
   ll_push(ll, &b);
   ll_push(ll, &c);
 
-  // printf("%d\n", *(int *)ll_seek(ll, 0));
-  // printf("%d\n", *(int *)ll_seek(ll, 1));
-  // printf("%d\n", *(int *)ll_seek(ll, 2));
   assert(*(int *)ll_pop(ll) == 1);
   assert(*(int *)ll_pop(ll) == 2);
   assert(*(int *)ll_pop(ll) == 3);
   assert(ll_pop(ll) == NULL);
-
   ll_push(ll, &a);
   assert(*(int *)ll_pop(ll) == 1);
   assert(ll_pop(ll) == NULL);
@@ -53,21 +49,27 @@ void test_ll_push_pop(void) {
   printf("\033[0;32mTests for ll_push and ll_pop passed\033[0;37m\n");
 }
 
-// TODO: remove?
-void test_ll_peek(void) {
+void test_ll_all(void) {
   ll_t *ll = ll_init(sizeof(char *));
 
   ll_push(ll, "a");
   ll_push(ll, "b");
-  ll_push(ll, "c");
+  ll_append(ll, "c");
+  // ll should be: "b" -> "a" -> "c"
 
   assert(ll->cur_size == 3);
-  assert(strcmp(ll_peek(ll), "c") == 0);
+  assert(strcmp(ll_seek(ll, 2), "c") == 0);
+  assert(strcmp(ll_peek(ll), "b") == 0);
+
   ll_pop(ll);
+  // ll should be: "b" -> "a"
+  assert(strcmp(ll_peek(ll), "b") == 0);
+  assert(strcmp(ll_seek(ll, 1), "a") == 0);
+  ll_pop(ll);
+  // ll should be: "b"
   assert(strcmp(ll_peek(ll), "b") == 0);
   ll_pop(ll);
-  assert(strcmp(ll_peek(ll), "a") == 0);
-  ll_pop(ll);
+  // ll should be: (nil)
   assert(ll_peek(ll) == NULL);
 
   ll_free(ll);
@@ -78,6 +80,6 @@ void test_linked_list(void) {
   printf("Testing linked list...\n");
   test_ll_append_seek();
   test_ll_push_pop();
-  test_ll_peek();
+  test_ll_all();
   printf("\033[0;32mAll linked list tests passed\033[0;37m\n");
 }
