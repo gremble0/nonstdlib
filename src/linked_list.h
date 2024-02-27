@@ -17,10 +17,10 @@ typedef struct ll_t {
 
 ll_t *ll_init(size_t type_size);
 void *ll_peek(ll_t *ll);
-void *ll_pop(ll_t *ll);
+void *ll_pop_back(ll_t *ll);
 void *ll_pop_front(ll_t *ll);
 void *ll_seek(ll_t *ll, size_t index);
-void ll_append(ll_t *ll, const void *value);
 void ll_free(ll_t *ll);
 void ll_print(ll_t *ll);
-void ll_push(ll_t *ll, const void *value);
+void ll_push_back(ll_t *ll, const void *value);
+void ll_push_front(ll_t *ll, const void *value);
