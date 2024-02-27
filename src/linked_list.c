@@ -28,12 +28,11 @@ void *ll_peek(ll_t *ll) { return ll->first->value; }
 
 /**
  * @brief Pops value of last entry added to the linked list and returns it.
- * Returned value needs to be freed
  *
  * @param s linked list to pop from
  */
 void *ll_pop(ll_t *ll) {
-  if (ll->cur_size == 0) {
+  if (ll->last == NULL) {
     return NULL;
   }
 
@@ -41,7 +40,9 @@ void *ll_pop(ll_t *ll) {
   void *ret = popped->value;
 
   ll->last = popped->prev;
-  ll->last->next = NULL;
+  if (popped->prev != NULL) {
+    ll->last->next = NULL;
+  }
 
   --ll->cur_size;
   free(popped);
@@ -93,11 +94,11 @@ void ll_append(ll_t *ll, const void *value) {
   ll_entry_t *new = malloc(sizeof(ll_entry_t));
   new->value = malloc(ll->type_size);
   memcpy(new->value, value, ll->type_size);
-  new->next = NULL;
   new->prev = ll->last;
+  new->next = NULL;
 
   // Update pointers in ll
-  if (ll->first == NULL) {
+  if (ll->last == NULL) {
     ll->first = new;
   } else {
     ll->last->next = new;
@@ -144,7 +145,8 @@ void ll_print(ll_t *ll) {
 
   int index = 0;
   while (entry != NULL) {
-    printf("[%u]: %p ->\n", index++, entry->value);
+    printf("[%u]: %p ->, prev -> %p, next -> %p\n", index++, entry, entry->prev,
+           entry->next);
     entry = entry->next;
   }
 }
@@ -158,10 +160,20 @@ void ll_print(ll_t *ll) {
  * @param value what to push onto the linked list
  */
 void ll_push(ll_t *ll, const void *value) {
+  // Initialize ll_entry
   ll_entry_t *new = malloc(sizeof(ll_entry_t));
   new->value = malloc(ll->type_size);
   memcpy(new->value, value, ll->type_size);
+  new->prev = NULL;
   new->next = ll->first;
+
+  // Update pointers in ll
+  if (ll->last == NULL) {
+    ll->last = new;
+  } else {
+    ll->first->prev = new;
+  }
+
   ll->first = new;
   ++ll->cur_size;
 }
