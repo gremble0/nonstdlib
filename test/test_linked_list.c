@@ -16,7 +16,8 @@ void test_ll_push_back_seek(void) {
   ll_push_back(ll, "f");
 
   assert(ll->cur_size == 6);
-  assert(strcmp(ll_peek(ll), "a") == 0);
+  assert(strcmp(ll_peek_front(ll), "a") == 0);
+  assert(strcmp(ll_peek_back(ll), "f") == 0);
   assert(strcmp(ll_seek(ll, 5), "f") == 0);
   assert(strcmp(ll_seek(ll, 2), "c") == 0);
   assert(strcmp(ll_seek(ll, 1), "b") == 0);
@@ -24,7 +25,8 @@ void test_ll_push_back_seek(void) {
   assert(strcmp(ll_seek(ll, 4), "e") == 0);
 
   ll_free(ll);
-  printf("\033[0;32mTests for ll_push_back and ll_seek passed\033[0;37m\n");
+  printf("\033[0;32mTests for ll_push_back ll_seek, ll_peek(front & back) "
+         "passed\033[0;37m\n");
 }
 
 void test_ll_push_front_pop(void) {
@@ -66,18 +68,18 @@ void test_ll_all(void) {
 
   assert(ll->cur_size == 3);
   assert(strcmp(ll_seek(ll, 2), "c") == 0);
-  assert(strcmp(ll_peek(ll), "b") == 0);
+  assert(strcmp(ll_peek_front(ll), "b") == 0);
 
   ll_pop_back(ll);
   // ll should be: "b" -> "a"
-  assert(strcmp(ll_peek(ll), "b") == 0);
+  assert(strcmp(ll_peek_front(ll), "b") == 0);
   assert(strcmp(ll_seek(ll, 1), "a") == 0);
   ll_pop_back(ll);
   // ll should be: "b"
-  assert(strcmp(ll_peek(ll), "b") == 0);
+  assert(strcmp(ll_peek_front(ll), "b") == 0);
   ll_pop_back(ll);
   // ll should be: (nil)
-  assert(ll_peek(ll) == NULL);
+  assert(ll_peek_front(ll) == NULL);
 
   ll_free(ll);
   printf("\033[0;32mTests for all linked list functions passed\033[0;37m\n");

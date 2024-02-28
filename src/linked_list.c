@@ -24,7 +24,20 @@ ll_t *ll_init(size_t type_size) {
  *
  * @param s linked list to get element from
  */
-void *ll_peek(ll_t *ll) {
+void *ll_peek_back(ll_t *ll) {
+  if (ll->last == NULL) {
+    return NULL;
+  }
+
+  return ll->last->value;
+}
+
+/**
+ * @brief Get the first element in the linked list without modifying it
+ *
+ * @param s linked list to get element from
+ */
+void *ll_peek_front(ll_t *ll) {
   if (ll->first == NULL) {
     return NULL;
   }
@@ -116,33 +129,6 @@ void *ll_seek(ll_t *ll, size_t index) {
 }
 
 /**
- * @brief Pushes a value to the end of a linked list (index ll->cur_size - 1).
- *        Mallocs and copies ll->type_size bytes from value into the linked list
- *        entries value
- *
- * @param ll linked list to append onto
- * @param value value to append
- */
-void ll_push_back(ll_t *ll, const void *value) {
-  // Initialize new ll_entry
-  ll_entry_t *new = malloc(sizeof(ll_entry_t));
-  new->value = malloc(ll->type_size);
-  memcpy(new->value, value, ll->type_size);
-  new->prev = ll->last;
-  new->next = NULL;
-
-  // Update pointers in ll
-  if (ll->last == NULL) {
-    ll->first = new;
-  } else {
-    ll->last->next = new;
-  }
-
-  ll->last = new;
-  ++ll->cur_size;
-}
-
-/**
  * @brief Frees memory allocated for a linked list and all its entries
  *
  * @param s linked list to free allocated memory for
@@ -186,11 +172,38 @@ void ll_print(ll_t *ll) {
 }
 
 /**
+ * @brief Pushes a value to the end of a linked list (index ll->cur_size - 1).
+ *        Mallocs and copies ll->type_size bytes from value into the linked list
+ *        entries value
+ *
+ * @param ll linked list to push onto
+ * @param value what to push onto the linked list
+ */
+void ll_push_back(ll_t *ll, const void *value) {
+  // Initialize new ll_entry
+  ll_entry_t *new = malloc(sizeof(ll_entry_t));
+  new->value = malloc(ll->type_size);
+  memcpy(new->value, value, ll->type_size);
+  new->prev = ll->last;
+  new->next = NULL;
+
+  // Update pointers in ll
+  if (ll->last == NULL) {
+    ll->first = new;
+  } else {
+    ll->last->next = new;
+  }
+
+  ll->last = new;
+  ++ll->cur_size;
+}
+
+/**
  * @brief Pushes an entry onto the front of the linked list (index 0).
  *        Mallocs and copies ll->type_size bytes from value into the
  *        linked list entries value
  *
- * @param s linked list to push into
+ * @param ll linked list to push onto
  * @param value what to push onto the linked list
  */
 void ll_push_front(ll_t *ll, const void *value) {
@@ -211,3 +224,10 @@ void ll_push_front(ll_t *ll, const void *value) {
   ll->first = new;
   ++ll->cur_size;
 }
+
+/**
+ * @brief Reverse a linked list in place
+ *
+ * @param ll linked list to reverse
+ */
+void ll_reverse(ll_t *ll) {}
