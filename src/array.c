@@ -5,15 +5,14 @@
 /**
  * @brief Check if value is present in array
  *
- * @param arr       array to check in
- * @param arr_size  size of arr
- * @param val       value to check if exists in arr
+ * @param arr array to check in
+ * @param arr_size size/length of arr
+ * @param val value to check if exists in arr
  * @param type_size amount of bytes used for each element in arr
- * @return          1 if arr contains val 0 if not
+ * @return 1 if arr contains val 0 if not
  */
 int arr_contains(void *arr, size_t arr_size, void *val, size_t type_size) {
   for (size_t i = 0; i < arr_size; ++i) {
-    // TODO: maybe do this ourselves instead of using string.h
     // Move i * val_type_size and compare val_type_size bytes each iteration
     if (memcmp(&arr[i * type_size], val, type_size) == 0) {
       return 1;
@@ -24,15 +23,14 @@ int arr_contains(void *arr, size_t arr_size, void *val, size_t type_size) {
 }
 
 /**
- * @brief Checks if all elements in two arrays are equal, if array is nested
- *        only compare pointers in first level array.
+ * @brief Checks if all elements in two arrays are equal
  *
- * @param           arr1 first array to compare
- * @param           arr1_size size of arr1
- * @param           arr2 second array to compare
- * @param           arr2_size size of arr2
+ * @param arr1 first array to compare
+ * @param arr1_size size/length of arr1
+ * @param arr2 second array to compare
+ * @param arr2_size size/length of arr2
  * @param type_size amount of bytes used for each element in arr1 and arr2
- * @return          1 if arrays are equal 0 if not
+ * @return 1 if arrays are equal 0 if not
  */
 int arr_equals(void *arr1, size_t arr1_size, void *arr2, size_t arr2_size,
                size_t type_size) {
@@ -52,8 +50,8 @@ int arr_equals(void *arr1, size_t arr1_size, void *arr2, size_t arr2_size,
 /**
  * @brief Clear the array by filling it with 0s
  *
- * @param           arr array to clear
- * @param           arr_size size of arr
+ * @param arr array to clear
+ * @param arr_size size/length of arr
  * @param type_size amount of bytes used for each element in arr
  */
 void arr_clear(void *arr, size_t arr_size, size_t type_size) {
@@ -63,8 +61,8 @@ void arr_clear(void *arr, size_t arr_size, size_t type_size) {
 /**
  * @brief Reverse the array in place
  *
- * @param arr       array to reverse
- * @param arr_size  size of arr
+ * @param arr array to reverse
+ * @param arr_size size/length of arr
  * @param type_size amount of bytes used for each element in arr
  */
 void arr_reverse(void *arr, size_t arr_size, size_t type_size) {
@@ -76,9 +74,9 @@ void arr_reverse(void *arr, size_t arr_size, size_t type_size) {
 /**
  * @brief Swap elements at index i and j within an array
  *
- * @param arr       array to swap elements in
- * @param i         index into arr of first element to swap
- * @param j         index into arr of second element to swap
+ * @param arr array to swap elements in
+ * @param i index into arr of first element to swap
+ * @param j index into arr of second element to swap
  * @param type_size amount of bytes used for each element in arr
  */
 void arr_swap(void *arr, int i, int j, size_t type_size) {

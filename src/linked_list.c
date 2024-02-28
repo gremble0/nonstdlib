@@ -24,9 +24,9 @@ ll_t *ll_init(size_t type_size) {
 }
 
 /**
- * @brief Get the first element in the linked list without modifying it
+ * @brief Get the last element in the linked list without modifying it
  *
- * @param s linked list to get element from
+ * @param s linked list to peek into
  */
 void *ll_peek_back(ll_t *ll) {
   if (ll->last == NULL) {
@@ -39,7 +39,7 @@ void *ll_peek_back(ll_t *ll) {
 /**
  * @brief Get the first element in the linked list without modifying it
  *
- * @param s linked list to get element from
+ * @param s linked list to peek into
  */
 void *ll_peek_front(ll_t *ll) {
   if (ll->first == NULL) {
@@ -177,7 +177,7 @@ void ll_print(ll_t *ll) {
 
 /**
  * @brief Helper function to initialize an ll_entry that handles potential
- * errors
+ * errors. ALL MY HOMIES HATE MACROS
  *
  * @param value what to assign to the ll_entry
  * @param type_size size of value's type
@@ -205,12 +205,11 @@ static ll_entry_t *ll_create_entry(const void *value, size_t type_size) {
 }
 
 /**
- * @brief Pushes a value to the end of a linked list (index ll->cur_size - 1).
- *        Mallocs and copies ll->type_size bytes from value into the linked list
- *        entries value
+ * @brief Pushes a value to the end of a linked list (after ll->last). Mallocs
+ * and copies ll->type_size bytes from value into the linked list entries value
  *
  * @param ll linked list to push onto
- * @param value what to push onto the linked list
+ * @param value what to push
  */
 void ll_push_back(ll_t *ll, const void *value) {
   ll_entry_t *new = ll_create_entry(value, ll->type_size);
@@ -229,12 +228,12 @@ void ll_push_back(ll_t *ll, const void *value) {
 }
 
 /**
- * @brief Pushes an entry onto the front of the linked list (index 0).
- *        Mallocs and copies ll->type_size bytes from value into the
- *        linked list entries value
+ * @brief Pushes an entry onto the front of the linked list (before ll->first).
+ * Mallocs and copies ll->type_size bytes from value into the linked list
+ * entries value
  *
  * @param ll linked list to push onto
- * @param value what to push onto the linked list
+ * @param value what to push
  */
 void ll_push_front(ll_t *ll, const void *value) {
   ll_entry_t *new = ll_create_entry(value, ll->type_size);

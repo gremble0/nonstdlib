@@ -44,7 +44,6 @@ ht_t *ht_init(uint32_t init_max_entries) {
   new_ht->n_entries = 0;
   new_ht->max_entries = init_max_entries;
   new_ht->entries = malloc(sizeof(ht_entry_t) * init_max_entries);
-
   if (new_ht->entries == NULL) {
     free(new_ht);
     return NULL;

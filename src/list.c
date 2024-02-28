@@ -4,7 +4,7 @@
 
 #include "list.h"
 
-// TODO: -1, -2, etc. to index from the back of lists
+// TODO: negative indicies to index from the back of lists
 
 /**
  * @brief Checks if a value is present in a list
@@ -32,10 +32,18 @@ int list_contains(list_t *list, const void *val) {
  */
 list_t *list_init(const int init_size, const size_t type_size) {
   list_t *list = malloc(sizeof(list_t));
+  if (list == NULL) {
+    return NULL;
+  }
+
   list->max_size = init_size;
   list->cur_size = 0;
   list->type_size = type_size;
   list->values = malloc(init_size * type_size);
+  if (list->values == NULL) {
+    free(list);
+    return NULL;
+  }
 
   return list;
 }
