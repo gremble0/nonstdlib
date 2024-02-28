@@ -176,6 +176,35 @@ void ll_print(ll_t *ll) {
 }
 
 /**
+ * @brief Helper function to initialize an ll_entry that handles potential
+ * errors
+ *
+ * @param value what to assign to the ll_entry
+ * @param type_size size of value's type
+ * @return ll_entry with a value, but prev and next set to NULL
+ */
+static ll_entry_t *ll_create_entry(const void *value, size_t type_size) {
+  ll_entry_t *new = malloc(sizeof(ll_entry_t));
+  if (new == NULL) {
+    // TODO: find a way to signal that this has errored?
+    return NULL;
+  }
+
+  new->value = malloc(type_size);
+  if (new->value == NULL) {
+    // TODO: find a way to signal that this has errored?
+    free(new);
+    return NULL;
+  }
+
+  memcpy(new->value, value, type_size);
+  new->prev = NULL;
+  new->next = NULL;
+
+  return new;
+}
+
+/**
  * @brief Pushes a value to the end of a linked list (index ll->cur_size - 1).
  *        Mallocs and copies ll->type_size bytes from value into the linked list
  *        entries value
@@ -184,20 +213,7 @@ void ll_print(ll_t *ll) {
  * @param value what to push onto the linked list
  */
 void ll_push_back(ll_t *ll, const void *value) {
-  // Initialize new ll_entry
-  ll_entry_t *new = malloc(sizeof(ll_entry_t));
-  if (new == NULL) {
-    // TODO: find a way to signal that this has errored?
-    return;
-  }
-
-  new->value = malloc(ll->type_size);
-  if (new->value == NULL) {
-    // TODO: find a way to signal that this has errored?
-    return;
-  }
-
-  memcpy(new->value, value, ll->type_size);
+  ll_entry_t *new = ll_create_entry(value, ll->type_size);
   new->prev = ll->last;
   new->next = NULL;
 
@@ -221,21 +237,7 @@ void ll_push_back(ll_t *ll, const void *value) {
  * @param value what to push onto the linked list
  */
 void ll_push_front(ll_t *ll, const void *value) {
-  // Initialize ll_entry
-  // TODO: consider memcpy here, does it do anything?
-  ll_entry_t *new = malloc(sizeof(ll_entry_t));
-  if (new == NULL) {
-    // TODO: find a way to signal that this has errored?
-    return;
-  }
-
-  new->value = malloc(ll->type_size);
-  if (new->value == NULL) {
-    // TODO: find a way to signal that this has errored?
-    return;
-  }
-
-  memcpy(new->value, value, ll->type_size);
+  ll_entry_t *new = ll_create_entry(value, ll->type_size);
   new->prev = NULL;
   new->next = ll->first;
 
@@ -282,5 +284,3 @@ void ll_reverse(ll_t *ll) {
     entry = prev;
   }
 }
-
-// TODO: check for malloc errors

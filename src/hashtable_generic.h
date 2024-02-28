@@ -53,9 +53,17 @@
    */                                                                          \
   type##_ht_t *type##_ht_init(uint32_t init_max_entries) {                     \
     type##_ht_t *new_ht = malloc(sizeof(type##_ht_t));                         \
+    if (new_ht == NULL) {                                                      \
+      return NULL;                                                             \
+    }                                                                          \
+                                                                               \
     new_ht->n_entries = 0;                                                     \
     new_ht->max_entries = init_max_entries;                                    \
     new_ht->entries = malloc(sizeof(type##_ht_entry_t) * init_max_entries);    \
+    if (new_ht->entries == NULL) {                                             \
+      free(new_ht);                                                            \
+      return NULL;                                                             \
+    }                                                                          \
                                                                                \
     for (size_t i = 0; i < init_max_entries; ++i) {                            \
       new_ht->entries[i] = NULL;                                               \
@@ -130,13 +138,17 @@
       type##_ht_expand(table);                                                 \
     }                                                                          \
                                                                                \
-    uint32_t hash_index = type##_hash(key) % table->max_entries;               \
+    type##_ht_entry_t *new_entry = malloc(sizeof(type##_ht_entry_t));          \
+    if (new_entry == NULL) {                                                   \
+      return;                                                                  \
+    }                                                                          \
+    new_entry->key = key;                                                      \
+    new_entry->value = value;                                                  \
+                                                                               \
+    uint32_t hash_index = hash(key) % table->max_entries;                      \
     type##_ht_entry_t *existing_entry = table->entries[hash_index];            \
                                                                                \
     if (existing_entry == NULL) {                                              \
-      type##_ht_entry_t *new_entry = malloc(sizeof(type##_ht_entry_t));        \
-      new_entry->key = key;                                                    \
-      new_entry->value = value;                                                \
       table->entries[hash_index] = new_entry;                                  \
       ++table->n_entries;                                                      \
       return;                                                                  \
@@ -146,10 +158,6 @@
       existing_entry->value = value;                                           \
       return;                                                                  \
     }                                                                          \
-                                                                               \
-    type##_ht_entry_t *new_entry = malloc(sizeof(type##_ht_entry_t));          \
-    new_entry->key = key;                                                      \
-    new_entry->value = value;                                                  \
                                                                                \
     while (table->entries[++hash_index] != NULL)                               \
       ;                                                                        \
