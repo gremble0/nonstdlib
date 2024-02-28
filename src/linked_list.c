@@ -11,6 +11,10 @@
  */
 ll_t *ll_init(size_t type_size) {
   ll_t *ll = malloc(sizeof(ll_t));
+  if (ll == NULL) {
+    return NULL;
+  }
+
   ll->cur_size = 0;
   ll->type_size = type_size;
   ll->first = NULL;
@@ -182,7 +186,17 @@ void ll_print(ll_t *ll) {
 void ll_push_back(ll_t *ll, const void *value) {
   // Initialize new ll_entry
   ll_entry_t *new = malloc(sizeof(ll_entry_t));
+  if (new == NULL) {
+    // TODO: find a way to signal that this has errored?
+    return;
+  }
+
   new->value = malloc(ll->type_size);
+  if (new->value == NULL) {
+    // TODO: find a way to signal that this has errored?
+    return;
+  }
+
   memcpy(new->value, value, ll->type_size);
   new->prev = ll->last;
   new->next = NULL;
@@ -210,7 +224,17 @@ void ll_push_front(ll_t *ll, const void *value) {
   // Initialize ll_entry
   // TODO: consider memcpy here, does it do anything?
   ll_entry_t *new = malloc(sizeof(ll_entry_t));
+  if (new == NULL) {
+    // TODO: find a way to signal that this has errored?
+    return;
+  }
+
   new->value = malloc(ll->type_size);
+  if (new->value == NULL) {
+    // TODO: find a way to signal that this has errored?
+    return;
+  }
+
   memcpy(new->value, value, ll->type_size);
   new->prev = NULL;
   new->next = ll->first;

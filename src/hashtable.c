@@ -37,9 +37,17 @@ const void *ht_get(ht_t *table, const char *key) {
  */
 ht_t *ht_init(uint32_t init_max_entries) {
   ht_t *new_ht = malloc(sizeof(ht_t));
+  if (new_ht == NULL) {
+    return NULL;
+  }
+
   new_ht->n_entries = 0;
   new_ht->max_entries = init_max_entries;
   new_ht->entries = malloc(sizeof(ht_entry_t) * init_max_entries);
+
+  if (new_ht->entries == NULL) {
+    return NULL;
+  }
 
   for (size_t i = 0; i < init_max_entries; ++i) {
     new_ht->entries[i] = NULL;
@@ -125,31 +133,39 @@ void ht_print(ht_t *table) {
  * @param value value to put in
  */
 void ht_put(ht_t *table, const char *key, const void *value) {
+  // Table should at maximum be at 50% capacity
   if (table->n_entries + 1 > table->max_entries / 2) {
     ht_expand(table);
   }
 
+  // Make new ht_entry
+  ht_entry_t *new_entry = malloc(sizeof(ht_entry_t));
+  if (new_entry == NULL) {
+    // TODO: find a way to signal that this has errored? set the
+    // entries[hash_index] to some special value?
+    return;
+  }
+  new_entry->key = key;
+  new_entry->value = value;
+
+  // Insert entry into ht
   uint32_t hash_index = hash(key) % table->max_entries;
   ht_entry_t *existing_entry = table->entries[hash_index];
 
+  // No entry at hash_index
   if (existing_entry == NULL) {
-    ht_entry_t *new_entry = malloc(sizeof(ht_entry_t));
-    new_entry->key = key;
-    new_entry->value = value;
     table->entries[hash_index] = new_entry;
     ++table->n_entries;
     return;
   }
 
+  // Same key has already been hashed (updating existing key)
   if (existing_entry->key == key) {
     existing_entry->value = value;
     return;
   }
 
-  ht_entry_t *new_entry = malloc(sizeof(ht_entry_t));
-  new_entry->key = key;
-  new_entry->value = value;
-
+  // Go to next index until there is an available spot
   while (table->entries[++hash_index] != NULL)
     ;
 
