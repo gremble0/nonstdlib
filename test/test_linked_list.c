@@ -78,6 +78,13 @@ void test_ll_reverse(void) {
   assert(strcmp(ll_seek(ll, 1), "a") == 0);
   assert(strcmp(ll_peek_back(ll), "b") == 0);
 
+  ll_reverse(ll);
+  // ll should be: "b" -> "a" -> "c"
+
+  assert(strcmp(ll_peek_front(ll), "b") == 0);
+  assert(strcmp(ll_seek(ll, 1), "a") == 0);
+  assert(strcmp(ll_peek_back(ll), "c") == 0);
+
   ll_free(ll);
   printf("\033[0;32mTests for ll_reverse passed\033[0;37m\n");
 }
