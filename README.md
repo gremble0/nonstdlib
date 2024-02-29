@@ -45,3 +45,11 @@ int main(void) {
     return 0;
 }
 ```
+
+## Modules:
+List of currently implemented modules:
+- `hashtable.h` and `generic_hashtable.h`
+- `array.h`
+- `sort.h`
+- `linked_list.h`
+- `list.h` (WIP)
