@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "hashtable_generic.h"
+#include "test.h"
 
 ht_prototype(int);
 ht_impl(int);
@@ -14,7 +15,7 @@ ht_prototype(str);
 ht_impl(str);
 
 void test_hashtable_generic(void) {
-  printf("Testing generic hash table data structure...\n");
+  TEST_MODULE_START("generic hash table");
 
   int_ht_t *int_table = int_ht_init(5);
   int asd = 44;
@@ -37,6 +38,5 @@ void test_hashtable_generic(void) {
   assert(strcmp(*str_ht_get(str_table, "asd"), "yoyo") == 0);
   assert(strcmp(*str_ht_get(str_table, "z"), "zaza") == 0);
 
-  printf("\033[0;32mAll generic hash table data structure tests "
-         "passed\033[0;37m\n");
+  TEST_MODULE_SUCCESS("generic hash table");
 }

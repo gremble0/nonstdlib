@@ -4,6 +4,8 @@
 
 #include "linked_list.h"
 
+// TODO: malloc some return values
+
 /**
  * @brief Initializes an empty linked list
  *

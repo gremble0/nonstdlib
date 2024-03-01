@@ -2,6 +2,9 @@
 #include <stdio.h>
 
 #include "sort.h"
+#include "test.h"
+
+// static int passed_tests = 0;
 
 void test_sort(sorting_algorithm sa) {
   int nums[] = {5, 1, 4, 2, 8};
@@ -30,16 +33,14 @@ void test_sort(sorting_algorithm sa) {
   for (int i = 0; i < nums3_size; i++) {
     assert(nums3[i] == sorted3[i]);
   }
-
-  printf("\033[0;32mTest successful for sorting algorithm %d\033[0;37m\n", sa);
 }
 
 void test_all_sorts(void) {
-  printf("Testing sorting algorithms...\n");
+  TEST_MODULE_START("sorting algorithms");
 
   for (int i = 0; i < NUM_SORT_ALGOS; ++i) {
     test_sort(i);
   }
 
-  printf("\033[0;32mAll sorting algorithms tests passed\033[0;37m\n");
+  TEST_MODULE_SUCCESS("sorting algorithms");
 }

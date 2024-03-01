@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "linked_list.h"
+#include "test.h"
 
 void test_ll_push_back_seek(void) {
   ll_t *ll = ll_init(sizeof(char *));
@@ -27,8 +28,7 @@ void test_ll_push_back_seek(void) {
   assert(strcmp(ll_seek(ll, 4), "e") == 0);
 
   ll_free(ll);
-  printf("\033[0;32mTests for ll_push_back, ll_seek, ll_peek(front & back) "
-         "passed\033[0;37m\n");
+  TEST_FUNCTION_SUCCESS("ll_push_back, ll_seek, ll_peek_(front & back)");
 }
 
 void test_ll_push_front_pop(void) {
@@ -56,8 +56,7 @@ void test_ll_push_front_pop(void) {
   assert(ll_pop_back(ll) == NULL);
 
   ll_free(ll);
-  printf("\033[0;32mTests for ll_push_front and ll_pop_(front & back) "
-         "passed\033[0;37m\n");
+  TEST_FUNCTION_SUCCESS("ll_push_front and ll_pop_(front & back)");
 }
 
 void test_ll_reverse(void) {
@@ -86,7 +85,7 @@ void test_ll_reverse(void) {
   assert(strcmp(ll_peek_back(ll), "c") == 0);
 
   ll_free(ll);
-  printf("\033[0;32mTests for ll_reverse passed\033[0;37m\n");
+  TEST_FUNCTION_SUCCESS("ll_reverse");
 }
 
 void test_ll_all(void) {
@@ -113,15 +112,16 @@ void test_ll_all(void) {
   assert(ll_peek_front(ll) == NULL);
 
   ll_free(ll);
-  printf("\033[0;32mTests for mix of all linked list functions "
-         "passed\033[0;37m\n");
+  TEST_FUNCTION_SUCCESS("mix of all linked list functions");
 }
 
 void test_linked_list(void) {
-  printf("Testing linked list...\n");
+  TEST_MODULE_START("linked list");
+
   test_ll_push_back_seek();
   test_ll_push_front_pop();
   test_ll_reverse();
   test_ll_all();
-  printf("\033[0;32mAll linked list tests passed\033[0;37m\n");
+
+  TEST_MODULE_SUCCESS("linked list");
 }

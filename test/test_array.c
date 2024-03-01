@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "array.h"
+#include "test.h"
 
 void test_arr_clear(void) {
   int nums[] = {1, 2, 3, 4, 5, 6};
@@ -29,7 +30,7 @@ void test_arr_clear(void) {
     assert(strings[i] == 0);
   }
 
-  printf("\033[0;32mAll arr_clear tests passed\033[0;37m\n");
+  TEST_FUNCTION_SUCCESS("arr_clear");
 }
 
 void test_arr_contains(void) {
@@ -54,7 +55,7 @@ void test_arr_contains(void) {
   assert(!arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &absent2,
                        sizeof(int)));
 
-  printf("\033[0;32mAll arr_contains tests passed\033[0;37m\n");
+  TEST_FUNCTION_SUCCESS("arr_contains");
 }
 
 void test_arr_equals(void) {
@@ -85,7 +86,7 @@ void test_arr_equals(void) {
   assert(arr_equals(nested, nested_size, nested3, nested3_size, sizeof(int)) ==
          1);
 
-  printf("\033[0;32mAll arr_equals tests passed\033[0;37m\n");
+  TEST_FUNCTION_SUCCESS("arr_equals");
 }
 
 void test_arr_reverse(void) {
@@ -116,7 +117,7 @@ void test_arr_reverse(void) {
     assert(strcmp(strings[i], strings_reversed[i]) == 0);
   }
 
-  printf("\033[0;32mAll arr_reversed tests passed\033[0;37m\n");
+  TEST_FUNCTION_SUCCESS("arr_reverse");
 }
 
 void test_arr_swap(void) {
@@ -143,14 +144,18 @@ void test_arr_swap(void) {
   assert(strcmp(strings[1], "hello") == 0);
   assert(strcmp(strings[2], "is") == 0);
   assert(strcmp(strings[3], "nonstdlib") == 0);
+
+  TEST_FUNCTION_SUCCESS("arr_swap");
 }
 
 void test_arr(void) {
-  printf("Testing array functions...\n");
+  TEST_MODULE_START("array");
+
   test_arr_clear();
   test_arr_contains();
   test_arr_equals();
   test_arr_swap();
   test_arr_reverse();
-  printf("\033[0;32mAll array function tests passed\033[0;37m\n");
+
+  TEST_MODULE_SUCCESS("array");
 }

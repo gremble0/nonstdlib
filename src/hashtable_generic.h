@@ -145,7 +145,7 @@
     new_entry->key = key;                                                      \
     new_entry->value = value;                                                  \
                                                                                \
-    uint32_t hash_index = hash(key) % table->max_entries;                      \
+    uint32_t hash_index = type##_hash(key) % table->max_entries;               \
     type##_ht_entry_t *existing_entry = table->entries[hash_index];            \
                                                                                \
     if (existing_entry == NULL) {                                              \
