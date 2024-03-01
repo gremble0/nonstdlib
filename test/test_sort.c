@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdio.h>
 
 #include "sort.h"
@@ -22,28 +21,29 @@ static void test_sort(sorting_algorithm sa) {
 
   sort(nums, nums_size, sa);
   for (int i = 0; i < nums_size; i++) {
-    assert(nums[i] == sorted[i]);
+    ASSERT_TRUE(nums[i] == sorted[i]);
   }
 
   sort(nums2, nums2_size, sa);
   for (int i = 0; i < nums2_size; i++) {
-    assert(nums2[i] == sorted2[i]);
+    ASSERT_TRUE(nums2[i] == sorted2[i]);
   }
 
   sort(nums3, nums3_size, sa);
   for (int i = 0; i < nums3_size; i++) {
-    assert(nums3[i] == sorted3[i]);
+    ASSERT_TRUE(nums3[i] == sorted3[i]);
   }
 
-  TEST_FUNCTION_SUCCESS("");
+defer:
+  TEST_FUNCTION_SUCCESS();
 }
 
 void test_all_sorts(void) {
-  TEST_MODULE_START("sorting algorithms");
+  TEST_MODULE_START();
 
   for (int i = 0; i < NUM_SORT_ALGOS; ++i) {
     test_sort(i);
   }
 
-  TEST_MODULE_END("sorting algorithms");
+  TEST_MODULE_END();
 }

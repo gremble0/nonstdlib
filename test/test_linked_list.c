@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,17 +19,18 @@ static void test_ll_push_back_seek(void) {
   ll_push_back(ll, "f");
   // ll should be: "a" -> "b" -> "c" -> "d" -> "e" -> "f"
 
-  assert(ll->cur_size == 6);
-  assert(strcmp(ll_peek_front(ll), "a") == 0);
-  assert(strcmp(ll_seek(ll, 5), "f") == 0);
-  assert(strcmp(ll_seek(ll, 2), "c") == 0);
-  assert(strcmp(ll_peek_back(ll), "f") == 0);
-  assert(strcmp(ll_seek(ll, 1), "b") == 0);
-  assert(strcmp(ll_seek(ll, 3), "d") == 0);
-  assert(strcmp(ll_seek(ll, 4), "e") == 0);
+  ASSERT_TRUE(ll->cur_size == 6);
+  ASSERT_TRUE(strcmp(ll_peek_front(ll), "a") == 0);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 5), "f") == 0);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 2), "c") == 0);
+  ASSERT_TRUE(strcmp(ll_peek_back(ll), "f") == 0);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 1), "b") == 0);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 3), "d") == 0);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 4), "e") == 0);
 
+defer:
   ll_free(ll);
-  TEST_FUNCTION_SUCCESS("ll_push_back, ll_seek, ll_peek_(front & back)");
+  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_ll_push_front_pop(void) {
@@ -44,21 +44,22 @@ static void test_ll_push_front_pop(void) {
   ll_push_front(ll, &c);
   // ll should be: 3 -> 2 -> 1
 
-  assert(*(int *)ll_pop_front(ll) == 3);
+  ASSERT_TRUE(*(int *)ll_pop_front(ll) == 3);
   // ll should be: 2 -> 1
-  assert(*(int *)ll_pop_back(ll) == 1);
+  ASSERT_TRUE(*(int *)ll_pop_back(ll) == 1);
   // ll should be: 2
-  assert(*(int *)ll_pop_back(ll) == 2);
+  ASSERT_TRUE(*(int *)ll_pop_back(ll) == 2);
   // ll should be: (nil)
-  assert(ll_pop_back(ll) == NULL);
+  ASSERT_TRUE(ll_pop_back(ll) == NULL);
   ll_push_front(ll, &a);
   // ll should be: 1
-  assert(*(int *)ll_pop_back(ll) == 1);
+  ASSERT_TRUE(*(int *)ll_pop_back(ll) == 1);
   // ll should be: (nil)
-  assert(ll_pop_back(ll) == NULL);
+  ASSERT_TRUE(ll_pop_back(ll) == NULL);
 
+defer:
   ll_free(ll);
-  TEST_FUNCTION_SUCCESS("ll_push_front and ll_pop_(front & back)");
+  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_ll_reverse(void) {
@@ -75,19 +76,20 @@ static void test_ll_reverse(void) {
   ll_reverse(ll);
   // ll should be: "c" -> "a" -> "b"
 
-  assert(strcmp(ll_peek_front(ll), "c") == 0);
-  assert(strcmp(ll_seek(ll, 1), "a") == 0);
-  assert(strcmp(ll_peek_back(ll), "b") == 0);
+  ASSERT_TRUE(strcmp(ll_peek_front(ll), "c") == 0);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 1), "a") == 0);
+  ASSERT_TRUE(strcmp(ll_peek_back(ll), "b") == 0);
 
   ll_reverse(ll);
   // ll should be: "b" -> "a" -> "c"
 
-  assert(strcmp(ll_peek_front(ll), "b") == 0);
-  assert(strcmp(ll_seek(ll, 1), "a") == 0);
-  assert(strcmp(ll_peek_back(ll), "c") == 0);
+  ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 1), "a") == 0);
+  ASSERT_TRUE(strcmp(ll_peek_back(ll), "c") == 0);
 
+defer:
   ll_free(ll);
-  TEST_FUNCTION_SUCCESS("ll_reverse");
+  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_ll_all(void) {
@@ -98,34 +100,35 @@ static void test_ll_all(void) {
   ll_push_back(ll, "c");
   // ll should be: "b" -> "a" -> "c"
 
-  assert(ll->cur_size == 3);
-  assert(strcmp(ll_seek(ll, 2), "c") == 0);
-  assert(strcmp(ll_peek_front(ll), "b") == 0);
+  ASSERT_TRUE(ll->cur_size == 3);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 2), "c") == 0);
+  ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
 
   ll_pop_back(ll);
   // ll should be: "b" -> "a"
-  assert(strcmp(ll_peek_front(ll), "b") == 0);
-  assert(strcmp(ll_seek(ll, 1), "a") == 0);
+  ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
+  ASSERT_TRUE(strcmp(ll_seek(ll, 1), "a") == 0);
 
   ll_pop_back(ll);
   // ll should be: "b"
-  assert(strcmp(ll_peek_front(ll), "b") == 0);
+  ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
 
   ll_pop_back(ll);
   // ll should be: (nil)
-  assert(ll_peek_front(ll) == NULL);
+  ASSERT_TRUE(ll_peek_front(ll) == NULL);
 
+defer:
   ll_free(ll);
-  TEST_FUNCTION_SUCCESS("mix of all linked list functions");
+  TEST_FUNCTION_SUCCESS();
 }
 
 void test_linked_list(void) {
-  TEST_MODULE_START("linked list");
+  TEST_MODULE_START();
 
   test_ll_push_back_seek();
   test_ll_push_front_pop();
   test_ll_reverse();
   test_ll_all();
 
-  TEST_MODULE_END("linked list");
+  TEST_MODULE_END();
 }
