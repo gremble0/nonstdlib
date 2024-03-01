@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-Wall -Wextra
+CFLAGS=-Wall -Wextra -g -O0
 SRC=../src
 
 all: src
