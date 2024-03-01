@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 // TODO: TEST_SUCCESS(test_name) macro
@@ -64,13 +65,19 @@ void test_list_pop(void) {
   list_push_front(list, "zozo");
   // list should be: ["zozo", "xoxo", "yoyo"]
 
-  assert(strcmp("yoyo", list_pop_back(list)) == 0);
+  char *yoyo = list_pop_back(list);
+  assert(strcmp("yoyo", yoyo) == 0);
+  free(yoyo);
   // list should be: ["zozo", "xoxo"]
 
-  assert(strcmp("xoxo", list_pop_back(list)) == 0);
+  char *xoxo = list_pop_back(list);
+  assert(strcmp("xoxo", xoxo) == 0);
+  free(xoxo);
   // list should be: ["zozo"]
 
-  assert(strcmp("zozo", list_pop_back(list)) == 0);
+  char *zozo = list_pop_back(list);
+  assert(strcmp("zozo", zozo) == 0);
+  free(zozo);
   // list should be: []
 
   assert(list_pop_front(list) == NULL);
@@ -81,13 +88,19 @@ void test_list_pop(void) {
   list_push_front(list, "zaza");
   // list should be: ["zaza", "yaya", "xaxa"]
 
-  assert(strcmp("xaxa", list_pop_back(list)) == 0);
+  char *xaxa = list_pop_back(list);
+  assert(strcmp("xaxa", xaxa) == 0);
+  free(xaxa);
   // list should be: ["zaza", "yaya"]
 
-  assert(strcmp("zaza", list_pop_front(list)) == 0);
+  char *zaza = list_pop_front(list);
+  assert(strcmp("zaza", zaza) == 0);
+  free(zaza);
   // list should be: ["yaya"]
 
-  assert(strcmp("yaya", list_pop_back(list)) == 0);
+  char *yaya = list_pop_back(list);
+  assert(strcmp("yaya", yaya) == 0);
+  free(yaya);
   // list should be: []
 
   assert(list_pop_front(list) == NULL);

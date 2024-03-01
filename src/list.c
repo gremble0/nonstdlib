@@ -101,7 +101,7 @@ void *list_get(list_t *list, const size_t index) {
 }
 
 /**
- * @brief Pops the last element of the list and return it
+ * @brief Pops the last element of the list and return it. Needs to be freed
  *
  * @param list list to pop from
  * @return element at the end of the list
@@ -111,15 +111,15 @@ void *list_pop_back(list_t *list) {
     return NULL;
   }
 
-  // the value is still technically available at list->cur_size + 1 but it is
-  // not accessible through the public list api. We could memset it to 0, but
-  // there is not really a point
+  void *ret = malloc(list->type_size);
+  memcpy(ret, list->values + --list->cur_size * list->type_size,
+         list->type_size);
 
-  return list->values + --list->cur_size * list->type_size;
+  return ret;
 }
 
 /**
- * @brief Pops the first element of the list and return it
+ * @brief Pops the first element of the list and return it. Needs to be freed
  *
  * @param list list to pop from
  * @return element at the end of the list
@@ -130,7 +130,7 @@ void *list_pop_front(list_t *list) {
   }
 
   // Save retun value before it gets overwritten by list_left_shift
-  void *ret = NULL;
+  void *ret = malloc(list->type_size);
   memcpy(ret, list->values, list->type_size);
 
   // Update list
