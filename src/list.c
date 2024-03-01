@@ -7,6 +7,23 @@
 // TODO: negative indicies to index from the back of lists
 
 /**
+ * @brief Move each list element one index to the right, assumes the list has
+ * allocated memory for one more element
+ *
+ * @param list list to right shift
+ */
+static void list_shift_right(list_t *list) {
+  list_print(list);
+  for (size_t i = list->cur_size; i > 0; i--) {
+    printf("ASd\n");
+    memcpy(list->values + (i + 1) * list->type_size,
+           list->values + i * list->type_size, list->type_size);
+  }
+  putchar('\n');
+  list_print(list);
+}
+
+/**
  * @brief Checks if a value is present in a list
  *
  * @param list list to check in
@@ -30,7 +47,7 @@ int list_contains(list_t *list, const void *val) {
  * @param type_size amount of bytes used for each element in the list
  * @return a malloc'd list that should to be freed using list_free()
  */
-list_t *list_init(const int init_size, const size_t type_size) {
+list_t *list_init(const size_t init_size, const size_t type_size) {
   list_t *list = malloc(sizeof(list_t));
   if (list == NULL) {
     return NULL;
@@ -49,12 +66,26 @@ list_t *list_init(const int init_size, const size_t type_size) {
 }
 
 /**
- * @brief Pops the last element appended to the list
+ * @brief Get a value in a list in O(1) time complexity
+ *
+ * @param list list to index
+ * @param index index into list
+ */
+void *list_get(list_t *list, const size_t index) {
+  if (index >= list->cur_size) {
+    return NULL;
+  }
+
+  return list->values + index * list->type_size;
+}
+
+/**
+ * @brief Pops the last element of the list and return it
  *
  * @param list list to pop from
- * @return whatever is present at the end of the list
+ * @return element at the end of the list
  */
-void *list_pop(list_t *list) {
+void *list_pop_back(list_t *list) {
   if (list->cur_size == 0) {
     return NULL;
   }
@@ -63,29 +94,18 @@ void *list_pop(list_t *list) {
 }
 
 /**
- * @brief Get a value in a list in O(1) time complexity
+ * @brief Pops the first element of the list and return it
  *
- * @param list list to index
- * @param index index into list
+ * @param list list to pop from
+ * @return element at the end of the list
  */
-void *list_get(list_t *list, const int index) {
-  return list->values + index * list->type_size;
-}
-
-/**
- * @brief Append a value to the end of a list by copying the bytes in val
- *
- * @param list list to append onto
- * @param val value to append onto the list
- */
-void list_append(list_t *list, const void *val) {
-  if (list->cur_size == list->max_size) {
-    list->max_size *= 2;
-    list->values = realloc(list->values, list->max_size);
+void *list_pop_front(list_t *list) {
+  // TODO: implement
+  if (list->cur_size == 0) {
+    return NULL;
   }
 
-  memcpy(list->values + list->cur_size * list->type_size, val, list->type_size);
-  ++list->cur_size;
+  return list->values[list->cur_size--];
 }
 
 /**
@@ -94,6 +114,7 @@ void list_append(list_t *list, const void *val) {
  * @param list list to clear
  */
 void list_clear(list_t *list) {
+  // TODO: reset max_size?
   memset(list->values, 0, list->cur_size * list->type_size);
   list->cur_size = 0;
 }
@@ -123,3 +144,45 @@ void list_print(list_t *list) {
     putchar('\n');
   }
 }
+
+/**
+ * @brief Push a value to the end of a list by copying the bytes in val
+ *
+ * @param list list to push onto
+ * @param val value to push onto the list
+ */
+void list_push_back(list_t *list, const void *val) {
+  // Resize if necessary
+  if (list->cur_size == list->max_size) {
+    list->max_size *= 2;
+    list->values = realloc(list->values, list->max_size);
+  }
+
+  memcpy(list->values + list->cur_size * list->type_size, val, list->type_size);
+  ++list->cur_size;
+}
+
+/**
+ * @brief Push a value to the start of a list by shifting the rest of the list
+ * to the right and copying the bytes in val to the front
+ *
+ * @param list list to push onto
+ * @param val value to push onto the list
+ */
+void list_push_front(list_t *list, const void *val) {
+  // Resize if necessary
+  if (list->cur_size == list->max_size) {
+    list->max_size *= 2;
+    list->values = realloc(list->values, list->max_size);
+  }
+
+  if (list->cur_size > 1) {
+    list_shift_right(list);
+  }
+
+  memcpy(list->values, val, list->type_size);
+  ++list->cur_size;
+}
+
+// TODO: implement
+void list_reverse(list_t *list) {}
