@@ -6,6 +6,7 @@
 
 // TODO: negative indicies to index from the back of lists
 // TODO: error handling? NERROR macro?
+// TODO: list_of function
 
 /**
  * @brief Move each list element one index to the right, assumes the list has
@@ -14,9 +15,32 @@
  * @param list list to right shift
  */
 static void list_shift_right(list_t *list) {
+  if (list->cur_size >= list->max_size) {
+    // TODO: error handling
+    return;
+  }
+
   for (size_t i = list->cur_size; i > 0; i--) {
     memcpy(list->values + i * list->type_size,
            list->values + (i - 1) * list->type_size, list->type_size);
+  }
+}
+
+/**
+ * @brief Move each list element one index to the left, element at index 0 will
+ * be overwritten
+ *
+ * @param list list to right shift
+ */
+static void list_shift_left(list_t *list) {
+  if (list->cur_size >= list->max_size) {
+    // TODO: error handling
+    return;
+  }
+
+  for (size_t i = 1; i < list->cur_size; i--) {
+    memcpy(list->values + (i - 1) * list->type_size,
+           list->values + i * list->type_size, list->type_size);
   }
 }
 
@@ -87,7 +111,11 @@ void *list_pop_back(list_t *list) {
     return NULL;
   }
 
-  return list->values[list->cur_size--];
+  // the value is still technically available at list->cur_size + 1 but it is
+  // not accessible through the public list api. We could memset it to 0, but
+  // there is not really a point
+
+  return list->values + --list->cur_size * list->type_size;
 }
 
 /**
@@ -97,12 +125,19 @@ void *list_pop_back(list_t *list) {
  * @return element at the end of the list
  */
 void *list_pop_front(list_t *list) {
-  // TODO: implement
   if (list->cur_size == 0) {
     return NULL;
   }
 
-  return list->values[list->cur_size--];
+  // Save retun value before it gets overwritten by list_left_shift
+  void *ret = NULL;
+  memcpy(ret, list->values, list->type_size);
+
+  // Update list
+  list_shift_left(list);
+  --list->cur_size;
+
+  return ret;
 }
 
 /**
