@@ -5,6 +5,7 @@
 #include "list.h"
 
 // TODO: negative indicies to index from the back of lists
+// TODO: error handling? NERROR macro?
 
 /**
  * @brief Move each list element one index to the right, assumes the list has
@@ -13,14 +14,10 @@
  * @param list list to right shift
  */
 static void list_shift_right(list_t *list) {
-  list_print(list);
   for (size_t i = list->cur_size; i > 0; i--) {
-    printf("ASd\n");
-    memcpy(list->values + (i + 1) * list->type_size,
-           list->values + i * list->type_size, list->type_size);
+    memcpy(list->values + i * list->type_size,
+           list->values + (i - 1) * list->type_size, list->type_size);
   }
-  putchar('\n');
-  list_print(list);
 }
 
 /**
@@ -66,7 +63,7 @@ list_t *list_init(const size_t init_size, const size_t type_size) {
 }
 
 /**
- * @brief Get a value in a list in O(1) time complexity
+ * @brief Get a value in a list in O(1) time
  *
  * @param list list to index
  * @param index index into list
@@ -176,7 +173,7 @@ void list_push_front(list_t *list, const void *val) {
     list->values = realloc(list->values, list->max_size);
   }
 
-  if (list->cur_size > 1) {
+  if (list->cur_size > 0) {
     list_shift_right(list);
   }
 

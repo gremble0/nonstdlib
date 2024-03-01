@@ -46,12 +46,9 @@ void test_list_push_front(void) {
   list_push_front(list, "xoxo");
   list_push_front(list, "zozo");
 
-  printf("%s\n", (char *)list_get(list, 0));
-  printf("%s\n", (char *)list_get(list, 1));
-  printf("%s\n", (char *)list_get(list, 2));
-  // assert(strcmp("zozo", list_get(list, 0)) == 0);
-  // assert(strcmp("xoxo", list_get(list, 1)) == 0);
-  // assert(strcmp("yoyo", list_get(list, 2)) == 0);
+  assert(strcmp("zozo", list_get(list, 0)) == 0);
+  assert(strcmp("xoxo", list_get(list, 1)) == 0);
+  assert(strcmp("yoyo", list_get(list, 2)) == 0);
 }
 
 void test_list_clear(void) {
