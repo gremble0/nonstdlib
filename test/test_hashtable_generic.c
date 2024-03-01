@@ -14,6 +14,9 @@ typedef char *str;
 ht_prototype(str);
 ht_impl(str);
 
+// int tests_passed = 0;
+// int tests_ran = 0;
+
 void test_hashtable_generic(void) {
   TEST_MODULE_START("generic hash table");
 
@@ -38,5 +41,5 @@ void test_hashtable_generic(void) {
   assert(strcmp(*str_ht_get(str_table, "asd"), "yoyo") == 0);
   assert(strcmp(*str_ht_get(str_table, "z"), "zaza") == 0);
 
-  TEST_MODULE_SUCCESS("generic hash table");
+  // TEST_MODULE_END("generic hash table");
 }

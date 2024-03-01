@@ -4,9 +4,10 @@
 #include "sort.h"
 #include "test.h"
 
-// static int passed_tests = 0;
+int tests_passed = 0;
+int tests_ran = 0;
 
-void test_sort(sorting_algorithm sa) {
+static void test_sort(sorting_algorithm sa) {
   int nums[] = {5, 1, 4, 2, 8};
   const int nums_size = sizeof(nums) / sizeof(nums[0]);
   int sorted[] = {1, 2, 4, 5, 8};
@@ -33,6 +34,9 @@ void test_sort(sorting_algorithm sa) {
   for (int i = 0; i < nums3_size; i++) {
     assert(nums3[i] == sorted3[i]);
   }
+
+  ++tests_passed;
+  ++tests_ran;
 }
 
 void test_all_sorts(void) {
@@ -42,5 +46,5 @@ void test_all_sorts(void) {
     test_sort(i);
   }
 
-  TEST_MODULE_SUCCESS("sorting algorithms");
+  TEST_MODULE_END("sorting algorithms");
 }

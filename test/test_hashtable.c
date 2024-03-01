@@ -3,9 +3,13 @@
 #include <string.h>
 
 #include "hashtable.h"
+#include "test.h"
+
+// int tests_passed = 0;
+// int tests_ran = 0;
 
 void test_hashtable(void) {
-  printf("Testing hash table data structure...\n");
+  TEST_MODULE_START("hash table");
 
   ht_t *table = ht_init(5);
   ht_put(table, "asd", "YOYO");
@@ -50,5 +54,5 @@ iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh"
 
   ht_free(table);
 
-  printf("\033[0;32mAll hash table data structure tests passed\033[0;37m\n");
+  // TEST_MODULE_END("hash table");
 }

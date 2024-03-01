@@ -6,7 +6,10 @@
 #include "linked_list.h"
 #include "test.h"
 
-void test_ll_push_back_seek(void) {
+// int tests_passed = 0;
+// int tests_ran = 0;
+
+static void test_ll_push_back_seek(void) {
   ll_t *ll = ll_init(sizeof(char *));
 
   ll_push_back(ll, "a");
@@ -17,7 +20,6 @@ void test_ll_push_back_seek(void) {
   ll_push_back(ll, "f");
   // ll should be: "a" -> "b" -> "c" -> "d" -> "e" -> "f"
 
-  // order of peeking and seeking should not matter
   assert(ll->cur_size == 6);
   assert(strcmp(ll_peek_front(ll), "a") == 0);
   assert(strcmp(ll_seek(ll, 5), "f") == 0);
@@ -31,7 +33,7 @@ void test_ll_push_back_seek(void) {
   TEST_FUNCTION_SUCCESS("ll_push_back, ll_seek, ll_peek_(front & back)");
 }
 
-void test_ll_push_front_pop(void) {
+static void test_ll_push_front_pop(void) {
   ll_t *ll = ll_init(sizeof(int));
 
   const int a = 1;
@@ -59,7 +61,7 @@ void test_ll_push_front_pop(void) {
   TEST_FUNCTION_SUCCESS("ll_push_front and ll_pop_(front & back)");
 }
 
-void test_ll_reverse(void) {
+static void test_ll_reverse(void) {
   ll_t *ll = ll_init(sizeof(char *));
 
   // reversing empty ll should not error
@@ -88,7 +90,7 @@ void test_ll_reverse(void) {
   TEST_FUNCTION_SUCCESS("ll_reverse");
 }
 
-void test_ll_all(void) {
+static void test_ll_all(void) {
   ll_t *ll = ll_init(sizeof(char *));
 
   ll_push_front(ll, "a");
@@ -104,9 +106,11 @@ void test_ll_all(void) {
   // ll should be: "b" -> "a"
   assert(strcmp(ll_peek_front(ll), "b") == 0);
   assert(strcmp(ll_seek(ll, 1), "a") == 0);
+
   ll_pop_back(ll);
   // ll should be: "b"
   assert(strcmp(ll_peek_front(ll), "b") == 0);
+
   ll_pop_back(ll);
   // ll should be: (nil)
   assert(ll_peek_front(ll) == NULL);
@@ -123,5 +127,5 @@ void test_linked_list(void) {
   test_ll_reverse();
   test_ll_all();
 
-  TEST_MODULE_SUCCESS("linked list");
+  // TEST_MODULE_END("linked list");
 }

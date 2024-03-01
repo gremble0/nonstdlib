@@ -8,7 +8,7 @@
 #include "list.h"
 #include "test.h"
 
-void test_list_push_pop(void) {
+static void test_list_push_pop(void) {
   list_t *list = list_init(5, sizeof(char *));
 
   list_push_front(list, "yoyo");
@@ -61,7 +61,7 @@ void test_list_push_pop(void) {
   TEST_FUNCTION_SUCCESS("list_pop_(front & back), list_push_(front & back)");
 }
 
-void test_list_clear(void) {
+static void test_list_clear(void) {
   list_t *list = list_init(5, sizeof(char *));
 
   list_push_back(list, "abc");
@@ -76,7 +76,7 @@ void test_list_clear(void) {
   TEST_FUNCTION_SUCCESS("list_clear");
 }
 
-void test_list_contains(void) {
+static void test_list_contains(void) {
   list_t *list = list_init(5, sizeof(char *));
 
   const int a = 2;
@@ -99,5 +99,5 @@ void test_list(void) {
   test_list_clear();
   test_list_contains();
 
-  TEST_MODULE_SUCCESS("list");
+  // TEST_MODULE_END("list");
 }

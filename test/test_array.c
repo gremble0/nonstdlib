@@ -5,7 +5,10 @@
 #include "array.h"
 #include "test.h"
 
-void test_arr_clear(void) {
+// int tests_passed; // = 0;
+// int tests_ran;    // = 0;
+
+static void test_arr_clear(void) {
   int nums[] = {1, 2, 3, 4, 5, 6};
   const int nums_size = sizeof(nums) / sizeof(nums[0]);
 
@@ -33,7 +36,7 @@ void test_arr_clear(void) {
   TEST_FUNCTION_SUCCESS("arr_clear");
 }
 
-void test_arr_contains(void) {
+static void test_arr_contains(void) {
   int nums[] = {1, 2, 3, 4};
   int present1 = 1;
   int present2 = 2;
@@ -58,7 +61,7 @@ void test_arr_contains(void) {
   TEST_FUNCTION_SUCCESS("arr_contains");
 }
 
-void test_arr_equals(void) {
+static void test_arr_equals(void) {
   int nums[] = {1, 2, 3, 4, 5, 6};
   const int nums_size = sizeof(nums) / sizeof(nums[0]);
 
@@ -89,7 +92,7 @@ void test_arr_equals(void) {
   TEST_FUNCTION_SUCCESS("arr_equals");
 }
 
-void test_arr_reverse(void) {
+static void test_arr_reverse(void) {
   int nums[] = {1, 2, 3, 4, 5, 6};
   const int nums_size = sizeof(nums) / sizeof(nums[0]);
   int nums_reversed[] = {6, 5, 4, 3, 2, 1};
@@ -120,7 +123,7 @@ void test_arr_reverse(void) {
   TEST_FUNCTION_SUCCESS("arr_reverse");
 }
 
-void test_arr_swap(void) {
+static void test_arr_swap(void) {
   int nums[] = {1, 2, 3};
   arr_swap(nums, 0, 1, sizeof(int));
   assert(nums[0] == 2);
@@ -157,5 +160,5 @@ void test_arr(void) {
   test_arr_swap();
   test_arr_reverse();
 
-  TEST_MODULE_SUCCESS("array");
+  // TEST_MODULE_END("array");
 }
