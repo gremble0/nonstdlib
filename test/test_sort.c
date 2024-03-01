@@ -4,8 +4,8 @@
 #include "sort.h"
 #include "test.h"
 
-int tests_passed = 0;
-int tests_ran = 0;
+static int tests_passed = 0;
+static int tests_ran = 0;
 
 static void test_sort(sorting_algorithm sa) {
   int nums[] = {5, 1, 4, 2, 8};
@@ -35,8 +35,7 @@ static void test_sort(sorting_algorithm sa) {
     assert(nums3[i] == sorted3[i]);
   }
 
-  ++tests_passed;
-  ++tests_ran;
+  TEST_FUNCTION_SUCCESS("");
 }
 
 void test_all_sorts(void) {

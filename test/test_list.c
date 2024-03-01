@@ -8,6 +8,9 @@
 #include "list.h"
 #include "test.h"
 
+static int tests_passed = 0;
+static int tests_ran = 0;
+
 static void test_list_push_pop(void) {
   list_t *list = list_init(5, sizeof(char *));
 
@@ -99,5 +102,5 @@ void test_list(void) {
   test_list_clear();
   test_list_contains();
 
-  // TEST_MODULE_END("list");
+  TEST_MODULE_END("list");
 }

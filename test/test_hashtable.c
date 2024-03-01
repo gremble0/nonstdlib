@@ -5,8 +5,8 @@
 #include "hashtable.h"
 #include "test.h"
 
-// int tests_passed = 0;
-// int tests_ran = 0;
+static int tests_passed = 0;
+static int tests_ran = 0;
 
 void test_hashtable(void) {
   TEST_MODULE_START("hash table");
@@ -54,5 +54,6 @@ iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh"
 
   ht_free(table);
 
-  // TEST_MODULE_END("hash table");
+  TEST_FUNCTION_SUCCESS("hash table all");
+  TEST_MODULE_END("hash table");
 }

@@ -5,8 +5,8 @@
 #include "array.h"
 #include "test.h"
 
-// int tests_passed; // = 0;
-// int tests_ran;    // = 0;
+static int tests_passed = 0;
+static int tests_ran = 0;
 
 static void test_arr_clear(void) {
   int nums[] = {1, 2, 3, 4, 5, 6};
@@ -160,5 +160,5 @@ void test_arr(void) {
   test_arr_swap();
   test_arr_reverse();
 
-  // TEST_MODULE_END("array");
+  TEST_MODULE_END("array");
 }

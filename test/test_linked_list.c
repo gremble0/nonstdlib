@@ -6,8 +6,8 @@
 #include "linked_list.h"
 #include "test.h"
 
-// int tests_passed = 0;
-// int tests_ran = 0;
+static int tests_passed = 0;
+static int tests_ran = 0;
 
 static void test_ll_push_back_seek(void) {
   ll_t *ll = ll_init(sizeof(char *));
@@ -127,5 +127,5 @@ void test_linked_list(void) {
   test_ll_reverse();
   test_ll_all();
 
-  // TEST_MODULE_END("linked list");
+  TEST_MODULE_END("linked list");
 }

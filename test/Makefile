@@ -3,7 +3,7 @@ CFLAGS=-Wall -Wextra -g -O0
 SRC=../src
 OBJS=test_array.o test_hashtable.o test_hashtable_generic.o test_linked_list.o test_list.o test_sort.o
 
-all: src $(OBJS)
+all: clean src $(OBJS)
 	$(CC) $(CFLAGS) -o test_all $(OBJS) test_all.c -L$(SRC) -lnonstdlib
 
 test_array.o:

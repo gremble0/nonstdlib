@@ -15,6 +15,8 @@
   }
 
 #define TEST_FUNCTION_SUCCESS(test)                                            \
+  ++tests_passed;                                                              \
+  ++tests_ran;                                                                 \
   printf("\033[0;32mTest successful for " test "\033[0;37m\n");
 
 #define TEST_FUNCTION_FAILURE(test)                                            \
