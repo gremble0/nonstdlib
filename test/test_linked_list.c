@@ -122,7 +122,7 @@ defer:
   TEST_FUNCTION_SUCCESS();
 }
 
-void test_linked_list(void) {
+void test_linked_list(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
   test_ll_push_back_seek();
@@ -131,4 +131,7 @@ void test_linked_list(void) {
   test_ll_all();
 
   TEST_MODULE_END();
+
+  *total_tests_passed += tests_passed;
+  *total_tests_ran += tests_ran;
 }

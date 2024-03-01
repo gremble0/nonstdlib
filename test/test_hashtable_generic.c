@@ -16,7 +16,7 @@ ht_impl(str);
 static int tests_passed = 0;
 static int tests_ran = 0;
 
-void test_hashtable_generic(void) {
+void test_hashtable_generic(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
   int_ht_t *int_table = int_ht_init(5);
@@ -43,4 +43,7 @@ void test_hashtable_generic(void) {
 defer:
   TEST_FUNCTION_SUCCESS();
   TEST_MODULE_END();
+
+  *total_tests_passed += tests_passed;
+  *total_tests_ran += tests_ran;
 }

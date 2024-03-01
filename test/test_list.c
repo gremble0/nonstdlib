@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// TODO: custom assert that actually says what is different if different
-
 #include "list.h"
 #include "test.h"
 
@@ -97,7 +95,7 @@ defer:
   TEST_FUNCTION_SUCCESS();
 }
 
-void test_list(void) {
+void test_list(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
   test_list_push_pop();
@@ -105,4 +103,7 @@ void test_list(void) {
   test_list_contains();
 
   TEST_MODULE_END();
+
+  *total_tests_passed += tests_passed;
+  *total_tests_ran += tests_ran;
 }

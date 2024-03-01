@@ -155,7 +155,7 @@ defer:
   TEST_FUNCTION_SUCCESS();
 }
 
-void test_arr(void) {
+void test_arr(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
   test_arr_clear();
@@ -165,4 +165,7 @@ void test_arr(void) {
   test_arr_reverse();
 
   TEST_MODULE_END();
+
+  *total_tests_passed += tests_passed;
+  *total_tests_ran += tests_ran;
 }

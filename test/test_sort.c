@@ -38,7 +38,7 @@ defer:
   TEST_FUNCTION_SUCCESS();
 }
 
-void test_all_sorts(void) {
+void test_all_sorts(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
   for (int i = 0; i < NUM_SORT_ALGOS; ++i) {
@@ -46,4 +46,7 @@ void test_all_sorts(void) {
   }
 
   TEST_MODULE_END();
+
+  *total_tests_passed += tests_passed;
+  *total_tests_ran += tests_ran;
 }

@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -8,7 +7,7 @@
 static int tests_passed = 0;
 static int tests_ran = 0;
 
-void test_hashtable(void) {
+void test_hashtable(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
   ht_t *table = ht_init(5);
@@ -28,22 +27,9 @@ void test_hashtable(void) {
   ASSERT_TRUE(strcmp(ht_get(table, "qwertz"), "BABA") == 0);
   ASSERT_TRUE(table->max_entries == 10);
 
-  ht_put(table,
-         "qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfjlaksdjfkd\
-ajsdklfaskldfkasjldhfkljashdfklahsdfklhasdkljfhasdkjlhfkjlashdfkljashdfkljhasdklfhkk\
-ajsdhfkjlahsdkjflhaskldfhkljasdfkjasdfkashfklahsdkfljhaskljdhkajlshdfkjlahsdkljhakld\
-sdhfkjlashdfkljhakjsldjashdfklalskdflkfhqwoliefhuqiowefiwlfiwelaufrawilerfilwhrfiklu\
-hfruilwehrfiluaweriulhweuirlhweiurhuweuiruhiweuhruqwueirlweihfilweufqwelfhiuweihrqlw\
-iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh",
-         "POPO");
+  ht_put(table, "iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirlur", "POPO");
   ASSERT_TRUE(table->n_entries == 5);
-  ht_put(table, "",
-         "qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfjlaksdjfkd\
-ajsdklfaskldfkasjldhfkljashdfklahsdfklhasdkljfhasdkjlhfkjlashdfkljashdfkljhasdklfhkk\
-ajsdhfkjlahsdkjflhaskldfhkljasdfkjasdfkashfklahsdkfljhaskljdhkajlshdfkjlahsdkljhakld\
-sdhfkjlashdfkljhakjsldjashdfklalskdflkfhqwoliefhuqiowefiwlfiwelaufrawilerfilwhrfiklu\
-hfruilwehrfiluaweriulhweuirlhweiurhuweuiruhiweuhruqwueirlweihfilweufqwelfhiuweihrqlw\
-iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirluhqwuierhqwelrihqweirulhqwieurh");
+  ht_put(table, "", "qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfj");
   ASSERT_TRUE(table->n_entries == 6);
   ASSERT_TRUE(table->max_entries == 20);
 
@@ -57,4 +43,7 @@ defer:
 
   TEST_FUNCTION_SUCCESS();
   TEST_MODULE_END();
+
+  *total_tests_passed += tests_passed;
+  *total_tests_ran += tests_ran;
 }
