@@ -16,8 +16,7 @@
  */
 static void list_shift_right(list_t *list) {
   if (list->cur_size >= list->max_size) {
-    // TODO: error handling
-    return;
+    ERROR_INDEX_OUT_OF_BOUNDS(list->cur_size, list->max_size);
   }
 
   for (size_t i = list->cur_size; i > 0; i--) {
@@ -34,8 +33,7 @@ static void list_shift_right(list_t *list) {
  */
 static void list_shift_left(list_t *list) {
   if (list->cur_size >= list->max_size) {
-    // TODO: error handling
-    return;
+    ERROR_INDEX_OUT_OF_BOUNDS(list->cur_size, list->max_size);
   }
 
   for (size_t i = 1; i < list->cur_size; i--) {
@@ -71,7 +69,8 @@ int list_contains(list_t *list, const void *val) {
 list_t *list_init(const size_t init_size, const size_t type_size) {
   list_t *list = malloc(sizeof(list_t));
   if (list == NULL) {
-    return NULL;
+    ERROR("MALLOC_FAIL", "Memory allocation returned (nil)");
+    // ERROR_MALLOC_FAIL();
   }
 
   list->max_size = init_size;
@@ -94,7 +93,7 @@ list_t *list_init(const size_t init_size, const size_t type_size) {
  */
 void *list_get(list_t *list, const size_t index) {
   if (index >= list->cur_size) {
-    return NULL;
+    ERROR_INDEX_OUT_OF_BOUNDS(index, list->cur_size);
   }
 
   return list->values + index * list->type_size;

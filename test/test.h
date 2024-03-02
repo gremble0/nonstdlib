@@ -1,5 +1,6 @@
 // TODO: make this a part of the libarary?
 
+// Assert something is true, if it's not print error message without crashing
 #define ASSERT_TRUE(expr)                                                      \
   do {                                                                         \
     if (!(expr)) {                                                             \
@@ -12,6 +13,7 @@
 
 #define TEST_MODULE_START() printf("Testing module: %s\n", __FILE__)
 
+// Print debug info about results for this test
 #define TEST_MODULE_END()                                                      \
   if (tests_passed != tests_ran) {                                             \
     printf("\033[0;31m%d/%d tests successful for %s\033[0;37m\n",              \

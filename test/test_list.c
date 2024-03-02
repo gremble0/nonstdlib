@@ -88,6 +88,7 @@ static void test_list_contains(void) {
   list_push_back(list, &b);
 
   ASSERT_TRUE(list_contains(list, &a) == 1);
+  ASSERT_TRUE(*(int *)list_get(list, 9) == 2);
   ASSERT_TRUE(list_contains(list, &b) == 1);
 
 defer:

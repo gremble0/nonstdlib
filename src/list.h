@@ -2,6 +2,21 @@
 
 #include <stddef.h>
 
+// TODO: make error.h
+// TODO: goto catch??
+// Some kind of inheritance for error handling
+#define ERROR(type, errstr, ...)                                               \
+  fprintf(stderr, type ": " errstr "\nIn call to function: '%s'\n",            \
+          __VA_ARGS__, __func__);                                              \
+  exit(1)
+
+#define ERROR_MALLOC_FAIL()                                                    \
+  ERROR("MALLOC_FAIL", "Memory allocation returned (nil)")
+
+#define ERROR_INDEX_OUT_OF_BOUNDS(index, max_index)                            \
+  ERROR("INDEX_OUT_OF_BOUNDS",                                                 \
+        "index %zu out of bounds where max_index is %zu", index, max_index);
+
 typedef struct list_t {
   void **values;    // List of all values
   size_t type_size; // Size of one value in the list
