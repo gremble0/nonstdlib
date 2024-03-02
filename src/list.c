@@ -1,7 +1,9 @@
+#include <execinfo.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "error.h"
 #include "list.h"
 
 // TODO: negative indicies to index from the back of lists
@@ -69,8 +71,7 @@ int list_contains(list_t *list, const void *val) {
 list_t *list_init(const size_t init_size, const size_t type_size) {
   list_t *list = malloc(sizeof(list_t));
   if (list == NULL) {
-    ERROR("MALLOC_FAIL", "Memory allocation returned (nil)");
-    // ERROR_MALLOC_FAIL();
+    ERROR_MALLOC_FAIL();
   }
 
   list->max_size = init_size;

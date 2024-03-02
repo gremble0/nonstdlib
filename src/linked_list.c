@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "error.h"
 #include "linked_list.h"
 
 // TODO: malloc some return values
@@ -58,7 +59,7 @@ void *ll_peek_front(ll_t *ll) {
  */
 void *ll_pop_back(ll_t *ll) {
   if (ll->last == NULL) {
-    return NULL;
+    ERROR_POP_FROM_EMPTY_LIST();
   }
 
   ll_entry_t *popped = ll->last;
@@ -84,7 +85,7 @@ void *ll_pop_back(ll_t *ll) {
  */
 void *ll_pop_front(ll_t *ll) {
   if (ll->first == NULL) {
-    return NULL;
+    ERROR_POP_FROM_EMPTY_LIST();
   }
 
   ll_entry_t *popped = ll->first;
