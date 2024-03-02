@@ -1,6 +1,9 @@
 # nonstdlib
 This project consists of several modules containing various useful utilities for C such as stacks, hashtables, lists and arrays.
 
+## Note on portability
+Because this project is mostly for fun I have not put any significant effort into maintaining portability to other platforms or compilers. The only way i can guarantee the library to work is to run it on linux with the clang compiler.
+
 ## Usage
 To use the library copy it into your project however you want (as a git submodule or cloning directly). Then go into nonstdlib/src and run make:
 ```sh
