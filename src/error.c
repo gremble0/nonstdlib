@@ -17,6 +17,13 @@ static void err_print_stacktrace() {
   free(strs);
 }
 
+_Noreturn void err_io_fail(const char *file_path) {
+  err_print_stacktrace();
+  fprintf(stderr, "ERROR_IO_FAIL: error doing IO to file at '%s'\n", file_path);
+
+  exit(1);
+}
+
 _Noreturn void err_index_out_of_bounds(size_t index, size_t max_index) {
   err_print_stacktrace();
   fprintf(stderr,
