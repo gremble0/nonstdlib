@@ -1,6 +1,6 @@
 CC=clang
 CFLAGS=-Wall -Wextra
-OBJS=hashtable.o linked_list.o sort.o array.o list.o
+OBJS=hashtable.o linked_list.o sort.o array.o list.o error.o
 LIB=libnonstdlib.a
 
 all: $(OBJS)
@@ -20,6 +20,9 @@ array.o:
 
 list.o:
 	$(CC) $(CFLAGS) -c list.c -o list.o
+
+error.o:
+	$(CC) $(CFLAGS) -c error.c -o error.o
 
 clean:
 	rm -f *.o

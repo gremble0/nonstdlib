@@ -59,7 +59,7 @@ void *ll_peek_front(ll_t *ll) {
  */
 void *ll_pop_back(ll_t *ll) {
   if (ll->last == NULL) {
-    ERROR_POP_FROM_EMPTY_LIST();
+    err_pop_from_empty_list();
   }
 
   ll_entry_t *popped = ll->last;
@@ -85,7 +85,7 @@ void *ll_pop_back(ll_t *ll) {
  */
 void *ll_pop_front(ll_t *ll) {
   if (ll->first == NULL) {
-    ERROR_POP_FROM_EMPTY_LIST();
+    err_pop_from_empty_list();
   }
 
   ll_entry_t *popped = ll->first;
