@@ -1,9 +1,9 @@
 #pragma once
 
-#include <execinfo.h>
-
 // TODO: goto catch??
 // Some kind of inheritance for error handling
+#ifdef __GLIBC__
+#include <execinfo.h>
 #define ERROR(type, errstr, ...)                                               \
   do {                                                                         \
     fprintf(stderr, "Running stacktrace:\n");                                  \
@@ -17,6 +17,14 @@
     fprintf(stderr, type ": " errstr "\n", ##__VA_ARGS__);                     \
     exit(1);                                                                   \
   } while (0)
+#else
+#define ERROR(type, errstr, ...)                                               \
+  do {                                                                         \
+    fprintf(stderr, "%s:%d: " type ": " errstr "\n", __FILE__, __LINE__,       \
+            ##__VA_ARGS__);                                                    \
+    exit(1);                                                                   \
+  } while (0)
+#endif
 
 #define ERROR_MALLOC_FAIL()                                                    \
   ERROR("ERROR_MALLOC_FAIL", "Memory allocation returned NULL");
