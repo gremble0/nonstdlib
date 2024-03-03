@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "error.h"
 #include "hashtable.h"
 
 /**
@@ -141,9 +142,7 @@ void ht_put(ht_t *table, const char *key, const void *value) {
   // Make new ht_entry
   ht_entry_t *new_entry = malloc(sizeof(ht_entry_t));
   if (new_entry == NULL) {
-    // TODO: find a way to signal that this has errored? set the
-    // entries[hash_index] to some special value?
-    return;
+    err_malloc_fail();
   }
   new_entry->key = key;
   new_entry->value = value;

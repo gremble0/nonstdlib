@@ -189,15 +189,13 @@ void ll_print(ll_t *ll) {
 static ll_entry_t *ll_create_entry(const void *value, size_t type_size) {
   ll_entry_t *new = malloc(sizeof(ll_entry_t));
   if (new == NULL) {
-    // TODO: find a way to signal that this has errored?
-    return NULL;
+    err_malloc_fail();
   }
 
   new->value = malloc(type_size);
   if (new->value == NULL) {
-    // TODO: find a way to signal that this has errored?
     free(new);
-    return NULL;
+    err_malloc_fail();
   }
 
   memcpy(new->value, value, type_size);
