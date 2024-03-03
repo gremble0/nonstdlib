@@ -21,10 +21,10 @@ const void *ht_get(ht_t *table, const char *key) {
   }
 
   while (entry->key != key) {
+    entry = table->entries[index++];
     if (entry == NULL) {
       return NULL;
     }
-    entry = table->entries[index++];
   }
 
   return entry->value;

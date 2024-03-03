@@ -50,12 +50,12 @@ static void test_ll_push_front_pop(void) {
   // ll should be: 2
   ASSERT_TRUE(*(int *)ll_pop_back(ll) == 2);
   // ll should be: (nil)
-  ASSERT_TRUE(ll_pop_back(ll) == NULL);
+  ASSERT_TRUE(ll_peek_front(ll) == NULL);
   ll_push_front(ll, &a);
   // ll should be: 1
   ASSERT_TRUE(*(int *)ll_pop_back(ll) == 1);
   // ll should be: (nil)
-  ASSERT_TRUE(ll_pop_back(ll) == NULL);
+  ASSERT_TRUE(ll_peek_front(ll) == NULL);
 
 defer:
   ll_free(ll);
