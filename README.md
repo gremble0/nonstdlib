@@ -51,8 +51,9 @@ int main(void) {
 
 ## Modules:
 List of currently implemented modules:
-- `hashtable.h` and `generic_hashtable.h`
-- `array.h`
-- `sort.h`
-- `linked_list.h`
-- `list.h` (WIP)
+- `hashtable.h` and `generic_hashtable.h`: Type and functions for the hashtable data structure.
+- `error.h`: Contains some functions for handling typical errors and printing more useful debug information.
+- `linked_list.h`: Type and functions for the linked list data structure.
+- `list.h` (WIP): Type and functions for the list data structure.
+- `array.h`: Utilities for normal C arrays.
+- `sort.h`: Some sorting algorithms for builtin C arrays.

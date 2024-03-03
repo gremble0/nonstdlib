@@ -217,4 +217,5 @@ void list_push_front(list_t *list, const void *val) {
 }
 
 // TODO: implement
-void list_reverse(list_t *list) {}
+void list_reverse(list_t *list);
+void list_remove(list_t *list, const void *val);
