@@ -7,6 +7,28 @@
 #include "hashtable.h"
 
 /**
+ * @brief Rehashes entry at old_hash_index and inserts it into the new hash
+ * index. Used if the tables max entries has changed and the old hash index may
+ * no longer be correct for the given entry
+ *
+ * @param table table to update entry in
+ * @param old_hash_index the old hash index of the entry we want to update
+ */
+static void ht_update_entry(ht_t *table, size_t old_hash_index) {
+  ht_entry_t *entry = table->entries[old_hash_index];
+  uint32_t new_hash_index = hash(entry->key) % table->max_entries;
+  if (new_hash_index == old_hash_index) {
+    return;
+  }
+
+  table->entries[old_hash_index] = NULL;
+  while (table->entries[++new_hash_index] != NULL)
+    ;
+
+  table->entries[new_hash_index] = entry;
+}
+
+/**
  * @brief Get an element from a hash table
  *
  * @param table table to get from
@@ -82,17 +104,13 @@ void ht_expand(ht_t *table) {
   table->max_entries *= 2;
   table->entries =
       realloc(table->entries, sizeof(ht_entry_t) * table->max_entries);
-  table->n_entries = 0; // Will be incremented in the loop by calling ht_put
 
   // Loop through table and reindex based on new size
   for (size_t i = 0; i < prev_max_entries; ++i) {
     if (table->entries[i] == NULL) {
       continue;
     }
-
-    ht_entry_t *entry = table->entries[i];
-    table->entries[i] = NULL; // TODO: memory management
-    ht_put(table, entry->key, entry->value);
+    ht_update_entry(table, i);
   }
 }
 
@@ -160,7 +178,8 @@ void ht_put(ht_t *table, const char *key, const void *value) {
 
   // Same key has already been hashed (updating existing key)
   if (existing_entry->key == key) {
-    existing_entry->value = value;
+    free(existing_entry);
+    table->entries[hash_index] = new_entry;
     return;
   }
 
