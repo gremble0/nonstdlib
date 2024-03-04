@@ -1,4 +1,3 @@
-#include <execinfo.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +6,6 @@
 #include "list.h"
 
 // TODO: negative indicies to index from the back of lists
-// TODO: error handling? NERROR macro?
 // TODO: list_of function
 
 /**
@@ -22,8 +20,7 @@ static void list_shift_right(list_t *list) {
   }
 
   for (size_t i = list->cur_size; i > 0; i--) {
-    memcpy(list->values + i * list->type_size,
-           list->values + (i - 1) * list->type_size, list->type_size);
+    memcpy(list->values[i], list->values[i - 1], list->type_size);
   }
 }
 
@@ -39,8 +36,15 @@ static void list_shift_left(list_t *list) {
   }
 
   for (size_t i = 1; i < list->cur_size; i--) {
-    memcpy(list->values + (i - 1) * list->type_size,
-           list->values + i * list->type_size, list->type_size);
+    memcpy(list->values[i - 1], list->values[i], list->type_size);
+  }
+}
+
+static void list_expand(list_t *list) {
+  list->max_size *= 2;
+  list->values = realloc(list->values, list->max_size);
+  if (list->values == NULL) {
+    err_malloc_fail();
   }
 }
 
@@ -53,6 +57,7 @@ static void list_shift_left(list_t *list) {
  */
 int list_contains(list_t *list, const void *val) {
   for (size_t i = 0; i < list->cur_size; ++i) {
+    // TODO: redo this
     if (memcmp(list->values + i * list->type_size, val, list->type_size) == 0) {
       return 1;
     }
@@ -77,10 +82,10 @@ list_t *list_init(const size_t init_size, const size_t type_size) {
   list->max_size = init_size;
   list->cur_size = 0;
   list->type_size = type_size;
-  list->values = malloc(init_size * type_size);
+  list->values = malloc(init_size * sizeof(void *));
   if (list->values == NULL) {
     free(list);
-    return NULL;
+    err_malloc_fail();
   }
 
   return list;
@@ -97,7 +102,7 @@ void *list_get(list_t *list, const size_t index) {
     err_index_out_of_bounds(list->cur_size, list->max_size);
   }
 
-  return list->values + index * list->type_size;
+  return list->values[index];
 }
 
 /**
@@ -112,8 +117,13 @@ void *list_pop_back(list_t *list) {
   }
 
   void *ret = malloc(list->type_size);
-  memcpy(ret, list->values + --list->cur_size * list->type_size,
-         list->type_size);
+  if (ret == NULL) {
+    err_malloc_fail();
+  }
+
+  --list->cur_size;
+  memcpy(ret, list->values[list->cur_size], list->type_size);
+  free(list->values[list->cur_size]);
 
   return ret;
 }
@@ -131,7 +141,12 @@ void *list_pop_front(list_t *list) {
 
   // Save retun value before it gets overwritten by list_left_shift
   void *ret = malloc(list->type_size);
+  if (ret == NULL) {
+    err_malloc_fail();
+  }
+
   memcpy(ret, list->values, list->type_size);
+  // free(list->values[0]);
 
   // Update list
   list_shift_left(list);
@@ -146,7 +161,7 @@ void *list_pop_front(list_t *list) {
  * @param list list to clear
  */
 void list_clear(list_t *list) {
-  // TODO: reset max_size?
+  // TODO: redo this
   memset(list->values, 0, list->cur_size * list->type_size);
   list->cur_size = 0;
 }
@@ -157,6 +172,9 @@ void list_clear(list_t *list) {
  * @param list list to free
  */
 void list_free(list_t *list) {
+  for (size_t i = 0; i < list->cur_size; ++i) {
+    free(list->values[i]);
+  }
   free(list->values);
   free(list);
 }
@@ -186,11 +204,17 @@ void list_print(list_t *list) {
 void list_push_back(list_t *list, const void *val) {
   // Resize if necessary
   if (list->cur_size == list->max_size) {
-    list->max_size *= 2;
-    list->values = realloc(list->values, list->max_size);
+    list_expand(list);
   }
 
-  memcpy(list->values + list->cur_size * list->type_size, val, list->type_size);
+  // TODO: own function for this
+  list->values[list->cur_size] = malloc(list->type_size);
+  if (list->values[list->cur_size] == NULL) {
+    list_free(list);
+    err_malloc_fail();
+  }
+
+  memcpy(list->values[list->cur_size], val, list->type_size);
   ++list->cur_size;
 }
 
@@ -204,15 +228,21 @@ void list_push_back(list_t *list, const void *val) {
 void list_push_front(list_t *list, const void *val) {
   // Resize if necessary
   if (list->cur_size == list->max_size) {
-    list->max_size *= 2;
-    list->values = realloc(list->values, list->max_size);
+    list_expand(list);
+  }
+
+  list->values[list->cur_size] = malloc(list->type_size);
+  if (list->values[list->cur_size] == NULL) {
+    // TODO: freeing when malloc other places
+    list_free(list);
+    err_malloc_fail();
   }
 
   if (list->cur_size > 0) {
     list_shift_right(list);
   }
 
-  memcpy(list->values, val, list->type_size);
+  memcpy(list->values[0], val, list->type_size);
   ++list->cur_size;
 }
 
