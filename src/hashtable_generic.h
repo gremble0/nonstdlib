@@ -20,13 +20,21 @@
   void type##_ht_put(type##_ht_t *table, const char *key, const type *value);
 
 #define ht_impl(type)                                                          \
-  /**                                                                          \
-   * @brief Get an element from a hash table                                   \
-   *                                                                           \
-   * @param table table to get from                                            \
-   * @param key key to get                                                     \
-   * @return value of the given key                                            \
-   */                                                                          \
+  static void type##_ht_update_entry(type##_ht_t *table,                       \
+                                     size_t old_hash_index) {                  \
+    type##_ht_entry_t *entry = table->entries[old_hash_index];                 \
+    uint32_t new_hash_index = type##_hash(entry->key) % table->max_entries;    \
+    if (new_hash_index == old_hash_index) {                                    \
+      return;                                                                  \
+    }                                                                          \
+                                                                               \
+    table->entries[old_hash_index] = NULL;                                     \
+    while (table->entries[++new_hash_index] != NULL)                           \
+      ;                                                                        \
+                                                                               \
+    table->entries[new_hash_index] = entry;                                    \
+  }                                                                            \
+                                                                               \
   const type *type##_ht_get(type##_ht_t *table, const char *key) {             \
     uint32_t index = type##_hash(key) % table->max_entries;                    \
     type##_ht_entry_t *entry = table->entries[index];                          \
@@ -35,22 +43,15 @@
     }                                                                          \
                                                                                \
     while (entry->key != key) {                                                \
+      entry = table->entries[index++];                                         \
       if (entry == NULL) {                                                     \
         return NULL;                                                           \
       }                                                                        \
-      entry = table->entries[index++];                                         \
     }                                                                          \
                                                                                \
     return entry->value;                                                       \
   }                                                                            \
                                                                                \
-  /**                                                                          \
-   * @brief Initialize an empty hash table allocated on the heap               \
-   *                                                                           \
-   * @param init_size the initial size of the hash table, can be changed by    \
-   * ht_put                                                                    \
-   * @return a malloc'd hash table                                             \
-   */                                                                          \
   type##_ht_t *type##_ht_init(uint32_t init_max_entries) {                     \
     type##_ht_t *new_ht = malloc(sizeof(type##_ht_t));                         \
     if (new_ht == NULL) {                                                      \
@@ -72,11 +73,6 @@
     return new_ht;                                                             \
   }                                                                            \
                                                                                \
-  /**                                                                          \
-   * @brief djb2 hash function                                                 \
-   *                                                                           \
-   * @return index into a hash table (needs to be %'d by table size)           \
-   */                                                                          \
   uint32_t type##_hash(const char *key) {                                      \
     uint32_t hash = 5381;                                                      \
                                                                                \
@@ -87,36 +83,20 @@
     return hash;                                                               \
   }                                                                            \
                                                                                \
-  /**                                                                          \
-   * @brief Doubles the size of a hash table                                   \
-   *                                                                           \
-   * @param table hash table to expand the size of                             \
-   */                                                                          \
   void type##_ht_expand(type##_ht_t *table) {                                  \
     uint32_t prev_max_entries = table->max_entries;                            \
     table->max_entries *= 2;                                                   \
     table->entries = realloc(table->entries,                                   \
                              sizeof(type##_ht_entry_t) * table->max_entries);  \
-    table->n_entries =                                                         \
-        0; /* Will be incremented in the loop by calling ht_put */             \
                                                                                \
-    /* Loop through table and reindex based on new size */                     \
     for (size_t i = 0; i < prev_max_entries; ++i) {                            \
       if (table->entries[i] == NULL) {                                         \
         continue;                                                              \
       }                                                                        \
-                                                                               \
-      type##_ht_entry_t *entry = table->entries[i];                            \
-      table->entries[i] = NULL; /* TODO: memory management */                  \
-      type##_ht_put(table, entry->key, entry->value);                          \
+      type##_ht_update_entry(table, i);                                        \
     }                                                                          \
   }                                                                            \
                                                                                \
-  /**                                                                          \
-   * @brief frees memory allocated for hash table                              \
-   *                                                                           \
-   * @param table table to free memory for                                     \
-   */                                                                          \
   void type##_ht_free(type##_ht_t *table) {                                    \
     for (size_t i = 0; i < table->max_entries; ++i) {                          \
       free(table->entries[i]);                                                 \
@@ -126,13 +106,17 @@
     free(table);                                                               \
   }                                                                            \
                                                                                \
-  /**                                                                          \
-   * @brief Put (insert) a value into a hash table                             \
-   *                                                                           \
-   * @param table table to put into                                            \
-   * @param key key to put in                                                  \
-   * @param value value to put in                                              \
-   */                                                                          \
+  void type##_ht_print(type##_ht_t *table) {                                   \
+    for (size_t i = 0; i < table->max_entries; ++i) {                          \
+      if (table->entries[i] == NULL) {                                         \
+        printf("[%zu]: --empty--\n", i);                                       \
+      } else {                                                                 \
+        type##_ht_entry_t *entry = table->entries[i];                          \
+        printf("[%zu]: key: %s, value: %p\n", i, entry->key, entry->value);    \
+      }                                                                        \
+    }                                                                          \
+  }                                                                            \
+                                                                               \
   void type##_ht_put(type##_ht_t *table, const char *key, const type *value) { \
     if (table->n_entries + 1 > table->max_entries / 2) {                       \
       type##_ht_expand(table);                                                 \
@@ -140,7 +124,7 @@
                                                                                \
     type##_ht_entry_t *new_entry = malloc(sizeof(type##_ht_entry_t));          \
     if (new_entry == NULL) {                                                   \
-      return;                                                                  \
+      err_malloc_fail();                                                       \
     }                                                                          \
     new_entry->key = key;                                                      \
     new_entry->value = value;                                                  \
@@ -155,7 +139,8 @@
     }                                                                          \
                                                                                \
     if (existing_entry->key == key) {                                          \
-      existing_entry->value = value;                                           \
+      free(existing_entry);                                                    \
+      table->entries[hash_index] = new_entry;                                  \
       return;                                                                  \
     }                                                                          \
                                                                                \
@@ -164,4 +149,4 @@
                                                                                \
     table->entries[hash_index] = new_entry;                                    \
     ++table->n_entries;                                                        \
-  }
+  }\
