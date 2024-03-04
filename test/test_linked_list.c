@@ -44,19 +44,31 @@ static void test_ll_push_front_pop(void) {
   ll_push_front(ll, &c);
   // ll should be: 3 -> 2 -> 1
 
-  ASSERT_TRUE(*(int *)ll_pop_front(ll) == 3);
+  int *popped_a = ll_pop_front(ll);
   // ll should be: 2 -> 1
-  ASSERT_TRUE(*(int *)ll_pop_back(ll) == 1);
+  int *popped_b = ll_pop_back(ll);
   // ll should be: 2
-  ASSERT_TRUE(*(int *)ll_pop_back(ll) == 2);
+  int *popped_c = ll_pop_back(ll);
   // ll should be: (nil)
-  ASSERT_TRUE(ll_peek_front(ll) == NULL);
-  ll_push_front(ll, &a);
-  // ll should be: 1
-  ASSERT_TRUE(*(int *)ll_pop_back(ll) == 1);
-  // ll should be: (nil)
+
+  ASSERT_TRUE(*popped_a == 3);
+  ASSERT_TRUE(*popped_b == 1);
+  ASSERT_TRUE(*popped_c == 2);
   ASSERT_TRUE(ll_peek_front(ll) == NULL);
 
+  ll_push_front(ll, &a);
+  // ll should be: 1
+
+  int *popped_d = ll_pop_back(ll);
+  // ll should be: (nil)
+
+  ASSERT_TRUE(*popped_d == 1);
+  ASSERT_TRUE(ll_peek_front(ll) == NULL);
+
+  free(popped_a);
+  free(popped_b);
+  free(popped_c);
+  free(popped_d);
 defer:
   ll_free(ll);
   TEST_FUNCTION_SUCCESS();
@@ -104,16 +116,16 @@ static void test_ll_all(void) {
   ASSERT_TRUE(strcmp(ll_seek(ll, 2), "c") == 0);
   ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
 
-  ll_pop_back(ll);
+  free(ll_pop_back(ll));
   // ll should be: "b" -> "a"
   ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
   ASSERT_TRUE(strcmp(ll_seek(ll, 1), "a") == 0);
 
-  ll_pop_back(ll);
+  free(ll_pop_back(ll));
   // ll should be: "b"
   ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
 
-  ll_pop_back(ll);
+  free(ll_pop_back(ll));
   // ll should be: (nil)
   ASSERT_TRUE(ll_peek_front(ll) == NULL);
 

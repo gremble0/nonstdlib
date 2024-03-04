@@ -40,7 +40,7 @@ void *ll_peek_back(ll_t *ll) {
 }
 
 /**
- * @brief Get the first element in the linked list without modifying it
+ * @brief Get the first element in the linked list without modifying it.
  *
  * @param s linked list to peek into
  */
@@ -53,7 +53,8 @@ void *ll_peek_front(ll_t *ll) {
 }
 
 /**
- * @brief Removes last entry in the linked list and returns it.
+ * @brief Removes last entry in the linked list and returns it. Returned value
+ * needs to be freed.
  *
  * @param s linked list to pop from
  */
@@ -79,7 +80,8 @@ void *ll_pop_back(ll_t *ll) {
 }
 
 /**
- * @brief Pops value of first entry in the linked list and returns it.
+ * @brief Pops value of first entry in the linked list and returns it. Returned
+ * value needs to be freed.
  *
  * @param s linked list to pop from
  */
@@ -136,19 +138,14 @@ void *ll_seek(ll_t *ll, size_t index) {
 }
 
 /**
- * @brief Frees memory allocated for a linked list and all its entries
+ * @brief Frees memory allocated for a linked list, all its entries and all its
+ * entries' values
  *
  * @param s linked list to free allocated memory for
  */
 void ll_free(ll_t *ll) {
-  if (ll->cur_size == 0) {
-    free(ll);
-
-    return;
-  }
-
   ll_entry_t *entry = ll->first;
-  while (entry->next != NULL) {
+  while (entry != NULL) {
     ll_entry_t *next = entry->next;
     free(entry->value);
     free(entry);
