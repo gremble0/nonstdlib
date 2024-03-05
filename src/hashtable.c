@@ -6,8 +6,6 @@
 #include "error.h"
 #include "hashtable.h"
 
-// TODO: wrap to index 0 if index is ht->max_size
-
 /**
  * @brief djb2 hash function.
  *
@@ -16,8 +14,9 @@
  */
 static uint32_t hash(const char *key) {
   uint32_t hash = 5381;
+  size_t key_len = strlen(key);
 
-  for (size_t i = 0; i < strlen(key); ++i) {
+  for (size_t i = 0; i < key_len; ++i) {
     hash = hash * 33 + key[i];
   }
 
@@ -32,7 +31,7 @@ static uint32_t hash(const char *key) {
  * @param table table to update entry in
  * @param old_hash_index the old hash index of the entry we want to update
  */
-static void ht_update_entry(ht_t *table, size_t old_hash_index) {
+static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
   ht_entry_t *entry = table->entries[old_hash_index];
   uint32_t new_hash_index = hash(entry->key) % table->max_entries;
   if (new_hash_index == old_hash_index) {
@@ -50,30 +49,6 @@ static void ht_update_entry(ht_t *table, size_t old_hash_index) {
   }
 
   table->entries[new_hash_index] = entry;
-}
-
-/**
- * @brief Get an element from a hash table.
- *
- * @param table table to get from
- * @param key key to get
- * @return value of the given key
- */
-const void *ht_get(ht_t *table, const char *key) {
-  uint32_t index = hash(key) % table->max_entries;
-  ht_entry_t *entry = table->entries[index];
-  if (entry == NULL) {
-    return NULL;
-  }
-
-  while (strcmp(entry->key, key) != 0) {
-    entry = table->entries[index++];
-    if (entry == NULL) {
-      return NULL;
-    }
-  }
-
-  return entry->value;
 }
 
 /**
@@ -108,6 +83,30 @@ static ht_entry_t *ht_create_entry(char *key, char *value) {
   memcpy(entry->value, value, value_len);
 
   return entry;
+}
+
+/**
+ * @brief Get an element from a hash table.
+ *
+ * @param table table to get from
+ * @param key key to get
+ * @return value of the given key
+ */
+const void *ht_get(ht_t *table, const char *key) {
+  uint32_t index = hash(key) % table->max_entries;
+  ht_entry_t *entry = table->entries[index];
+  if (entry == NULL) {
+    return NULL;
+  }
+
+  while (strcmp(entry->key, key) != 0) {
+    entry = table->entries[index++];
+    if (entry == NULL) {
+      return NULL;
+    }
+  }
+
+  return entry->value;
 }
 
 /**
@@ -148,13 +147,17 @@ void ht_expand(ht_t *table) {
   table->max_entries *= 2;
   table->entries =
       realloc(table->entries, table->max_entries * sizeof(ht_entry_t *));
+  for (size_t i = prev_max_entries; i < table->max_entries; ++i) {
+    table->entries[i] = NULL;
+  }
 
   // Loop through table and reindex based on new size
   for (size_t i = 0; i < prev_max_entries; ++i) {
     if (table->entries[i] == NULL) {
       continue;
     }
-    ht_update_entry(table, i);
+
+    ht_rehash_index(table, i);
   }
 }
 
@@ -208,35 +211,25 @@ void ht_put(ht_t *table, char *key, void *value) {
   uint32_t hash_index = hash(key) % table->max_entries;
   ht_entry_t *existing_entry = table->entries[hash_index];
 
-  // No entry at hash_index
   if (existing_entry == NULL) {
     table->entries[hash_index] = ht_create_entry(key, value);
     ++table->n_entries;
+  } else if (strcmp(existing_entry->key, key) != 0) {
+    while (table->entries[hash_index] != NULL) {
+      ++hash_index;
 
-    return;
-  }
+      if (hash_index >= table->max_entries) {
+        hash_index = 0;
+      }
+    }
 
-  // Same key has already been hashed (updating existing key)
-  if (strcmp(existing_entry->key, key) == 0) {
-    // TODO: malloc/memcpy value?
+    table->entries[hash_index] = ht_create_entry(key, value);
+    ++table->n_entries;
+  } else {
     size_t value_len = strlen(value) + 1;
 
     table->entries[hash_index]->value =
         realloc(table->entries[hash_index]->value, value_len);
     memcpy(table->entries[hash_index]->value, value, value_len);
-
-    return;
   }
-
-  // Go to next index until there is an available spot
-  while (table->entries[hash_index] != NULL) {
-    ++hash_index;
-
-    if (hash_index >= table->max_entries) {
-      hash_index = 0;
-    }
-  }
-
-  table->entries[hash_index] = ht_create_entry(key, value);
-  ++table->n_entries;
 }

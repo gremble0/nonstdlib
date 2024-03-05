@@ -35,7 +35,7 @@ void test_hashtable(int *total_tests_ran, int *total_tests_passed) {
 
   long a = 2;
   ht_put(table, "jig", &a);
-  ASSERT_TRUE(*(long *)ht_get(table, "jig") == 2);
+  ASSERT_TRUE(*(long *)ht_get(table, "jig") == a);
   ASSERT_TRUE(ht_get(table, "doesnt_exist") == NULL);
 
 defer:
