@@ -25,8 +25,7 @@ test_sort.o:
 	$(CC) $(CFLAGS) -I$(SRC) -c test_sort.c -o test_sort.o
 
 src:
-	$(MAKE) -C $(SRC) clean
-	$(MAKE) -C $(SRC)
+	$(MAKE) -C $(SRC) debug
 
 clean:
 	rm test_all *.o -f
