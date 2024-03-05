@@ -79,17 +79,20 @@ defer:
 }
 
 static void test_list_contains(void) {
-  list_t *list = list_init(5, sizeof(char *));
+  list_t *list = list_init(5, sizeof(const int));
 
   const int a = 2;
   const int b = 44;
+  const int c = 44;
+  const int d = 42;
 
   list_push_back(list, &a);
   list_push_back(list, &b);
 
   ASSERT_TRUE(list_contains(list, &a) == 1);
-  ASSERT_TRUE(*(int *)list_get(list, 0) == 2);
   ASSERT_TRUE(list_contains(list, &b) == 1);
+  ASSERT_TRUE(list_contains(list, &c) == 1);
+  ASSERT_TRUE(list_contains(list, &d) != 1);
 
 defer:
   list_free(list);

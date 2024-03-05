@@ -35,7 +35,7 @@ static void list_shift_left(list_t *list) {
     err_index_out_of_bounds(list->cur_size, list->max_size);
   }
 
-  for (size_t i = 1; i < list->cur_size; i--) {
+  for (size_t i = 1; i < list->cur_size; i++) {
     memcpy(list->values[i - 1], list->values[i], list->type_size);
   }
 }
@@ -49,7 +49,7 @@ static void list_expand(list_t *list) {
 }
 
 /**
- * @brief Checks if a value is present in a list
+ * @brief Checks if a value is present in a list.
  *
  * @param list list to check in
  * @param val value to check for
@@ -57,8 +57,7 @@ static void list_expand(list_t *list) {
  */
 int list_contains(list_t *list, const void *val) {
   for (size_t i = 0; i < list->cur_size; ++i) {
-    // TODO: redo this
-    if (memcmp(list->values + i * list->type_size, val, list->type_size) == 0) {
+    if (memcmp(list->values[i], val, list->type_size) == 0) {
       return 1;
     }
   }
@@ -116,6 +115,8 @@ void *list_pop_back(list_t *list) {
     return NULL;
   }
 
+  // Save return value to new memory locatin independent of the list it was
+  // popped from
   void *ret = malloc(list->type_size);
   if (ret == NULL) {
     err_malloc_fail();
@@ -145,12 +146,15 @@ void *list_pop_front(list_t *list) {
     err_malloc_fail();
   }
 
-  memcpy(ret, list->values, list->type_size);
-  // free(list->values[0]);
+  memcpy(ret, list->values[0], list->type_size);
 
   // Update list
   list_shift_left(list);
+
   --list->cur_size;
+  // Memory has been moved around so freeing list->values[0] would free in use
+  // memory. We need to free the value at the end previous instead
+  free(list->values[list->cur_size]);
 
   return ret;
 }
@@ -161,8 +165,10 @@ void *list_pop_front(list_t *list) {
  * @param list list to clear
  */
 void list_clear(list_t *list) {
-  // TODO: redo this
-  memset(list->values, 0, list->cur_size * list->type_size);
+  for (size_t i = 0; i < list->cur_size; ++i) {
+    free(list->values[i]);
+  }
+
   list->cur_size = 0;
 }
 
