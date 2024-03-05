@@ -20,7 +20,7 @@ static void list_shift_right(list_t *list) {
   }
 
   for (size_t i = list->cur_size; i > 0; i--) {
-    memcpy(list->values[i], list->values[i - 1], list->type_size);
+    memcpy(list->entries[i], list->entries[i - 1], list->type_size);
   }
 }
 
@@ -36,14 +36,14 @@ static void list_shift_left(list_t *list) {
   }
 
   for (size_t i = 1; i < list->cur_size; i++) {
-    memcpy(list->values[i - 1], list->values[i], list->type_size);
+    memcpy(list->entries[i - 1], list->entries[i], list->type_size);
   }
 }
 
 static void list_expand(list_t *list) {
   list->max_size *= 2;
-  list->values = realloc(list->values, list->max_size);
-  if (list->values == NULL) {
+  list->entries = realloc(list->entries, list->max_size);
+  if (list->entries == NULL) {
     err_malloc_fail();
   }
 }
@@ -57,7 +57,7 @@ static void list_expand(list_t *list) {
  */
 int list_contains(list_t *list, const void *val) {
   for (size_t i = 0; i < list->cur_size; ++i) {
-    if (memcmp(list->values[i], val, list->type_size) == 0) {
+    if (memcmp(list->entries[i], val, list->type_size) == 0) {
       return 1;
     }
   }
@@ -81,8 +81,8 @@ list_t *list_init(const size_t init_size, const size_t type_size) {
   list->max_size = init_size;
   list->cur_size = 0;
   list->type_size = type_size;
-  list->values = malloc(init_size * sizeof(void *));
-  if (list->values == NULL) {
+  list->entries = malloc(init_size * sizeof(void *));
+  if (list->entries == NULL) {
     free(list);
     err_malloc_fail();
   }
@@ -101,7 +101,7 @@ void *list_get(list_t *list, const size_t index) {
     err_index_out_of_bounds(list->cur_size, list->max_size);
   }
 
-  return list->values[index];
+  return list->entries[index];
 }
 
 /**
@@ -117,16 +117,16 @@ void *list_pop_back(list_t *list) {
 
   // Save return value to new memory locatin independent of the list it was
   // popped from
-  void *ret = malloc(list->type_size);
-  if (ret == NULL) {
+  void *popped = malloc(list->type_size);
+  if (popped == NULL) {
     err_malloc_fail();
   }
 
   --list->cur_size;
-  memcpy(ret, list->values[list->cur_size], list->type_size);
-  free(list->values[list->cur_size]);
+  memcpy(popped, list->entries[list->cur_size], list->type_size);
+  free(list->entries[list->cur_size]);
 
-  return ret;
+  return popped;
 }
 
 /**
@@ -141,22 +141,22 @@ void *list_pop_front(list_t *list) {
   }
 
   // Save retun value before it gets overwritten by list_left_shift
-  void *ret = malloc(list->type_size);
-  if (ret == NULL) {
+  void *popped = malloc(list->type_size);
+  if (popped == NULL) {
     err_malloc_fail();
   }
 
-  memcpy(ret, list->values[0], list->type_size);
+  memcpy(popped, list->entries[0], list->type_size);
 
   // Update list
   list_shift_left(list);
 
   --list->cur_size;
   // Memory has been moved around so freeing list->values[0] would free in use
-  // memory. We need to free the value at the end previous instead
-  free(list->values[list->cur_size]);
+  // memory. We need to free the value at the previous end instead
+  free(list->entries[list->cur_size]);
 
-  return ret;
+  return popped;
 }
 
 /**
@@ -166,7 +166,7 @@ void *list_pop_front(list_t *list) {
  */
 void list_clear(list_t *list) {
   for (size_t i = 0; i < list->cur_size; ++i) {
-    free(list->values[i]);
+    free(list->entries[i]);
   }
 
   list->cur_size = 0;
@@ -179,9 +179,9 @@ void list_clear(list_t *list) {
  */
 void list_free(list_t *list) {
   for (size_t i = 0; i < list->cur_size; ++i) {
-    free(list->values[i]);
+    free(list->entries[i]);
   }
-  free(list->values);
+  free(list->entries);
   free(list);
 }
 
@@ -214,13 +214,13 @@ void list_push_back(list_t *list, const void *val) {
   }
 
   // TODO: own function for this
-  list->values[list->cur_size] = malloc(list->type_size);
-  if (list->values[list->cur_size] == NULL) {
+  list->entries[list->cur_size] = malloc(list->type_size);
+  if (list->entries[list->cur_size] == NULL) {
     list_free(list);
     err_malloc_fail();
   }
 
-  memcpy(list->values[list->cur_size], val, list->type_size);
+  memcpy(list->entries[list->cur_size], val, list->type_size);
   ++list->cur_size;
 }
 
@@ -237,8 +237,8 @@ void list_push_front(list_t *list, const void *val) {
     list_expand(list);
   }
 
-  list->values[list->cur_size] = malloc(list->type_size);
-  if (list->values[list->cur_size] == NULL) {
+  list->entries[list->cur_size] = malloc(list->type_size);
+  if (list->entries[list->cur_size] == NULL) {
     // TODO: freeing when malloc other places
     list_free(list);
     err_malloc_fail();
@@ -248,7 +248,7 @@ void list_push_front(list_t *list, const void *val) {
     list_shift_right(list);
   }
 
-  memcpy(list->values[0], val, list->type_size);
+  memcpy(list->entries[0], val, list->type_size);
   ++list->cur_size;
 }
 

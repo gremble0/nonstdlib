@@ -92,7 +92,7 @@ static void test_list_contains(void) {
   ASSERT_TRUE(list_contains(list, &a) == 1);
   ASSERT_TRUE(list_contains(list, &b) == 1);
   ASSERT_TRUE(list_contains(list, &c) == 1);
-  ASSERT_TRUE(list_contains(list, &d) != 1);
+  ASSERT_TRUE(list_contains(list, &d) == 0);
 
 defer:
   list_free(list);
