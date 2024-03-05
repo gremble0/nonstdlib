@@ -6,6 +6,8 @@
 #include "error.h"
 #include "hashtable.h"
 
+// TODO: wrap to index 0 if index is ht->max_size
+
 /**
  * @brief djb2 hash function.
  *
@@ -37,9 +39,15 @@ static void ht_update_entry(ht_t *table, size_t old_hash_index) {
     return;
   }
 
+  // Move from old index to first available index at or after the new index
   table->entries[old_hash_index] = NULL;
-  while (table->entries[++new_hash_index] != NULL)
-    ;
+  while (table->entries[new_hash_index] != NULL) {
+    ++new_hash_index;
+
+    if (new_hash_index >= table->max_entries) {
+      new_hash_index = 0;
+    }
+  }
 
   table->entries[new_hash_index] = entry;
 }
@@ -76,13 +84,28 @@ const void *ht_get(ht_t *table, const char *key) {
  * @param value value associated with the key
  * @return constructed ht_entry_t
  */
-static ht_entry_t *ht_create_entry(const char *key, const char *value) {
+static ht_entry_t *ht_create_entry(char *key, char *value) {
   ht_entry_t *entry = malloc(sizeof(ht_entry_t));
   if (entry == NULL) {
     err_malloc_fail();
   }
-  entry->key = key;
-  entry->value = value;
+
+  size_t key_len = strlen(key) + 1;
+  size_t value_len = strlen(value) + 1;
+
+  entry->key = malloc(key_len);
+  if (entry->key == NULL) {
+    err_malloc_fail();
+  }
+  entry->value = malloc(value_len);
+  if (entry->value == NULL) {
+    // TODO: ht_free()
+    free(entry->key);
+    err_malloc_fail();
+  }
+
+  memcpy(entry->key, key, key_len);
+  memcpy(entry->value, value, value_len);
 
   return entry;
 }
@@ -116,7 +139,7 @@ ht_t *ht_init(uint32_t init_max_entries) {
 }
 
 /**
- * @brief Doubles the size of a hash table
+ * @brief Doubles the size of a hash table.
  *
  * @param table hash table to expand the size of
  */
@@ -124,7 +147,7 @@ void ht_expand(ht_t *table) {
   uint32_t prev_max_entries = table->max_entries;
   table->max_entries *= 2;
   table->entries =
-      realloc(table->entries, sizeof(ht_entry_t) * table->max_entries);
+      realloc(table->entries, table->max_entries * sizeof(ht_entry_t *));
 
   // Loop through table and reindex based on new size
   for (size_t i = 0; i < prev_max_entries; ++i) {
@@ -136,13 +159,17 @@ void ht_expand(ht_t *table) {
 }
 
 /**
- * @brief frees memory allocated for hash table
+ * @brief Frees memory allocated for hash table.
  *
  * @param table table to free memory for
  */
 void ht_free(ht_t *table) {
   for (size_t i = 0; i < table->max_entries; ++i) {
-    free(table->entries[i]);
+    if (table->entries[i] != NULL) {
+      free(table->entries[i]->key);
+      free(table->entries[i]->value);
+      free(table->entries[i]);
+    }
   }
 
   free(table->entries);
@@ -165,44 +192,6 @@ void ht_print(ht_t *table) {
   }
 }
 
-// void ht_put(ht_t *table, const char *key, const void *value) {
-//   // Ensure table capacity is sufficient
-//   if (table->n_entries + 1 > table->max_entries / 2) {
-//     ht_expand(table);
-//   }
-//
-//   uint32_t hash_index = hash(key) % table->max_entries;
-//
-//   // Search for an existing entry with the same key or the first empty slot
-//   while (table->entries[hash_index] != NULL &&
-//          strcmp(table->entries[hash_index]->key, key) != 0) {
-//     hash_index = (hash_index + 1) %
-//                  table->max_entries; // Use linear probing with wrapping
-//   }
-//
-//   // At this point, hash_index is either an empty slot or an entry with the
-//   same
-//   // key
-//   if (table->entries[hash_index] == NULL) {
-//     // If it's an empty slot, create a new entry
-//     ht_entry_t *new_entry = malloc(sizeof(ht_entry_t));
-//     if (new_entry == NULL) {
-//       err_malloc_fail(); // Ensure this function appropriately handles the
-//                          // error, e.g., exit or return
-//     }
-//     new_entry->key = key;     // Assign the key
-//     new_entry->value = value; // Assign the value
-//
-//     table->entries[hash_index] = new_entry; // Insert the new entry
-//     ++table->n_entries;
-//   } else {
-//     // If an entry with the same key was found, update the value directly
-//     // Depending on your memory management strategy, you might need to
-//     // free/replace the value
-//     table->entries[hash_index]->value = value;
-//   }
-// }
-
 /**
  * @brief Put (insert) a value into a hash table
  *
@@ -210,13 +199,12 @@ void ht_print(ht_t *table) {
  * @param key key to put in
  * @param value value to put in
  */
-void ht_put(ht_t *table, const char *key, const void *value) {
+void ht_put(ht_t *table, char *key, void *value) {
   // Table should at maximum be at 50% capacity
   if (table->n_entries + 1 > table->max_entries / 2) {
     ht_expand(table);
   }
 
-  // Insert entry into ht
   uint32_t hash_index = hash(key) % table->max_entries;
   ht_entry_t *existing_entry = table->entries[hash_index];
 
@@ -224,19 +212,30 @@ void ht_put(ht_t *table, const char *key, const void *value) {
   if (existing_entry == NULL) {
     table->entries[hash_index] = ht_create_entry(key, value);
     ++table->n_entries;
+
     return;
   }
 
   // Same key has already been hashed (updating existing key)
   if (strcmp(existing_entry->key, key) == 0) {
     // TODO: malloc/memcpy value?
-    table->entries[hash_index]->value = value;
+    size_t value_len = strlen(value) + 1;
+
+    table->entries[hash_index]->value =
+        realloc(table->entries[hash_index]->value, value_len);
+    memcpy(table->entries[hash_index]->value, value, value_len);
+
     return;
   }
 
   // Go to next index until there is an available spot
-  while (table->entries[++hash_index] != NULL)
-    ;
+  while (table->entries[hash_index] != NULL) {
+    ++hash_index;
+
+    if (hash_index >= table->max_entries) {
+      hash_index = 0;
+    }
+  }
 
   table->entries[hash_index] = ht_create_entry(key, value);
   ++table->n_entries;
