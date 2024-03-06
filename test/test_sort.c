@@ -6,7 +6,7 @@
 static int tests_passed = 0;
 static int tests_ran = 0;
 
-static void test_sort(sorting_algorithm sa) {
+static void test_sort(void (*sort_func)(int[], int)) {
   int nums[] = {5, 1, 4, 2, 8};
   const int nums_size = sizeof(nums) / sizeof(nums[0]);
   int sorted[] = {1, 2, 4, 5, 8};
@@ -19,17 +19,17 @@ static void test_sort(sorting_algorithm sa) {
   const int nums3_size = sizeof(nums3) / sizeof(nums3[0]);
   int sorted3[] = {-1, -1, -1, 1, 1, 2, 2, 3, 5};
 
-  sort(nums, nums_size, sa);
+  sort_func(nums, nums_size);
   for (int i = 0; i < nums_size; i++) {
     ASSERT_TRUE(nums[i] == sorted[i]);
   }
 
-  sort(nums2, nums2_size, sa);
+  sort_func(nums2, nums2_size);
   for (int i = 0; i < nums2_size; i++) {
     ASSERT_TRUE(nums2[i] == sorted2[i]);
   }
 
-  sort(nums3, nums3_size, sa);
+  sort_func(nums3, nums3_size);
   for (int i = 0; i < nums3_size; i++) {
     ASSERT_TRUE(nums3[i] == sorted3[i]);
   }
@@ -41,9 +41,10 @@ defer:
 void test_all_sorts(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
-  for (int i = 0; i < NUM_SORT_ALGOS; ++i) {
-    test_sort(i);
-  }
+  test_sort(bubblesort);
+  test_sort(insertionsort);
+  test_sort(quicksort);
+  test_sort(selectionsort);
 
   TEST_MODULE_END();
 

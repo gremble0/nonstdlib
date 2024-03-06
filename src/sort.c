@@ -22,8 +22,6 @@ void sort(int buf[], int bufsize, sorting_algorithm sa) {
   case SELECTIONSORT:
     selectionsort(buf, bufsize);
     break;
-  default:
-    break;
   }
 }
 
