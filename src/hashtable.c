@@ -12,11 +12,10 @@
  * @return the key hashed. (needs to be %'d by table size to get index into
  * hashtable)
  */
-static uint32_t hash(const char *key) {
+static uint32_t hash(char *key, size_t key_size) {
   uint32_t hash = 5381;
-  size_t key_len = strlen(key);
 
-  for (size_t i = 0; i < key_len; ++i) {
+  for (size_t i = 0; i < key_size; ++i) {
     hash = hash * 33 + key[i];
   }
 
@@ -33,7 +32,8 @@ static uint32_t hash(const char *key) {
  */
 static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
   ht_entry_t *entry = table->entries[old_hash_index];
-  uint32_t new_hash_index = hash(entry->key) % table->max_entries;
+  uint32_t new_hash_index =
+      hash(entry->key, strlen(entry->key)) % table->max_entries;
   if (new_hash_index == old_hash_index) {
     return;
   }
@@ -59,20 +59,19 @@ static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
  * @param value value associated with the key
  * @return constructed ht_entry_t
  */
-static ht_entry_t *ht_create_entry(char *key, char *value) {
+static ht_entry_t *ht_create_entry(char *key, void *value, size_t value_size) {
   ht_entry_t *entry = malloc(sizeof(ht_entry_t));
   if (entry == NULL) {
     err_malloc_fail();
   }
 
   size_t key_len = strlen(key) + 1;
-  size_t value_len = strlen(value) + 1;
 
   entry->key = malloc(key_len);
   if (entry->key == NULL) {
     err_malloc_fail();
   }
-  entry->value = malloc(value_len);
+  entry->value = malloc(value_size);
   if (entry->value == NULL) {
     // TODO: ht_free()
     free(entry->key);
@@ -80,7 +79,7 @@ static ht_entry_t *ht_create_entry(char *key, char *value) {
   }
 
   memcpy(entry->key, key, key_len);
-  memcpy(entry->value, value, value_len);
+  memcpy(entry->value, value, value_size);
 
   return entry;
 }
@@ -92,8 +91,8 @@ static ht_entry_t *ht_create_entry(char *key, char *value) {
  * @param key key to get
  * @return value of the given key
  */
-const void *ht_get(ht_t *table, const char *key) {
-  uint32_t index = hash(key) % table->max_entries;
+void *ht_get(ht_t *table, char *key) {
+  uint32_t index = hash(key, strlen(key)) % table->max_entries;
   ht_entry_t *entry = table->entries[index];
   if (entry == NULL) {
     return NULL;
@@ -202,19 +201,22 @@ void ht_print(ht_t *table) {
  * @param key key to put in
  * @param value value to put in
  */
-void ht_put(ht_t *table, char *key, void *value) {
+void ht_put(ht_t *table, char *key, void *value, size_t value_size) {
   // Table should at maximum be at 50% capacity
   if (table->n_entries + 1 > table->max_entries / 2) {
     ht_expand(table);
   }
 
-  uint32_t hash_index = hash(key) % table->max_entries;
+  uint32_t hash_index = hash(key, strlen(key)) % table->max_entries;
   ht_entry_t *existing_entry = table->entries[hash_index];
 
   if (existing_entry == NULL) {
-    table->entries[hash_index] = ht_create_entry(key, value);
+    // New key
+    table->entries[hash_index] = ht_create_entry(key, value, value_size);
     ++table->n_entries;
+
   } else if (strcmp(existing_entry->key, key) != 0) {
+    // New key, but hash_index is occupied
     while (table->entries[hash_index] != NULL) {
       ++hash_index;
 
@@ -223,13 +225,12 @@ void ht_put(ht_t *table, char *key, void *value) {
       }
     }
 
-    table->entries[hash_index] = ht_create_entry(key, value);
+    table->entries[hash_index] = ht_create_entry(key, value, value_size);
     ++table->n_entries;
   } else {
-    size_t value_len = strlen(value) + 1;
-
+    // Existing key, update its value
     table->entries[hash_index]->value =
-        realloc(table->entries[hash_index]->value, value_len);
-    memcpy(table->entries[hash_index]->value, value, value_len);
+        realloc(table->entries[hash_index]->value, value_size);
+    memcpy(table->entries[hash_index]->value, value, value_size);
   }
 }

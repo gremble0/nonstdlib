@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "error.h"
 #include "hashtable_generic.h"
 #include "test.h"
 
