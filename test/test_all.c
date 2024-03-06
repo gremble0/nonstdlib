@@ -11,14 +11,16 @@ int main(void) {
   printf("------------------------------------------\n");
   test_hashtable(&total_tests_ran, &total_tests_passed);
   printf("------------------------------------------\n");
-  test_hashtable_generic(&total_tests_ran, &total_tests_passed);
-  printf("------------------------------------------\n");
   test_list(&total_tests_ran, &total_tests_passed);
   printf("------------------------------------------\n");
   test_all_sorts(&total_tests_ran, &total_tests_passed);
   printf("------------------------------------------\n");
   test_linked_list(&total_tests_ran, &total_tests_passed);
   printf("------------------------------------------\n");
+
+  // DEPRECATED:
+  // test_hashtable_generic(&total_tests_ran, &total_tests_passed);
+  // printf("------------------------------------------\n");
 
   if (total_tests_passed == total_tests_ran) {
     printf("\033[0;32m%d/%d tests successful\033[0;37m\n", total_tests_passed,

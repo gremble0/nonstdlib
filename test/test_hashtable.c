@@ -73,8 +73,8 @@ defer:
 void test_hashtable(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
-  test_hashtable_string(total_tests_ran, total_tests_passed);
   test_hashtable_int(total_tests_ran, total_tests_passed);
+  test_hashtable_string(total_tests_ran, total_tests_passed);
 
   TEST_MODULE_END();
 }
