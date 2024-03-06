@@ -10,9 +10,8 @@
 ht_prototype(int);
 ht_impl(int);
 
-typedef char *str;
-ht_prototype(str);
-ht_impl(str);
+ht_prototype(char);
+ht_impl(char);
 
 static int tests_passed = 0;
 static int tests_ran = 0;
@@ -22,24 +21,24 @@ void test_hashtable_generic(int *total_tests_ran, int *total_tests_passed) {
 
   int_ht_t *int_table = int_ht_init(5);
   int asd = 44;
-  int_ht_put(int_table, "asd", &asd);
+  int_ht_put(int_table, "asd", &asd, sizeof(asd));
   ASSERT_TRUE(int_table->n_entries == 1);
 
   int asd2 = 22;
-  int_ht_put(int_table, "asd", &asd2);
+  int_ht_put(int_table, "asd", &asd2, sizeof(asd2));
   ASSERT_TRUE(int_table->n_entries == 1);
   ASSERT_TRUE(*int_ht_get(int_table, "asd") == 22);
 
-  str_ht_t *str_table = str_ht_init(5);
-  str asd_str = "yoyo";
-  str_ht_put(str_table, "asd", &asd_str);
-  ASSERT_TRUE(str_table->n_entries == 1);
-  ASSERT_TRUE(strcmp(*str_ht_get(str_table, "asd"), "yoyo") == 0);
-  str qwerty = "zaza";
-  str_ht_put(str_table, "z", &qwerty);
-  ASSERT_TRUE(str_table->n_entries == 2);
-  ASSERT_TRUE(strcmp(*str_ht_get(str_table, "asd"), "yoyo") == 0);
-  ASSERT_TRUE(strcmp(*str_ht_get(str_table, "z"), "zaza") == 0);
+  char_ht_t *char_table = char_ht_init(5);
+  char *asd_str = "yoyo";
+  char_ht_put(char_table, "asd", asd_str, strlen(asd_str) + 1);
+  ASSERT_TRUE(char_table->n_entries == 1);
+  ASSERT_TRUE(strcmp(char_ht_get(char_table, "asd"), "yoyo") == 0);
+  char *qwerty = "zaza";
+  char_ht_put(char_table, "z", qwerty, strlen(qwerty) + 1);
+  ASSERT_TRUE(char_table->n_entries == 2);
+  ASSERT_TRUE(strcmp(char_ht_get(char_table, "asd"), "yoyo") == 0);
+  ASSERT_TRUE(strcmp(char_ht_get(char_table, "z"), "zaza") == 0);
 
 defer:
   TEST_FUNCTION_SUCCESS();

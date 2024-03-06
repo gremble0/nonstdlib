@@ -12,7 +12,7 @@
  * @return the key hashed. (needs to be %'d by table size to get index into
  * hashtable)
  */
-static uint32_t hash(char *key, size_t key_size) {
+static uint32_t hash(const char *key, size_t key_size) {
   uint32_t hash = 5381;
 
   for (size_t i = 0; i < key_size; ++i) {
@@ -59,7 +59,8 @@ static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
  * @param value value associated with the key
  * @return constructed ht_entry_t
  */
-static ht_entry_t *ht_create_entry(char *key, void *value, size_t value_size) {
+static ht_entry_t *ht_create_entry(const char *key, void *value,
+                                   size_t value_size) {
   ht_entry_t *entry = malloc(sizeof(ht_entry_t));
   if (entry == NULL) {
     err_malloc_fail();
@@ -74,11 +75,11 @@ static ht_entry_t *ht_create_entry(char *key, void *value, size_t value_size) {
   entry->value = malloc(value_size);
   if (entry->value == NULL) {
     // TODO: ht_free()
-    free(entry->key);
+    free((void *)entry->key);
     err_malloc_fail();
   }
 
-  memcpy(entry->key, key, key_len);
+  memcpy((void *)entry->key, key, key_len);
   memcpy(entry->value, value, value_size);
 
   return entry;
@@ -91,7 +92,7 @@ static ht_entry_t *ht_create_entry(char *key, void *value, size_t value_size) {
  * @param key key to get
  * @return value of the given key
  */
-void *ht_get(ht_t *table, char *key) {
+void *ht_get(ht_t *table, const char *key) {
   uint32_t index = hash(key, strlen(key)) % table->max_entries;
   ht_entry_t *entry = table->entries[index];
   if (entry == NULL) {
@@ -168,7 +169,7 @@ void ht_expand(ht_t *table) {
 void ht_free(ht_t *table) {
   for (size_t i = 0; i < table->max_entries; ++i) {
     if (table->entries[i] != NULL) {
-      free(table->entries[i]->key);
+      free((void *)table->entries[i]->key);
       free(table->entries[i]->value);
       free(table->entries[i]);
     }
@@ -201,7 +202,7 @@ void ht_print(ht_t *table) {
  * @param key key to put in
  * @param value value to put in
  */
-void ht_put(ht_t *table, char *key, void *value, size_t value_size) {
+void ht_put(ht_t *table, const char *key, void *value, size_t value_size) {
   // Table should at maximum be at 50% capacity
   if (table->n_entries + 1 > table->max_entries / 2) {
     ht_expand(table);
