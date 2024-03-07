@@ -16,7 +16,7 @@ ht_impl(char);
 static int tests_passed = 0;
 static int tests_ran = 0;
 
-static void test_hashtable_int(int *total_tests_ran, int *total_tests_passed) {
+static void test_hashtable_int(void) {
   int_ht_t *int_table = int_ht_init(5);
   int asd = 44;
   int_ht_put(int_table, "asd", &asd, sizeof(asd));
@@ -30,12 +30,10 @@ static void test_hashtable_int(int *total_tests_ran, int *total_tests_passed) {
 defer:
   TEST_FUNCTION_SUCCESS();
 
-  *total_tests_passed += tests_passed;
-  *total_tests_ran += tests_ran;
+  int_ht_free(int_table);
 }
 
-static void test_hashtable_string(int *total_tests_ran,
-                                  int *total_tests_passed) {
+static void test_hashtable_string(void) {
   char_ht_t *char_table = char_ht_init(5);
   char *asd_str = "yoyo";
   char_ht_put(char_table, "asd", asd_str, strlen(asd_str) + 1);
@@ -51,15 +49,17 @@ static void test_hashtable_string(int *total_tests_ran,
 defer:
   TEST_FUNCTION_SUCCESS();
 
-  *total_tests_passed += tests_passed;
-  *total_tests_ran += tests_ran;
+  char_ht_free(char_table);
 }
 
 void test_hashtable_generic(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
-  test_hashtable_int(total_tests_ran, total_tests_passed);
-  test_hashtable_string(total_tests_ran, total_tests_passed);
+  test_hashtable_int();
+  test_hashtable_string();
 
   TEST_MODULE_END();
+
+  *total_tests_passed += tests_passed;
+  *total_tests_ran += tests_ran;
 }

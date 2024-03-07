@@ -99,12 +99,49 @@ defer:
   TEST_FUNCTION_SUCCESS();
 }
 
+static void test_list_structs(void) {
+  struct some_struct {
+    int a;
+    int b;
+    int c;
+    char d[15];
+  };
+
+  list_t *list = list_init(5, sizeof(struct some_struct));
+
+  struct some_struct s1 = {
+      10,
+      20,
+      30,
+      "hello",
+  };
+  struct some_struct s2 = {
+      1,
+      2,
+      3,
+      "nonstdlib",
+  };
+  list_push_back(list, &s1);
+  list_push_front(list, &s2);
+
+  struct some_struct *should_be_s2 = list_get(list, 0);
+  struct some_struct *should_be_s1 = list_get(list, 1);
+
+  ASSERT_TRUE(should_be_s2->a == s2.a);
+  ASSERT_TRUE(should_be_s1->a == s1.a);
+
+defer:
+  list_free(list);
+  TEST_FUNCTION_SUCCESS();
+}
+
 void test_list(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
   test_list_push_pop();
   test_list_clear();
   test_list_contains();
+  test_list_structs();
 
   TEST_MODULE_END();
 
