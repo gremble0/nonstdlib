@@ -51,3 +51,9 @@ _Noreturn void err_pop_from_empty_list() {
   fprintf(stderr, "ERROR_POP_FROM_EMPTY_LIST: Cannot pop from empty list\n");
   exit(1);
 }
+
+_Noreturn void err_assert_fail(const char *expr) {
+  err_print_stacktrace();
+  fprintf(stderr, "ERROR_ASSERTION_FAIL: %s\n", expr);
+  exit(1);
+}
