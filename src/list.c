@@ -7,6 +7,8 @@
 
 // TODO: negative indicies to index from the back of lists
 // TODO: list_of function
+// TODO: typeof() macro for generic??? inline keyword?
+// TODO: use sizeof(*malloced) instead of sizeof(malloced_type)
 
 /**
  * @brief Move each list element one index to the right, assumes the list has
