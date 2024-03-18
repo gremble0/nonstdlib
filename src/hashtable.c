@@ -59,7 +59,7 @@ static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
  * @param value value associated with the key
  * @return constructed ht_entry_t
  */
-static ht_entry_t *ht_create_entry(const char *key, void *value,
+static ht_entry_t *ht_create_entry(const char *key, const void *value,
                                    size_t value_size) {
   ht_entry_t *entry = malloc(sizeof(ht_entry_t));
   if (entry == NULL) {
@@ -92,7 +92,7 @@ static ht_entry_t *ht_create_entry(const char *key, void *value,
  * @param key key to get
  * @return value of the given key
  */
-void *ht_get(ht_t *table, const char *key) {
+void *ht_get(const ht_t *table, const char *key) {
   uint32_t index = hash(key, strlen(key)) % table->max_entries;
   ht_entry_t *entry = table->entries[index];
   if (entry == NULL) {
@@ -166,7 +166,7 @@ void ht_expand(ht_t *table) {
  *
  * @param table table to free memory for
  */
-void ht_free(ht_t *table) {
+void ht_free(const ht_t *table) {
   for (size_t i = 0; i < table->max_entries; ++i) {
     if (table->entries[i] != NULL) {
       free((void *)table->entries[i]->key);
@@ -176,7 +176,7 @@ void ht_free(ht_t *table) {
   }
 
   free(table->entries);
-  free(table);
+  free((void *)table);
 }
 
 /**
@@ -209,7 +209,7 @@ void ht_put(ht_t *table, const char *key, void *value, size_t value_size) {
   }
 
   uint32_t hash_index = hash(key, strlen(key)) % table->max_entries;
-  ht_entry_t *existing_entry = table->entries[hash_index];
+  const ht_entry_t *existing_entry = table->entries[hash_index];
 
   if (existing_entry == NULL) {
     // New key

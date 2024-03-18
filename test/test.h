@@ -15,18 +15,20 @@
 
 // Print debug info about results for this test
 #define TEST_MODULE_END()                                                      \
-  if (tests_passed != tests_ran) {                                             \
-    printf("\033[0;31m%d/%d tests successful for %s\033[0;37m\n",              \
-           tests_passed, tests_ran, __FILE__);                                 \
-  } else {                                                                     \
-    printf("\033[0;32m%d/%d tests successful for %s\033[0;37m\n",              \
-           tests_passed, tests_ran, __FILE__);                                 \
-  }
+  do {                                                                         \
+    if (tests_passed != tests_ran) {                                           \
+      printf("\033[0;31m%d/%d tests successful for %s\033[0;37m\n",            \
+             tests_passed, tests_ran, __FILE__);                               \
+    } else {                                                                   \
+      printf("\033[0;32m%d/%d tests successful for %s\033[0;37m\n",            \
+             tests_passed, tests_ran, __FILE__);                               \
+    }                                                                          \
+  } while (0)
 
 #define TEST_FUNCTION_SUCCESS(args...)                                         \
   ++tests_passed;                                                              \
   ++tests_ran;                                                                 \
-  printf("\033[0;32mTest successful for %s \033[0;37m\n", __func__);
+  printf("\033[0;32mTest successful for %s \033[0;37m\n", __func__)
 
 #define TEST_FUNCTION_FAILURE()                                                \
   ++tests_ran;                                                                 \

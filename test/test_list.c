@@ -124,8 +124,8 @@ static void test_list_structs(void) {
   list_push_back(list, &s1);
   list_push_front(list, &s2);
 
-  struct some_struct *should_be_s2 = list_get(list, 0);
-  struct some_struct *should_be_s1 = list_get(list, 1);
+  const struct some_struct *should_be_s2 = list_get(list, 0);
+  const struct some_struct *should_be_s1 = list_get(list, 1);
 
   ASSERT_TRUE(should_be_s2->a == s2.a);
   ASSERT_TRUE(should_be_s1->a == s1.a);

@@ -16,7 +16,7 @@
  *
  * @param list list to right shift
  */
-static void list_shift_right(list_t *list) {
+static void list_shift_right(const list_t *list) {
   if (list->cur_size >= list->max_size) {
     err_index_out_of_bounds(list->cur_size, list->max_size);
   }
@@ -32,7 +32,7 @@ static void list_shift_right(list_t *list) {
  *
  * @param list list to right shift
  */
-static void list_shift_left(list_t *list) {
+static void list_shift_left(const list_t *list) {
   if (list->cur_size >= list->max_size) {
     err_index_out_of_bounds(list->cur_size, list->max_size);
   }
@@ -57,7 +57,7 @@ static void list_expand(list_t *list) {
  * @param val value to check for
  * @return 1 if present 0 if not
  */
-int list_contains(list_t *list, const void *val) {
+int list_contains(const list_t *list, const void *val) {
   for (size_t i = 0; i < list->cur_size; ++i) {
     if (memcmp(list->entries[i], val, list->type_size) == 0) {
       return 1;
@@ -98,7 +98,7 @@ list_t *list_init(const size_t init_size, const size_t type_size) {
  * @param list list to index
  * @param index index into list
  */
-void *list_get(list_t *list, const size_t index) {
+void *list_get(const list_t *list, const size_t index) {
   if (index >= list->cur_size) {
     err_index_out_of_bounds(list->cur_size, list->max_size);
   }

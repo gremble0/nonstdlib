@@ -82,7 +82,8 @@ void quicksort_impl(int buf[], int start, int end) {
   // Choose pivot element (here just use the last element in the array)
   int pivot = buf[end - 1];
 
-  int left_i = start, right_i = end - 2;
+  int left_i = start;
+  int right_i = end - 2;
   // Increment left_i until buf[left_i] is greater than pivot
   while (buf[left_i] < pivot && ++left_i)
     ;

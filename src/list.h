@@ -10,9 +10,9 @@ typedef struct list_t {
                     // increased)
 } list_t;
 
-int list_contains(list_t *list, const void *val);
+int list_contains(const list_t *list, const void *val);
 list_t *list_init(const size_t init_size, const size_t type_size);
-void *list_get(list_t *list, const size_t index);
+void *list_get(const list_t *list, const size_t index);
 void *list_pop_back(list_t *list);
 void *list_pop_front(list_t *list);
 void list_clear(list_t *list);
