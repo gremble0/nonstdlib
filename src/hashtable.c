@@ -61,7 +61,7 @@ static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
  */
 static ht_entry_t *ht_create_entry(const char *key, const void *value,
                                    size_t value_size) {
-  ht_entry_t *entry = malloc(sizeof(ht_entry_t));
+  ht_entry_t *entry = malloc(sizeof(*entry));
   if (entry == NULL) {
     err_malloc_fail();
   }
@@ -117,14 +117,14 @@ void *ht_get(const ht_t *table, const char *key) {
  * @return a malloc'd hash table
  */
 ht_t *ht_init(uint32_t init_max_entries) {
-  ht_t *new_ht = malloc(sizeof(ht_t));
+  ht_t *new_ht = malloc(sizeof(*new_ht));
   if (new_ht == NULL) {
     return NULL;
   }
 
   new_ht->n_entries = 0;
   new_ht->max_entries = init_max_entries;
-  new_ht->entries = malloc(init_max_entries * sizeof(ht_entry_t *));
+  new_ht->entries = malloc(init_max_entries * sizeof(new_ht->entries));
   if (new_ht->entries == NULL) {
     free(new_ht);
     return NULL;

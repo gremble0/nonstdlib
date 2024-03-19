@@ -75,7 +75,7 @@ int list_contains(const list_t *list, const void *val) {
  * @return a malloc'd list that should to be freed using list_free()
  */
 list_t *list_init(const size_t init_size, const size_t type_size) {
-  list_t *list = malloc(sizeof(list_t));
+  list_t *list = malloc(sizeof(*list));
   if (list == NULL) {
     err_malloc_fail();
   }
@@ -83,7 +83,7 @@ list_t *list_init(const size_t init_size, const size_t type_size) {
   list->max_size = init_size;
   list->cur_size = 0;
   list->type_size = type_size;
-  list->entries = malloc(init_size * sizeof(void *));
+  list->entries = malloc(init_size * sizeof(list->entries));
   if (list->entries == NULL) {
     free(list);
     err_malloc_fail();

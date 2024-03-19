@@ -13,7 +13,7 @@
  * @return an empty linked list
  */
 ll_t *ll_init(size_t type_size) {
-  ll_t *ll = malloc(sizeof(ll_t));
+  ll_t *ll = malloc(sizeof(*ll));
   if (ll == NULL) {
     return NULL;
   }
@@ -184,7 +184,7 @@ void ll_print(ll_t *ll) {
  * @return ll_entry with a value, but prev and next set to NULL
  */
 static ll_entry_t *ll_create_entry(const void *value, size_t type_size) {
-  ll_entry_t *new = malloc(sizeof(ll_entry_t));
+  ll_entry_t *new = malloc(sizeof(*new));
   if (new == NULL) {
     err_malloc_fail();
   }
