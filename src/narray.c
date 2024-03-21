@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "array.h"
+#include "narray.h"
 
 /**
  * @brief Check if value is present in array

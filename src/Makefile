@@ -1,7 +1,7 @@
 CC=clang
 CFLAGS=-Wall -Wextra
 DEBUG_FLAGS=$(CFLAGS) -g -O0
-OBJS=hashtable.o linked_list.o sort.o array.o list.o error.o
+OBJS=nhashtable.o nlinked_list.o nsort.o narray.o nlist.o nerror.o
 DEBUG_OBJS=$(OBJS:.o=_debug.o)
 LIB=libnonstdlib.a
 

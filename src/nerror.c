@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "error.h"
+#include "nerror.h"
 
 void err_print_stacktrace() {
   void *callstack[128];

@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "error.h"
-#include "hashtable.h"
+#include "nerror.h"
+#include "nhashtable.h"
 
 /**
  * @brief djb2 hash function.

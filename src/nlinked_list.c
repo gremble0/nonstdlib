@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "error.h"
-#include "linked_list.h"
+#include "nerror.h"
+#include "nlinked_list.h"
 
 // TODO: malloc some return values
 

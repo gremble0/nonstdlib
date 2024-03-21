@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "array.h"
+#include "narray.h"
 #include "test.h"
 
 static int tests_passed = 0;

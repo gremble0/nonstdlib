@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "linked_list.h"
+#include "nlinked_list.h"
 #include "test.h"
 
 static int tests_passed = 0;

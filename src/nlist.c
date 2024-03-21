@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "error.h"
-#include "list.h"
+#include "nerror.h"
+#include "nlist.h"
 
 // TODO: negative indicies to index from the back of lists
 // TODO: list_of function

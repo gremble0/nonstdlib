@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "sort.h"
+#include "nsort.h"
 #include "test.h"
 
 static int tests_passed = 0;
