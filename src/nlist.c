@@ -6,9 +6,6 @@
 #include "nlist.h"
 
 // TODO: negative indicies to index from the back of lists
-// TODO: list_of function
-// TODO: typeof() macro for generic??? inline keyword?
-// TODO: use sizeof(*malloced) instead of sizeof(malloced_type)
 
 /**
  * @brief Move each list element one index to the right, assumes the list has
@@ -42,10 +39,16 @@ static void list_shift_left(const list_t *list) {
   }
 }
 
+/**
+ * @brief Expand max capacity of a list
+ *
+ * @param list list to expand
+ */
 static void list_expand(list_t *list) {
   list->max_size *= 2;
-  list->entries = realloc(list->entries, list->max_size);
+  list->entries = realloc(list->entries, list->max_size * list->type_size);
   if (list->entries == NULL) {
+    list_free(list);
     err_malloc_fail();
   }
 }
@@ -121,6 +124,7 @@ void *list_pop_back(list_t *list) {
   // popped from
   void *popped = malloc(list->type_size);
   if (popped == NULL) {
+    list_free(list);
     err_malloc_fail();
   }
 
@@ -145,6 +149,7 @@ void *list_pop_front(list_t *list) {
   // Save retun value before it gets overwritten by list_left_shift
   void *popped = malloc(list->type_size);
   if (popped == NULL) {
+    list_free(list);
     err_malloc_fail();
   }
 
@@ -241,7 +246,6 @@ void list_push_front(list_t *list, const void *val) {
 
   list->entries[list->cur_size] = malloc(list->type_size);
   if (list->entries[list->cur_size] == NULL) {
-    // TODO: freeing when malloc other places
     list_free(list);
     err_malloc_fail();
   }
