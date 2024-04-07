@@ -46,7 +46,8 @@ static void list_shift_left(const list_t *list) {
  */
 static void list_expand(list_t *list) {
   list->max_size *= 2;
-  list->entries = realloc(list->entries, list->max_size * list->type_size);
+  list->entries =
+      realloc(list->entries, list->max_size * sizeof(list->entries));
   if (list->entries == NULL) {
     list_free(list);
     err_malloc_fail();

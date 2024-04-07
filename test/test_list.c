@@ -62,6 +62,38 @@ defer:
   TEST_FUNCTION_SUCCESS();
 }
 
+static void test_list_expand(void) {
+  list_t *list = list_init(1, sizeof(char *));
+
+  list_push_back(list, "");
+  ASSERT_TRUE(list->cur_size == 1);
+  ASSERT_TRUE(list->max_size == 1);
+
+  list_push_back(list, "");
+  ASSERT_TRUE(list->cur_size == 2);
+  ASSERT_TRUE(list->max_size == 2);
+
+  list_push_back(list, "");
+  ASSERT_TRUE(list->cur_size == 3);
+  ASSERT_TRUE(list->max_size == 4);
+
+  list_push_back(list, "");
+  ASSERT_TRUE(list->cur_size == 4);
+  ASSERT_TRUE(list->max_size == 4);
+
+  list_push_back(list, "");
+  ASSERT_TRUE(list->cur_size == 5);
+  ASSERT_TRUE(list->max_size == 8);
+
+  list_push_back(list, "");
+  ASSERT_TRUE(list->cur_size == 6);
+  ASSERT_TRUE(list->max_size == 8);
+
+defer:
+  list_free(list);
+  TEST_FUNCTION_SUCCESS();
+}
+
 static void test_list_clear(void) {
   list_t *list = list_init(5, sizeof(char *));
 
@@ -139,6 +171,7 @@ void test_list(int *total_tests_ran, int *total_tests_passed) {
   TEST_MODULE_START();
 
   test_list_push_pop();
+  test_list_expand();
   test_list_clear();
   test_list_contains();
   test_list_structs();
