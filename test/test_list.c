@@ -58,7 +58,7 @@ static void test_list_push_pop(void) {
   // list should be: []
 
 defer:
-  list_free(list);
+  list_free(list, free);
   TEST_FUNCTION_SUCCESS();
 }
 
@@ -90,7 +90,7 @@ static void test_list_expand(void) {
   ASSERT_TRUE(list->max_size == 8);
 
 defer:
-  list_free(list);
+  list_free(list, free);
   TEST_FUNCTION_SUCCESS();
 }
 
@@ -106,7 +106,7 @@ static void test_list_clear(void) {
   ASSERT_TRUE(list->cur_size == 0);
 
 defer:
-  list_free(list);
+  list_free(list, free);
   TEST_FUNCTION_SUCCESS();
 }
 
@@ -127,7 +127,7 @@ static void test_list_contains(void) {
   ASSERT_TRUE(list_contains(list, &d) == 0);
 
 defer:
-  list_free(list);
+  list_free(list, free);
   TEST_FUNCTION_SUCCESS();
 }
 
@@ -163,7 +163,7 @@ static void test_list_structs(void) {
   ASSERT_TRUE(should_be_s1->a == s1.a);
 
 defer:
-  list_free(list);
+  list_free(list, free);
   TEST_FUNCTION_SUCCESS();
 }
 

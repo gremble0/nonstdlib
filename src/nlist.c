@@ -49,7 +49,7 @@ static void list_expand(list_t *list) {
   list->entries =
       realloc(list->entries, list->max_size * sizeof(list->entries));
   if (list->entries == NULL) {
-    list_free(list);
+    list_free(list, free);
     err_malloc_fail();
   }
 }
@@ -125,7 +125,7 @@ void *list_pop_back(list_t *list) {
   // popped from
   void *popped = malloc(list->type_size);
   if (popped == NULL) {
-    list_free(list);
+    list_free(list, free);
     err_malloc_fail();
   }
 
@@ -150,7 +150,7 @@ void *list_pop_front(list_t *list) {
   // Save retun value before it gets overwritten by list_left_shift
   void *popped = malloc(list->type_size);
   if (popped == NULL) {
-    list_free(list);
+    list_free(list, free);
     err_malloc_fail();
   }
 
@@ -184,10 +184,11 @@ void list_clear(list_t *list) {
  * @brief Free all variables bound to a list
  *
  * @param list list to free
+ * @param free_func function to call on each element in list (e.g. `free`)
  */
-void list_free(list_t *list) {
+void list_free(list_t *list, void(free_func)(void *)) {
   for (size_t i = 0; i < list->cur_size; ++i) {
-    free(list->entries[i]);
+    free_func(list->entries[i]);
   }
   free(list->entries);
   free(list);
@@ -224,7 +225,7 @@ void list_push_back(list_t *list, const void *val) {
   // TODO: own function for this
   list->entries[list->cur_size] = malloc(list->type_size);
   if (list->entries[list->cur_size] == NULL) {
-    list_free(list);
+    list_free(list, free);
     err_malloc_fail();
   }
 
@@ -247,7 +248,7 @@ void list_push_front(list_t *list, const void *val) {
 
   list->entries[list->cur_size] = malloc(list->type_size);
   if (list->entries[list->cur_size] == NULL) {
-    list_free(list);
+    list_free(list, free);
     err_malloc_fail();
   }
 
