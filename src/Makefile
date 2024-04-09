@@ -1,9 +1,11 @@
-CC=clang
-CFLAGS=-Wall -Wextra
-DEBUG_FLAGS=$(CFLAGS) -g -O0
-OBJS=nhashtable.o nlinked_list.o nsort.o narray.o nlist.o nerror.o
-DEBUG_OBJS=$(OBJS:.o=_debug.o)
-LIB=libnonstdlib.a
+CC := clang
+CFLAGS := -Wall -Wextra
+RELEASE_FLAGS := $(CFLAGS) -O2
+DEBUG_FLAGS := $(CFLAGS) -g -O0
+
+OBJS := nhashtable.o nlinked_list.o nsort.o narray.o nlist.o nerror.o
+DEBUG_OBJS := $(OBJS:.o=_debug.o)
+LIB := libnonstdlib.a
 
 all: $(OBJS)
 	ar rcs $(LIB) $(OBJS)
@@ -12,7 +14,7 @@ debug: clean $(DEBUG_OBJS)
 	ar rcs $(LIB) $(DEBUG_OBJS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(RELEASE_FLAGS) -c $< -o $@
 
 %_debug.o: %.c
 	$(CC) $(DEBUG_FLAGS) -c $< -o $@
