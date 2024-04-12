@@ -45,13 +45,14 @@ static void list_shift_left(const list_t *list) {
  * @param list list to expand
  */
 static void list_expand(list_t *list) {
-  list->max_size *= 2;
-  list->entries =
-      realloc(list->entries, list->max_size * sizeof(list->entries));
+  size_t new_size = list->max_size * 2;
+  list->entries = realloc(list->entries, new_size * sizeof(list->entries));
   if (list->entries == NULL) {
     list_free(list, free);
     err_malloc_fail();
   }
+
+  list->max_size = new_size;
 }
 
 /**
