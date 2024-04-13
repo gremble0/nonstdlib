@@ -1,12 +1,12 @@
 #pragma once
 
 #define ht_prototype(type)                                                     \
-  typedef struct type##_ht_entry {                                             \
+  typedef struct {                                                             \
     const char *key;                                                           \
     type *value;                                                               \
   } type##_ht_entry_t;                                                         \
                                                                                \
-  typedef struct type##_ht_t {                                                 \
+  typedef struct {                                                             \
     type##_ht_entry_t **entries;                                               \
     uint32_t n_entries;                                                        \
     uint32_t max_entries;                                                      \

@@ -2,13 +2,13 @@
 
 #include <stddef.h>
 
-typedef struct ll_entry_t {
+typedef struct {
   void *value;
   struct ll_entry_t *next;
   struct ll_entry_t *prev;
 } ll_entry_t;
 
-typedef struct ll_t {
+typedef struct {
   ll_entry_t *first;
   ll_entry_t *last;
   size_t cur_size;

@@ -3,12 +3,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef struct ht_entry {
+typedef struct {
   const char *key;
   void *value;
 } ht_entry_t;
 
-typedef struct ht_t {
+typedef struct {
   ht_entry_t **entries;
   uint32_t n_entries;
   uint32_t max_entries;

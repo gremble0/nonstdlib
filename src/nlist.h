@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 
-typedef struct list_t {
+typedef struct {
   void **entries;   // List of all values
   size_t type_size; // Size of one value in the list
   size_t cur_size;  // How many values are currently in the list
@@ -16,7 +16,7 @@ void *list_get(const list_t *list, const size_t index);
 void *list_pop_back(list_t *list);
 void *list_pop_front(list_t *list);
 void list_clear(list_t *list);
-void list_free(list_t *list, void(free_func)(void*));
+void list_free(list_t *list, void(free_func)(void *));
 void list_print(list_t *list);
 void list_push_back(list_t *list, const void *val);
 void list_push_front(list_t *list, const void *val);
