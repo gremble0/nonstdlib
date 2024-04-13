@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "nerror.h"
 #include "nlinked_list.h"
 #include "test.h"
-
-static int tests_passed = 0;
-static int tests_ran = 0;
 
 static void test_ll_push_back_seek(void) {
   ll_t *ll = ll_init(sizeof(char *));
@@ -19,18 +17,16 @@ static void test_ll_push_back_seek(void) {
   ll_push_back(ll, "f");
   // ll should be: "a" -> "b" -> "c" -> "d" -> "e" -> "f"
 
-  ASSERT_TRUE(ll->cur_size == 6);
-  ASSERT_TRUE(strcmp(ll_peek_front(ll), "a") == 0);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 5), "f") == 0);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 2), "c") == 0);
-  ASSERT_TRUE(strcmp(ll_peek_back(ll), "f") == 0);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 1), "b") == 0);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 3), "d") == 0);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 4), "e") == 0);
+  DEBUG_ASSERT(ll->cur_size == 6);
+  DEBUG_ASSERT(strcmp(ll_peek_front(ll), "a") == 0);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 5), "f") == 0);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 2), "c") == 0);
+  DEBUG_ASSERT(strcmp(ll_peek_back(ll), "f") == 0);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 1), "b") == 0);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 3), "d") == 0);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 4), "e") == 0);
 
-defer:
   ll_free(ll);
-  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_ll_push_front_pop(void) {
@@ -51,10 +47,10 @@ static void test_ll_push_front_pop(void) {
   int *popped_c = ll_pop_back(ll);
   // ll should be: (nil)
 
-  ASSERT_TRUE(*popped_a == 3);
-  ASSERT_TRUE(*popped_b == 1);
-  ASSERT_TRUE(*popped_c == 2);
-  ASSERT_TRUE(ll_peek_front(ll) == NULL);
+  DEBUG_ASSERT(*popped_a == 3);
+  DEBUG_ASSERT(*popped_b == 1);
+  DEBUG_ASSERT(*popped_c == 2);
+  DEBUG_ASSERT(ll_peek_front(ll) == NULL);
 
   ll_push_front(ll, &a);
   // ll should be: 1
@@ -62,16 +58,14 @@ static void test_ll_push_front_pop(void) {
   int *popped_d = ll_pop_back(ll);
   // ll should be: (nil)
 
-  ASSERT_TRUE(*popped_d == 1);
-  ASSERT_TRUE(ll_peek_front(ll) == NULL);
+  DEBUG_ASSERT(*popped_d == 1);
+  DEBUG_ASSERT(ll_peek_front(ll) == NULL);
 
   free(popped_a);
   free(popped_b);
   free(popped_c);
   free(popped_d);
-defer:
   ll_free(ll);
-  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_ll_reverse(void) {
@@ -88,20 +82,18 @@ static void test_ll_reverse(void) {
   ll_reverse(ll);
   // ll should be: "c" -> "a" -> "b"
 
-  ASSERT_TRUE(strcmp(ll_peek_front(ll), "c") == 0);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 1), "a") == 0);
-  ASSERT_TRUE(strcmp(ll_peek_back(ll), "b") == 0);
+  DEBUG_ASSERT(strcmp(ll_peek_front(ll), "c") == 0);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 1), "a") == 0);
+  DEBUG_ASSERT(strcmp(ll_peek_back(ll), "b") == 0);
 
   ll_reverse(ll);
   // ll should be: "b" -> "a" -> "c"
 
-  ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 1), "a") == 0);
-  ASSERT_TRUE(strcmp(ll_peek_back(ll), "c") == 0);
+  DEBUG_ASSERT(strcmp(ll_peek_front(ll), "b") == 0);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 1), "a") == 0);
+  DEBUG_ASSERT(strcmp(ll_peek_back(ll), "c") == 0);
 
-defer:
   ll_free(ll);
-  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_ll_all(void) {
@@ -112,38 +104,33 @@ static void test_ll_all(void) {
   ll_push_back(ll, "c");
   // ll should be: "b" -> "a" -> "c"
 
-  ASSERT_TRUE(ll->cur_size == 3);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 2), "c") == 0);
-  ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
+  DEBUG_ASSERT(ll->cur_size == 3);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 2), "c") == 0);
+  DEBUG_ASSERT(strcmp(ll_peek_front(ll), "b") == 0);
 
   free(ll_pop_back(ll));
   // ll should be: "b" -> "a"
-  ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
-  ASSERT_TRUE(strcmp(ll_seek(ll, 1), "a") == 0);
+  DEBUG_ASSERT(strcmp(ll_peek_front(ll), "b") == 0);
+  DEBUG_ASSERT(strcmp(ll_seek(ll, 1), "a") == 0);
 
   free(ll_pop_back(ll));
   // ll should be: "b"
-  ASSERT_TRUE(strcmp(ll_peek_front(ll), "b") == 0);
+  DEBUG_ASSERT(strcmp(ll_peek_front(ll), "b") == 0);
 
   free(ll_pop_back(ll));
   // ll should be: (nil)
-  ASSERT_TRUE(ll_peek_front(ll) == NULL);
+  DEBUG_ASSERT(ll_peek_front(ll) == NULL);
 
-defer:
   ll_free(ll);
-  TEST_FUNCTION_SUCCESS();
 }
 
-void test_linked_list(int *total_tests_ran, int *total_tests_passed) {
-  TEST_MODULE_START();
+void test_linked_list() {
+  TEST_MODULE_START("linked list");
 
   test_ll_push_back_seek();
   test_ll_push_front_pop();
   test_ll_reverse();
   test_ll_all();
 
-  TEST_MODULE_END();
-
-  *total_tests_passed += tests_passed;
-  *total_tests_ran += tests_ran;
+  TEST_MODULE_END("linked list");
 }

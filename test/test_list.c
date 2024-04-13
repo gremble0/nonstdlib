@@ -4,9 +4,7 @@
 
 #include "nlist.h"
 #include "test.h"
-
-static int tests_passed = 0;
-static int tests_ran = 0;
+#include <nerror.h>
 
 static void test_list_push_pop(void) {
   list_t *list = list_init(5, sizeof(char *));
@@ -17,21 +15,21 @@ static void test_list_push_pop(void) {
   // list should be: ["zozo", "xoxo", "yoyo"]
 
   char *yoyo = list_pop_back(list);
-  ASSERT_TRUE(strcmp("yoyo", yoyo) == 0);
+  DEBUG_ASSERT(strcmp("yoyo", yoyo) == 0);
   free(yoyo);
   // list should be: ["zozo", "xoxo"]
 
   char *xoxo = list_pop_back(list);
-  ASSERT_TRUE(strcmp("xoxo", xoxo) == 0);
+  DEBUG_ASSERT(strcmp("xoxo", xoxo) == 0);
   free(xoxo);
   // list should be: ["zozo"]
 
   char *zozo = list_pop_back(list);
-  ASSERT_TRUE(strcmp("zozo", zozo) == 0);
+  DEBUG_ASSERT(strcmp("zozo", zozo) == 0);
   free(zozo);
   // list should be: []
 
-  ASSERT_TRUE(list_pop_front(list) == NULL);
+  DEBUG_ASSERT(list_pop_front(list) == NULL);
   // list should be: []
 
   list_push_back(list, "yaya");
@@ -40,58 +38,54 @@ static void test_list_push_pop(void) {
   // list should be: ["zaza", "yaya", "xaxa"]
 
   char *xaxa = list_pop_back(list);
-  ASSERT_TRUE(strcmp("xaxa", xaxa) == 0);
+  DEBUG_ASSERT(strcmp("xaxa", xaxa) == 0);
   free(xaxa);
   // list should be: ["zaza", "yaya"]
 
   char *zaza = list_pop_front(list);
-  ASSERT_TRUE(strcmp("zaza", zaza) == 0);
+  DEBUG_ASSERT(strcmp("zaza", zaza) == 0);
   free(zaza);
   // list should be: ["yaya"]
 
   char *yaya = list_pop_back(list);
-  ASSERT_TRUE(strcmp("yaya", yaya) == 0);
+  DEBUG_ASSERT(strcmp("yaya", yaya) == 0);
   free(yaya);
   // list should be: []
 
-  ASSERT_TRUE(list_pop_front(list) == NULL);
+  DEBUG_ASSERT(list_pop_front(list) == NULL);
   // list should be: []
 
-defer:
   list_free(list, free);
-  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_list_expand(void) {
   list_t *list = list_init(1, sizeof(char *));
 
   list_push_back(list, "");
-  ASSERT_TRUE(list->cur_size == 1);
-  ASSERT_TRUE(list->max_size == 1);
+  DEBUG_ASSERT(list->cur_size == 1);
+  DEBUG_ASSERT(list->max_size == 1);
 
   list_push_back(list, "");
-  ASSERT_TRUE(list->cur_size == 2);
-  ASSERT_TRUE(list->max_size == 2);
+  DEBUG_ASSERT(list->cur_size == 2);
+  DEBUG_ASSERT(list->max_size == 2);
 
   list_push_back(list, "");
-  ASSERT_TRUE(list->cur_size == 3);
-  ASSERT_TRUE(list->max_size == 4);
+  DEBUG_ASSERT(list->cur_size == 3);
+  DEBUG_ASSERT(list->max_size == 4);
 
   list_push_back(list, "");
-  ASSERT_TRUE(list->cur_size == 4);
-  ASSERT_TRUE(list->max_size == 4);
+  DEBUG_ASSERT(list->cur_size == 4);
+  DEBUG_ASSERT(list->max_size == 4);
 
   list_push_back(list, "");
-  ASSERT_TRUE(list->cur_size == 5);
-  ASSERT_TRUE(list->max_size == 8);
+  DEBUG_ASSERT(list->cur_size == 5);
+  DEBUG_ASSERT(list->max_size == 8);
 
   list_push_back(list, "");
-  ASSERT_TRUE(list->cur_size == 6);
-  ASSERT_TRUE(list->max_size == 8);
+  DEBUG_ASSERT(list->cur_size == 6);
+  DEBUG_ASSERT(list->max_size == 8);
 
-defer:
   list_free(list, free);
-  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_list_clear(void) {
@@ -101,13 +95,11 @@ static void test_list_clear(void) {
   list_push_back(list, "abc");
   list_push_back(list, "abc");
   list_push_back(list, "abc");
-  ASSERT_TRUE(list->cur_size == 4);
+  DEBUG_ASSERT(list->cur_size == 4);
   list_clear(list);
-  ASSERT_TRUE(list->cur_size == 0);
+  DEBUG_ASSERT(list->cur_size == 0);
 
-defer:
   list_free(list, free);
-  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_list_contains(void) {
@@ -121,14 +113,12 @@ static void test_list_contains(void) {
   list_push_back(list, &a);
   list_push_back(list, &b);
 
-  ASSERT_TRUE(list_contains(list, &a) == 1);
-  ASSERT_TRUE(list_contains(list, &b) == 1);
-  ASSERT_TRUE(list_contains(list, &c) == 1);
-  ASSERT_TRUE(list_contains(list, &d) == 0);
+  DEBUG_ASSERT(list_contains(list, &a) == 1);
+  DEBUG_ASSERT(list_contains(list, &b) == 1);
+  DEBUG_ASSERT(list_contains(list, &c) == 1);
+  DEBUG_ASSERT(list_contains(list, &d) == 0);
 
-defer:
   list_free(list, free);
-  TEST_FUNCTION_SUCCESS();
 }
 
 static void test_list_structs(void) {
@@ -159,16 +149,14 @@ static void test_list_structs(void) {
   const struct some_struct *should_be_s2 = list_get(list, 0);
   const struct some_struct *should_be_s1 = list_get(list, 1);
 
-  ASSERT_TRUE(should_be_s2->a == s2.a);
-  ASSERT_TRUE(should_be_s1->a == s1.a);
+  DEBUG_ASSERT(should_be_s2->a == s2.a);
+  DEBUG_ASSERT(should_be_s1->a == s1.a);
 
-defer:
   list_free(list, free);
-  TEST_FUNCTION_SUCCESS();
 }
 
-void test_list(int *total_tests_ran, int *total_tests_passed) {
-  TEST_MODULE_START();
+void test_list() {
+  TEST_MODULE_START("list");
 
   test_list_push_pop();
   test_list_expand();
@@ -176,8 +164,5 @@ void test_list(int *total_tests_ran, int *total_tests_passed) {
   test_list_contains();
   test_list_structs();
 
-  TEST_MODULE_END();
-
-  *total_tests_passed += tests_passed;
-  *total_tests_ran += tests_ran;
+  TEST_MODULE_END("list");
 }

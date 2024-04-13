@@ -1,10 +1,6 @@
-#include <stdio.h>
-
+#include "nerror.h"
 #include "nsort.h"
 #include "test.h"
-
-static int tests_passed = 0;
-static int tests_ran = 0;
 
 static void test_sort(void (*sort_func)(int[], int)) {
   int nums[] = {5, 1, 4, 2, 8};
@@ -21,33 +17,27 @@ static void test_sort(void (*sort_func)(int[], int)) {
 
   sort_func(nums, nums_size);
   for (int i = 0; i < nums_size; i++) {
-    ASSERT_TRUE(nums[i] == sorted[i]);
+    DEBUG_ASSERT(nums[i] == sorted[i]);
   }
 
   sort_func(nums2, nums2_size);
   for (int i = 0; i < nums2_size; i++) {
-    ASSERT_TRUE(nums2[i] == sorted2[i]);
+    DEBUG_ASSERT(nums2[i] == sorted2[i]);
   }
 
   sort_func(nums3, nums3_size);
   for (int i = 0; i < nums3_size; i++) {
-    ASSERT_TRUE(nums3[i] == sorted3[i]);
+    DEBUG_ASSERT(nums3[i] == sorted3[i]);
   }
-
-defer:
-  TEST_FUNCTION_SUCCESS();
 }
 
-void test_all_sorts(int *total_tests_ran, int *total_tests_passed) {
-  TEST_MODULE_START();
+void test_all_sorts() {
+  TEST_MODULE_START("sort");
 
   test_sort(bubblesort);
   test_sort(insertionsort);
   test_sort(quicksort);
   test_sort(selectionsort);
 
-  TEST_MODULE_END();
-
-  *total_tests_passed += tests_passed;
-  *total_tests_ran += tests_ran;
+  TEST_MODULE_END("sort");
 }

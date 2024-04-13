@@ -1,11 +1,20 @@
 #pragma once
 
-// TODO: goto catch??
-#include <stddef.h>
+#include <stdio.h>
 
 #define ASSERT(expr)                                                           \
   do {                                                                         \
     if (!(expr)) {                                                             \
+      err_assert_fail(#expr);                                                  \
+    }                                                                          \
+  } while (0)
+
+// Same as assert, but print if assert is true
+#define DEBUG_ASSERT(expr)                                                     \
+  do {                                                                         \
+    if ((expr)) {                                                              \
+      printf("\033[0;32mPASSED: \033[0;37mDEBUG_ASSERT(%s)\n", #expr);         \
+    } else {                                                                   \
       err_assert_fail(#expr);                                                  \
     }                                                                          \
   } while (0)

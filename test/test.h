@@ -11,33 +11,14 @@
     }                                                                          \
   } while (0)
 
-#define TEST_MODULE_START() printf("Testing module: %s\n", __FILE__)
+#define TEST_MODULE_START(module)                                              \
+  printf("\033[1mTesting module '%s'\033[0;37m\n", module)
+#define TEST_MODULE_END(module)                                                \
+  printf("\033[0;32mTest successful for module '%s' \033[0;37m\n", module)
 
-// Print debug info about results for this test
-#define TEST_MODULE_END()                                                      \
-  do {                                                                         \
-    if (tests_passed != tests_ran) {                                           \
-      printf("\033[0;31m%d/%d tests successful for %s\033[0;37m\n",            \
-             tests_passed, tests_ran, __FILE__);                               \
-    } else {                                                                   \
-      printf("\033[0;32m%d/%d tests successful for %s\033[0;37m\n",            \
-             tests_passed, tests_ran, __FILE__);                               \
-    }                                                                          \
-  } while (0)
-
-#define TEST_FUNCTION_SUCCESS(args...)                                         \
-  ++tests_passed;                                                              \
-  ++tests_ran;                                                                 \
-  printf("\033[0;32mTest successful for %s \033[0;37m\n", __func__)
-
-#define TEST_FUNCTION_FAILURE()                                                \
-  ++tests_ran;                                                                 \
-  printf("\033[0;31mTest failed for %s \033[0;37m\n", __func__);               \
-  goto defer
-
-void test_arr(int *total_tests_ran, int *total_tests_passed);
-void test_hashtable(int *total_tests_ran, int *total_tests_passed);
-void test_hashtable_generic(int *total_tests_ran, int *total_tests_passed);
-void test_linked_list(int *total_tests_ran, int *total_tests_passed);
-void test_list(int *total_tests_ran, int *total_tests_passed);
-void test_all_sorts(int *total_tests_ran, int *total_tests_passed);
+void test_arr();
+void test_hashtable();
+void test_hashtable_generic();
+void test_linked_list();
+void test_list();
+void test_all_sorts();
