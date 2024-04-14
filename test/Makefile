@@ -22,7 +22,7 @@ src_debug:
 	$(MAKE) -C $(SRC) debug
 
 src_release:
-	$(MAKE) -C $(SRC)
+	$(MAKE) -C $(SRC) 
 
 clean:
 	rm test_all *.o -f

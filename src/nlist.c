@@ -19,7 +19,7 @@ static void list_shift_right(const list_t *list) {
   }
 
   for (size_t i = list->cur_size; i > 0; i--) {
-    memcpy(list->entries[i], list->entries[i - 1], list->type_size);
+    list->entries[i] = list->entries[i - 1];
   }
 }
 
@@ -35,7 +35,7 @@ static void list_shift_left(const list_t *list) {
   }
 
   for (size_t i = 1; i < list->cur_size; i++) {
-    memcpy(list->entries[i - 1], list->entries[i], list->type_size);
+    list->entries[i - 1] = list->entries[i];
   }
 }
 
@@ -62,9 +62,9 @@ static void list_expand(list_t *list) {
  * @param val value to check for
  * @return 1 if present 0 if not
  */
-int list_contains(const list_t *list, const void *val) {
+int list_contains(const list_t *list, void *val) {
   for (size_t i = 0; i < list->cur_size; ++i) {
-    if (memcmp(list->entries[i], val, list->type_size) == 0) {
+    if (list->entries[i] == val) {
       return 1;
     }
   }
@@ -79,7 +79,7 @@ int list_contains(const list_t *list, const void *val) {
  * @param type_size amount of bytes used for each element in the list
  * @return a malloc'd list that should to be freed using list_free()
  */
-list_t *list_init(const size_t init_size, const size_t type_size) {
+list_t *list_init(const size_t init_size) {
   list_t *list = malloc(sizeof(*list));
   if (list == NULL) {
     err_malloc_fail();
@@ -87,7 +87,6 @@ list_t *list_init(const size_t init_size, const size_t type_size) {
 
   list->max_size = init_size;
   list->cur_size = 0;
-  list->type_size = type_size;
   list->entries = malloc(init_size * sizeof(list->entries));
   if (list->entries == NULL) {
     free(list);
@@ -112,7 +111,7 @@ void *list_get(const list_t *list, const size_t index) {
 }
 
 /**
- * @brief Pops the last element of the list and return it. Needs to be freed
+ * @brief Pops the last element of the list and return it
  *
  * @param list list to pop from
  * @return element at the end of the list
@@ -122,23 +121,11 @@ void *list_pop_back(list_t *list) {
     return NULL;
   }
 
-  // Save return value to new memory locatin independent of the list it was
-  // popped from
-  void *popped = malloc(list->type_size);
-  if (popped == NULL) {
-    list_free(list, free);
-    err_malloc_fail();
-  }
-
-  --list->cur_size;
-  memcpy(popped, list->entries[list->cur_size], list->type_size);
-  free(list->entries[list->cur_size]);
-
-  return popped;
+  return list->entries[list->cur_size--];
 }
 
 /**
- * @brief Pops the first element of the list and return it. Needs to be freed
+ * @brief Pops the first element of the list and return it
  *
  * @param list list to pop from
  * @return element at the end of the list
@@ -149,21 +136,9 @@ void *list_pop_front(list_t *list) {
   }
 
   // Save retun value before it gets overwritten by list_left_shift
-  void *popped = malloc(list->type_size);
-  if (popped == NULL) {
-    list_free(list, free);
-    err_malloc_fail();
-  }
-
-  memcpy(popped, list->entries[0], list->type_size);
-
-  // Update list
+  void *popped = list->entries[0];
   list_shift_left(list);
-
   --list->cur_size;
-  // Memory has been moved around so freeing list->values[0] would free in use
-  // memory. We need to free the value at the previous end instead
-  free(list->entries[list->cur_size]);
 
   return popped;
 }
@@ -185,14 +160,22 @@ void list_clear(list_t *list) {
  * @brief Free all variables bound to a list
  *
  * @param list list to free
- * @param free_func function to call on each element in list (e.g. `free`)
  */
-void list_free(list_t *list, void(free_func)(void *)) {
-  for (size_t i = 0; i < list->cur_size; ++i) {
-    free_func(list->entries[i]);
-  }
+void list_free(list_t *list) {
   free(list->entries);
   free(list);
+}
+
+/**
+ * @brief Map a function on each element in the list. For example you could map
+ * free onto the list if you know all elements are heap allocated
+ *
+ * @param list list to map functions onto
+ */
+void list_map(list_t *list, void(func)(void *)) {
+  for (size_t i = 0; i < list->cur_size; ++i) {
+    func(list->entries[i]);
+  }
 }
 
 /**
@@ -204,7 +187,7 @@ void list_print(list_t *list) {
   for (size_t i = 0; i < list->cur_size; ++i) {
     printf("[%zu]: ", i);
     void *at_i = list_get(list, i);
-    for (size_t j = 0; j < list->type_size; ++j) {
+    for (size_t j = 0; j < sizeof(void *); ++j) {
       printf("%02x ", *(char *)(at_i + j));
     }
     putchar('\n');
@@ -217,20 +200,13 @@ void list_print(list_t *list) {
  * @param list list to push onto
  * @param val value to push onto the list
  */
-void list_push_back(list_t *list, const void *val) {
+void list_push_back(list_t *list, void *val) {
   // Resize if necessary
   if (list->cur_size == list->max_size) {
     list_expand(list);
   }
 
-  // TODO: own function for this
-  list->entries[list->cur_size] = malloc(list->type_size);
-  if (list->entries[list->cur_size] == NULL) {
-    list_free(list, free);
-    err_malloc_fail();
-  }
-
-  memcpy(list->entries[list->cur_size], val, list->type_size);
+  list->entries[list->cur_size] = val;
   ++list->cur_size;
 }
 
@@ -241,26 +217,20 @@ void list_push_back(list_t *list, const void *val) {
  * @param list list to push onto
  * @param val value to push onto the list
  */
-void list_push_front(list_t *list, const void *val) {
+void list_push_front(list_t *list, void *val) {
   // Resize if necessary
   if (list->cur_size == list->max_size) {
     list_expand(list);
-  }
-
-  list->entries[list->cur_size] = malloc(list->type_size);
-  if (list->entries[list->cur_size] == NULL) {
-    list_free(list, free);
-    err_malloc_fail();
   }
 
   if (list->cur_size > 0) {
     list_shift_right(list);
   }
 
-  memcpy(list->entries[0], val, list->type_size);
+  list->entries[0] = val;
   ++list->cur_size;
 }
 
 // TODO: implement
 void list_reverse(list_t *list);
-void list_remove(list_t *list, const void *val);
+void list_remove(list_t *list, void *val);

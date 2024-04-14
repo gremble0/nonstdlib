@@ -2,11 +2,12 @@
 
 #include <stddef.h>
 
-typedef struct {
+typedef struct ll_entry_t ll_entry_t;
+struct ll_entry_t {
   void *value;
-  struct ll_entry_t *next;
-  struct ll_entry_t *prev;
-} ll_entry_t;
+  ll_entry_t *next;
+  ll_entry_t *prev;
+};
 
 typedef struct {
   ll_entry_t *first;
