@@ -18,13 +18,8 @@ static void test_list_push_pop(void) {
   list_push_front(list, zozo);
   // list should be: ["zozo", "xoxo", "yoyo"]
 
-  printf("%s\n", list_pop_back(list));
-  printf("%s\n", list_pop_back(list));
-  printf("%s\n", list_pop_back(list));
-  printf("%s\n", list_pop_back(list));
-  // DEBUG_ASSERT(yoyo == list_pop_back(list) && strcmp(yoyo, "yoyo") == 0);
+  DEBUG_ASSERT(yoyo == list_pop_back(list) && strcmp(yoyo, "yoyo") == 0);
   // list should be: ["zozo", "xoxo"]
-  return;
 
   DEBUG_ASSERT(xoxo == list_pop_back(list) && strcmp(xoxo, "xoxo") == 0);
   // list should be: ["zozo"]
@@ -35,30 +30,30 @@ static void test_list_push_pop(void) {
   DEBUG_ASSERT(list_pop_front(list) == NULL);
   // list should be: []
 
-  list_push_back(list, "yaya");
-  list_push_back(list, "xaxa");
-  list_push_front(list, "zaza");
-  // list should be: ["zaza", "yaya", "xaxa"]
+  list_push_back(list, yoyo);
+  list_push_back(list, xoxo);
+  list_push_front(list, zozo);
+  // list should be: ["zozo", "yoyo", "xoxo"]
 
-  char *xaxa = list_pop_back(list);
-  DEBUG_ASSERT(strcmp("xaxa", xaxa) == 0);
-  free(xaxa);
-  // list should be: ["zaza", "yaya"]
+  DEBUG_ASSERT(xoxo == list_pop_back(list) && strcmp(xoxo, "xoxo") == 0);
+  // list should be: ["zozo", "yoyo"]
 
-  char *zaza = list_pop_front(list);
-  DEBUG_ASSERT(strcmp("zaza", zaza) == 0);
-  free(zaza);
-  // list should be: ["yaya"]
+  list_push_front(list, "lololololololoo very long long long string :)))))");
+  // list should be: ["zozo", "yoyo", "lololololololoo very long long long
+  // string :)))))"]
 
-  char *yaya = list_pop_back(list);
-  DEBUG_ASSERT(strcmp("yaya", yaya) == 0);
-  free(yaya);
+  DEBUG_ASSERT(strcmp(list_pop_front(list),
+                      "lololololololoo very long long long string :)))))") ==
+               0);
+
+  DEBUG_ASSERT(yoyo == list_pop_back(list) && strcmp(yoyo, "yoyo") == 0);
+  // list should be: ["zozo"]
+
+  DEBUG_ASSERT(zozo == list_pop_back(list) && strcmp(zozo, "zozo") == 0);
   // list should be: []
 
   DEBUG_ASSERT(list_pop_front(list) == NULL);
   // list should be: []
-
-  list_push_back(list, "lololololohahahahahahaha");
 
   list_free(list);
 }
@@ -110,9 +105,9 @@ static void test_list_clear(void) {
 static void test_list_contains(void) {
   list_t *list = list_init(5);
 
-  int a = 2;
-  int b = 44;
-  int c = 44;
+  int a = 1;
+  int b = 2;
+  int c = 2;
   int d = 42;
 
   list_push_back(list, &a);
@@ -120,7 +115,7 @@ static void test_list_contains(void) {
 
   DEBUG_ASSERT(list_contains(list, &a) == 1);
   DEBUG_ASSERT(list_contains(list, &b) == 1);
-  DEBUG_ASSERT(list_contains(list, &c) == 1);
+  DEBUG_ASSERT(list_contains(list, &c) == 0);
   DEBUG_ASSERT(list_contains(list, &d) == 0);
 
   list_free(list);
@@ -163,15 +158,11 @@ static void test_list_structs(void) {
 void test_list() {
   TEST_MODULE_START("list");
 
-  // list_t *l = list_init(5);
-  // char *a = "asdgaslkdjflkasjdflkasdflkasdjflkasjdfkla";
-  // list_push_back(l, a);
-  // printf("%s\n", list_pop_front(l));
   test_list_push_pop();
-  // test_list_expand();
-  // test_list_clear();
-  // test_list_contains();
+  test_list_expand();
+  test_list_clear();
+  test_list_contains();
   test_list_structs();
-  //
+
   TEST_MODULE_END("list");
 }

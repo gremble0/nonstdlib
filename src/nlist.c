@@ -104,7 +104,7 @@ list_t *list_init(const size_t init_size) {
  */
 void *list_get(const list_t *list, const size_t index) {
   if (index >= list->cur_size) {
-    err_index_out_of_bounds(list->cur_size, list->max_size);
+    err_index_out_of_bounds(index, list->cur_size);
   }
 
   return list->entries[index];
@@ -121,7 +121,7 @@ void *list_pop_back(list_t *list) {
     return NULL;
   }
 
-  return list->entries[list->cur_size--];
+  return list->entries[--list->cur_size];
 }
 
 /**
@@ -150,7 +150,7 @@ void *list_pop_front(list_t *list) {
  */
 void list_clear(list_t *list) {
   for (size_t i = 0; i < list->cur_size; ++i) {
-    free(list->entries[i]);
+    list->entries[i] = NULL;
   }
 
   list->cur_size = 0;

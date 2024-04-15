@@ -34,7 +34,7 @@ _Noreturn void err_io_fail(const char *file_path) {
 _Noreturn void err_index_out_of_bounds(size_t index, size_t max_index) {
   err_print_stacktrace();
   fprintf(stderr,
-          "ERROR_INDEX_OUT_OF_BOUNDS: index %zu out of bounds where max_index "
+          "ERROR_INDEX_OUT_OF_BOUNDS: index %zu out of bounds for size "
           "is %zu\n",
           index, max_index);
   exit(1);
