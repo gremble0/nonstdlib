@@ -9,6 +9,12 @@ typedef struct {
                    // increased)
 } list_t;
 
+// Useful to cast functions that do not explicitly take a void * as a parameter.
+// for example if you have a function `void do_something(char *) { ... }` and
+// you have a list of `char *` you can cast it to a list_map_func in calls to
+// list_map like: `list_map(list, (list_map_func)do_something)`
+typedef void (*list_map_func)(void *);
+
 int list_contains(const list_t *list, void *val);
 list_t *list_init(const size_t init_size);
 void *list_get(const list_t *list, size_t index);
