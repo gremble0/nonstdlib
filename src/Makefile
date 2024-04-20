@@ -1,5 +1,5 @@
 CC := clang
-CFLAGS := -Wall -Wextra
+CFLAGS := -Wall -Wextra -I../include/nonstdlib
 RELEASE_FLAGS := $(CFLAGS) -O2
 DEBUG_FLAGS := $(CFLAGS) -g -O0
 
