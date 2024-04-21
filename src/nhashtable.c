@@ -184,7 +184,7 @@ void ht_free(const ht_t *table) {
  *
  * @param table table to print
  */
-void ht_print(ht_t *table) {
+void ht_print(const ht_t *table) {
   for (size_t i = 0; i < table->max_entries; ++i) {
     if (table->entries[i] == NULL) {
       printf("[%zu]: --empty--\n", i);
@@ -202,7 +202,8 @@ void ht_print(ht_t *table) {
  * @param key key to put in
  * @param value value to put in
  */
-void ht_put(ht_t *table, const char *key, void *value, size_t value_size) {
+void ht_put(ht_t *table, const char *key, const void *value,
+            size_t value_size) {
   // Table should at maximum be at 50% capacity
   if (table->n_entries + 1 > table->max_entries / 2) {
     ht_expand(table);

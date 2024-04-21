@@ -62,7 +62,7 @@ static void list_expand(list_t *list) {
  * @param val value to check for
  * @return 1 if present 0 if not
  */
-int list_contains(const list_t *list, void *val) {
+int list_contains(const list_t *list, const void *val) {
   for (size_t i = 0; i < list->cur_size; ++i) {
     if (list->entries[i] == val) {
       return 1;
@@ -172,7 +172,7 @@ void list_free(list_t *list) {
  *
  * @param list list to map functions onto
  */
-void list_map(list_t *list, void(func)(void *)) {
+void list_map(const list_t *list, void(func)(void *)) {
   for (size_t i = 0; i < list->cur_size; ++i) {
     func(list->entries[i]);
   }
@@ -183,14 +183,9 @@ void list_map(list_t *list, void(func)(void *)) {
  *
  * @param list list to print bytes of
  */
-void list_print(list_t *list) {
+void list_print(const list_t *list) {
   for (size_t i = 0; i < list->cur_size; ++i) {
-    printf("[%zu]: ", i);
-    void *at_i = list_get(list, i);
-    for (size_t j = 0; j < sizeof(void *); ++j) {
-      printf("%02x ", *(char *)(at_i + j));
-    }
-    putchar('\n');
+    printf("[%zu]: %p\n", i, list->entries[i]);
   }
 }
 
