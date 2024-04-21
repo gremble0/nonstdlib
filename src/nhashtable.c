@@ -75,11 +75,11 @@ static ht_entry_t *ht_create_entry(const char *key, const void *value,
   entry->value = malloc(value_size);
   if (entry->value == NULL) {
     // TODO: ht_free()
-    free((void *)entry->key);
+    free(entry->key);
     err_malloc_fail();
   }
 
-  memcpy((void *)entry->key, key, key_len);
+  memcpy(entry->key, key, key_len);
   memcpy(entry->value, value, value_size);
 
   return entry;
@@ -166,17 +166,17 @@ void ht_expand(ht_t *table) {
  *
  * @param table table to free memory for
  */
-void ht_free(const ht_t *table) {
+void ht_free(ht_t *table) {
   for (size_t i = 0; i < table->max_entries; ++i) {
     if (table->entries[i] != NULL) {
-      free((void *)table->entries[i]->key);
+      free(table->entries[i]->key);
       free(table->entries[i]->value);
       free(table->entries[i]);
     }
   }
 
   free(table->entries);
-  free((void *)table);
+  free(table);
 }
 
 /**
