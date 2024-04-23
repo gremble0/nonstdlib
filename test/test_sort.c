@@ -16,19 +16,16 @@ static void test_sort(void (*sort_func)(int[], int)) {
   int sorted3[] = {-1, -1, -1, 1, 1, 2, 2, 3, 5};
 
   sort_func(nums, nums_size);
-  for (int i = 0; i < nums_size; i++) {
+  for (int i = 0; i < nums_size; i++)
     DEBUG_ASSERT(nums[i] == sorted[i]);
-  }
 
   sort_func(nums2, nums2_size);
-  for (int i = 0; i < nums2_size; i++) {
+  for (int i = 0; i < nums2_size; i++)
     DEBUG_ASSERT(nums2[i] == sorted2[i]);
-  }
 
   sort_func(nums3, nums3_size);
-  for (int i = 0; i < nums3_size; i++) {
+  for (int i = 0; i < nums3_size; i++)
     DEBUG_ASSERT(nums3[i] == sorted3[i]);
-  }
 }
 
 void test_all_sorts() {

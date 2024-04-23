@@ -14,9 +14,8 @@
  */
 ll_t *ll_init(size_t type_size) {
   ll_t *ll = malloc(sizeof(*ll));
-  if (ll == NULL) {
-    return NULL;
-  }
+  if (ll == NULL)
+    err_malloc_fail();
 
   ll->cur_size = 0;
   ll->type_size = type_size;
@@ -32,9 +31,8 @@ ll_t *ll_init(size_t type_size) {
  * @param s linked list to peek into
  */
 void *ll_peek_back(ll_t *ll) {
-  if (ll->last == NULL) {
+  if (ll->last == NULL)
     return NULL;
-  }
 
   return ll->last->value;
 }
@@ -45,9 +43,8 @@ void *ll_peek_back(ll_t *ll) {
  * @param s linked list to peek into
  */
 void *ll_peek_front(ll_t *ll) {
-  if (ll->first == NULL) {
+  if (ll->first == NULL)
     return NULL;
-  }
 
   return ll->first->value;
 }
@@ -59,19 +56,17 @@ void *ll_peek_front(ll_t *ll) {
  * @param s linked list to pop from
  */
 void *ll_pop_back(ll_t *ll) {
-  if (ll->last == NULL) {
+  if (ll->last == NULL)
     err_pop_from_empty_list();
-  }
 
   ll_entry_t *popped = ll->last;
   void *ret = popped->value;
 
   ll->last = popped->prev;
-  if (ll->last == NULL) {
+  if (ll->last == NULL)
     ll->first = NULL;
-  } else {
+  else
     ll->last->next = NULL;
-  }
 
   --ll->cur_size;
   free(popped);
@@ -86,19 +81,17 @@ void *ll_pop_back(ll_t *ll) {
  * @param s linked list to pop from
  */
 void *ll_pop_front(ll_t *ll) {
-  if (ll->first == NULL) {
+  if (ll->first == NULL)
     err_pop_from_empty_list();
-  }
 
   ll_entry_t *popped = ll->first;
   void *ret = popped->value;
 
   ll->first = popped->next;
-  if (ll->first == NULL) {
+  if (ll->first == NULL)
     ll->last = NULL;
-  } else {
+  else
     ll->first->prev = NULL;
-  }
 
   --ll->cur_size;
   free(popped);
@@ -114,24 +107,21 @@ void *ll_pop_front(ll_t *ll) {
  */
 void *ll_seek(ll_t *ll, size_t index) {
   // Index out of bounds
-  if (index >= ll->cur_size) {
+  if (index >= ll->cur_size)
     return NULL;
-  }
 
   // Seek front to back if index is small, back to front if index is large
   if (index <= ll->cur_size / 2) {
     ll_entry_t *entry = ll->first;
-    while (index-- > 0) {
+    while (index-- > 0)
       entry = entry->next;
-    }
 
     return entry->value;
   } else {
     index = ll->cur_size - index;
     ll_entry_t *entry = ll->last;
-    while (--index > 0) {
+    while (--index > 0)
       entry = entry->prev;
-    }
 
     return entry->value;
   }
@@ -184,22 +174,19 @@ void ll_print(ll_t *ll) {
  * @return ll_entry with a value, but prev and next set to NULL
  */
 static ll_entry_t *ll_create_entry(const void *value, size_t type_size) {
-  ll_entry_t *new = malloc(sizeof(*new));
-  if (new == NULL) {
+  ll_entry_t *ll = malloc(sizeof(*ll));
+  if (ll == NULL)
     err_malloc_fail();
-  }
 
-  new->value = malloc(type_size);
-  if (new->value == NULL) {
-    free(new);
+  ll->value = malloc(type_size);
+  if (ll->value == NULL)
     err_malloc_fail();
-  }
 
-  memcpy(new->value, value, type_size);
-  new->prev = NULL;
-  new->next = NULL;
+  memcpy(ll->value, value, type_size);
+  ll->prev = NULL;
+  ll->next = NULL;
 
-  return new;
+  return ll;
 }
 
 /**
@@ -215,11 +202,10 @@ void ll_push_back(ll_t *ll, const void *value) {
   new->next = NULL;
 
   // Update pointers in ll
-  if (ll->last == NULL) {
+  if (ll->last == NULL)
     ll->first = new;
-  } else {
+  else
     ll->last->next = new;
-  }
 
   ll->last = new;
   ++ll->cur_size;
@@ -239,11 +225,10 @@ void ll_push_front(ll_t *ll, const void *value) {
   new->next = ll->first;
 
   // Update pointers in ll
-  if (ll->last == NULL) {
+  if (ll->last == NULL)
     ll->last = new;
-  } else {
+  else
     ll->first->prev = new;
-  }
 
   ll->first = new;
   ++ll->cur_size;
@@ -255,9 +240,8 @@ void ll_push_front(ll_t *ll, const void *value) {
  * @param ll linked list to reverse
  */
 void ll_reverse(ll_t *ll) {
-  if (ll->first == NULL) {
+  if (ll->first == NULL)
     return;
-  }
 
   // Update first/last
   ll_entry_t *first = ll->first;

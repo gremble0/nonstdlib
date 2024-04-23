@@ -14,13 +14,11 @@
  * @param list list to right shift
  */
 static void list_shift_right(const list_t *list) {
-  if (list->cur_size >= list->max_size) {
+  if (list->cur_size >= list->max_size)
     err_index_out_of_bounds(list->cur_size, list->max_size);
-  }
 
-  for (size_t i = list->cur_size; i > 0; i--) {
+  for (size_t i = list->cur_size; i > 0; i--)
     list->entries[i] = list->entries[i - 1];
-  }
 }
 
 /**
@@ -30,13 +28,11 @@ static void list_shift_right(const list_t *list) {
  * @param list list to right shift
  */
 static void list_shift_left(const list_t *list) {
-  if (list->cur_size >= list->max_size) {
+  if (list->cur_size >= list->max_size)
     err_index_out_of_bounds(list->cur_size, list->max_size);
-  }
 
-  for (size_t i = 1; i < list->cur_size; i++) {
+  for (size_t i = 1; i < list->cur_size; i++)
     list->entries[i - 1] = list->entries[i];
-  }
 }
 
 /**
@@ -63,11 +59,9 @@ static void list_expand(list_t *list) {
  * @return 1 if present 0 if not
  */
 int list_contains(const list_t *list, const void *val) {
-  for (size_t i = 0; i < list->cur_size; ++i) {
-    if (list->entries[i] == val) {
+  for (size_t i = 0; i < list->cur_size; ++i)
+    if (list->entries[i] == val)
       return 1;
-    }
-  }
 
   return 0;
 }
@@ -81,13 +75,12 @@ int list_contains(const list_t *list, const void *val) {
  */
 list_t *list_init(const size_t init_size) {
   list_t *list = malloc(sizeof(*list));
-  if (list == NULL) {
+  if (list == NULL)
     err_malloc_fail();
-  }
 
   list->max_size = init_size;
   list->cur_size = 0;
-  list->entries = malloc(init_size * sizeof(list->entries));
+  list->entries = malloc(init_size * sizeof(*list->entries));
   if (list->entries == NULL) {
     free(list);
     err_malloc_fail();
@@ -103,9 +96,8 @@ list_t *list_init(const size_t init_size) {
  * @param index index into list
  */
 void *list_get(const list_t *list, const size_t index) {
-  if (index >= list->cur_size) {
+  if (index >= list->cur_size)
     err_index_out_of_bounds(index, list->cur_size);
-  }
 
   return list->entries[index];
 }
@@ -117,9 +109,8 @@ void *list_get(const list_t *list, const size_t index) {
  * @return element at the end of the list
  */
 void *list_pop_back(list_t *list) {
-  if (list->cur_size == 0) {
+  if (list->cur_size == 0)
     return NULL;
-  }
 
   return list->entries[--list->cur_size];
 }
@@ -131,9 +122,8 @@ void *list_pop_back(list_t *list) {
  * @return element at the end of the list
  */
 void *list_pop_front(list_t *list) {
-  if (list->cur_size == 0) {
+  if (list->cur_size == 0)
     return NULL;
-  }
 
   // Save retun value before it gets overwritten by list_left_shift
   void *popped = list->entries[0];
@@ -149,9 +139,8 @@ void *list_pop_front(list_t *list) {
  * @param list list to clear
  */
 void list_clear(list_t *list) {
-  for (size_t i = 0; i < list->cur_size; ++i) {
+  for (size_t i = 0; i < list->cur_size; ++i)
     list->entries[i] = NULL;
-  }
 
   list->cur_size = 0;
 }
@@ -184,9 +173,8 @@ void list_map(const list_t *list, void(func)(void *)) {
  * @param list list to print bytes of
  */
 void list_print(const list_t *list) {
-  for (size_t i = 0; i < list->cur_size; ++i) {
+  for (size_t i = 0; i < list->cur_size; ++i)
     printf("[%zu]: %p\n", i, list->entries[i]);
-  }
 }
 
 /**
@@ -197,9 +185,8 @@ void list_print(const list_t *list) {
  */
 void list_push_back(list_t *list, void *val) {
   // Resize if necessary
-  if (list->cur_size == list->max_size) {
+  if (list->cur_size == list->max_size)
     list_expand(list);
-  }
 
   list->entries[list->cur_size] = val;
   ++list->cur_size;
@@ -214,13 +201,11 @@ void list_push_back(list_t *list, void *val) {
  */
 void list_push_front(list_t *list, void *val) {
   // Resize if necessary
-  if (list->cur_size == list->max_size) {
+  if (list->cur_size == list->max_size)
     list_expand(list);
-  }
 
-  if (list->cur_size > 0) {
+  if (list->cur_size > 0)
     list_shift_right(list);
-  }
 
   list->entries[0] = val;
   ++list->cur_size;

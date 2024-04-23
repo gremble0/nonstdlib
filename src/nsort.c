@@ -44,12 +44,11 @@ void bubblesort(int buf[], int bufsize) {
     }
   }
 
-  if (swapped) {
+  if (swapped)
     // After one full iteration of the array, we know we have moved at least one
     // element to the end of the array, so we can decrement the bufsize for the
     // next recursive call
     bubblesort(buf, bufsize - 1);
-  }
 }
 
 /**
@@ -59,11 +58,9 @@ void bubblesort(int buf[], int bufsize) {
  * @param bufsize size of the array to sort
  */
 void insertionsort(int buf[], int bufsize) {
-  for (int i = 1; i < bufsize; ++i) {
-    for (int j = i; buf[j - 1] > buf[j] && j > 0; --j) {
+  for (int i = 1; i < bufsize; ++i)
+    for (int j = i; buf[j - 1] > buf[j] && j > 0; --j)
       arr_swap(buf, j - 1, j, sizeof(int));
-    }
-  }
 }
 
 /**
@@ -75,9 +72,8 @@ void insertionsort(int buf[], int bufsize) {
  */
 void quicksort_impl(int buf[], int start, int end) {
   // basecase
-  if (start >= end) {
+  if (start >= end)
     return;
-  }
 
   // Choose pivot element (here just use the last element in the array)
   int pivot = buf[end - 1];
@@ -125,11 +121,10 @@ void selectionsort(int buf[], int bufsize) {
   // Index of smallest number seen in current iteration
   int min_i = 0;
   for (int i = 0; i < bufsize;) {
-    for (int j = i; j < bufsize; ++j) {
-      if (buf[j] < buf[min_i]) {
+    for (int j = i; j < bufsize; ++j)
+      if (buf[j] < buf[min_i])
         min_i = j;
-      }
-    }
+
     arr_swap(buf, min_i, i, sizeof(int));
     min_i = ++i;
   }

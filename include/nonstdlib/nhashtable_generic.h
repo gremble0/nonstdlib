@@ -2,7 +2,7 @@
 
 #define ht_prototype(type)                                                     \
   typedef struct {                                                             \
-    const char *key;                                                           \
+    char *key;                                                                 \
     type *value;                                                               \
   } type##_ht_entry_t;                                                         \
                                                                                \
@@ -15,9 +15,9 @@
   type *type##_ht_get(const type##_ht_t *table, const char *key);              \
   type##_ht_t *type##_ht_init(uint32_t init_size);                             \
   void type##_ht_expand(type##_ht_t *table);                                   \
-  void type##_ht_free(const type##_ht_t *table);                               \
+  void type##_ht_free(type##_ht_t *table);                                     \
   void type##_ht_print(type##_ht_t *table);                                    \
-  void type##_ht_put(type##_ht_t *table, const char *key, type *value,         \
+  void type##_ht_put(type##_ht_t *table, const char *key, const type *value,   \
                      size_t value_size);
 
 #define ht_impl(type)                                                          \
@@ -30,9 +30,8 @@
   static uint32_t type##_hash(const char *key, size_t key_size) {              \
     uint32_t hash = 5381;                                                      \
                                                                                \
-    for (size_t i = 0; i < key_size; ++i) {                                    \
+    for (size_t i = 0; i < key_size; ++i)                                      \
       hash = hash * 33 + key[i];                                               \
-    }                                                                          \
                                                                                \
     return hash;                                                               \
   }                                                                            \
@@ -50,17 +49,15 @@
     type##_ht_entry_t *entry = table->entries[old_hash_index];                 \
     uint32_t new_hash_index =                                                  \
         type##_hash(entry->key, strlen(entry->key)) % table->max_entries;      \
-    if (new_hash_index == old_hash_index) {                                    \
+    if (new_hash_index == old_hash_index)                                      \
       return;                                                                  \
-    }                                                                          \
                                                                                \
     table->entries[old_hash_index] = NULL;                                     \
     while (table->entries[new_hash_index] != NULL) {                           \
       ++new_hash_index;                                                        \
                                                                                \
-      if (new_hash_index >= table->max_entries) {                              \
+      if (new_hash_index >= table->max_entries)                                \
         new_hash_index = 0;                                                    \
-      }                                                                        \
     }                                                                          \
                                                                                \
     table->entries[new_hash_index] = entry;                                    \
@@ -77,23 +74,20 @@
   static type##_ht_entry_t *type##_ht_create_entry(                            \
       const char *key, const type *value, size_t value_size) {                 \
     type##_ht_entry_t *entry = malloc(sizeof(type##_ht_entry_t));              \
-    if (entry == NULL) {                                                       \
+    if (entry == NULL)                                                         \
       err_malloc_fail();                                                       \
-    }                                                                          \
                                                                                \
     size_t key_len = strlen(key) + 1;                                          \
                                                                                \
     entry->key = malloc(key_len);                                              \
-    if (entry->key == NULL) {                                                  \
+    if (entry->key == NULL)                                                    \
       err_malloc_fail();                                                       \
-    }                                                                          \
-    entry->value = malloc(value_size);                                         \
-    if (entry->value == NULL) {                                                \
-      free((void *)entry->key);                                                \
-      err_malloc_fail();                                                       \
-    }                                                                          \
                                                                                \
-    memcpy((void *)entry->key, key, key_len);                                  \
+    entry->value = malloc(value_size);                                         \
+    if (entry->value == NULL)                                                  \
+      err_malloc_fail();                                                       \
+                                                                               \
+    memcpy(entry->key, key, key_len);                                          \
     memcpy(entry->value, value, value_size);                                   \
                                                                                \
     return entry;                                                              \
@@ -109,15 +103,13 @@
   type *type##_ht_get(const type##_ht_t *table, const char *key) {             \
     uint32_t index = type##_hash(key, strlen(key)) % table->max_entries;       \
     type##_ht_entry_t *entry = table->entries[index];                          \
-    if (entry == NULL) {                                                       \
+    if (entry == NULL)                                                         \
       return NULL;                                                             \
-    }                                                                          \
                                                                                \
     while (strcmp(entry->key, key) != 0) {                                     \
       entry = table->entries[index++];                                         \
-      if (entry == NULL) {                                                     \
+      if (entry == NULL)                                                       \
         return NULL;                                                           \
-      }                                                                        \
     }                                                                          \
                                                                                \
     return entry->value;                                                       \
@@ -133,21 +125,17 @@
    */                                                                          \
   type##_ht_t *type##_ht_init(uint32_t init_max_entries) {                     \
     type##_ht_t *new_ht = malloc(sizeof(*new_ht));                             \
-    if (new_ht == NULL) {                                                      \
-      return NULL;                                                             \
-    }                                                                          \
+    if (new_ht == NULL)                                                        \
+      err_malloc_fail();                                                       \
                                                                                \
     new_ht->n_entries = 0;                                                     \
     new_ht->max_entries = init_max_entries;                                    \
     new_ht->entries = malloc(init_max_entries * sizeof(new_ht->entries));      \
-    if (new_ht->entries == NULL) {                                             \
-      free(new_ht);                                                            \
-      return NULL;                                                             \
-    }                                                                          \
+    if (new_ht->entries == NULL)                                               \
+      err_malloc_fail();                                                       \
                                                                                \
-    for (size_t i = 0; i < init_max_entries; ++i) {                            \
+    for (size_t i = 0; i < init_max_entries; ++i)                              \
       new_ht->entries[i] = NULL;                                               \
-    }                                                                          \
                                                                                \
     return new_ht;                                                             \
   }                                                                            \
@@ -162,17 +150,12 @@
     table->max_entries *= 2;                                                   \
     table->entries = realloc(table->entries, table->max_entries *              \
                                                  sizeof(type##_ht_entry_t *)); \
-    for (size_t i = prev_max_entries; i < table->max_entries; ++i) {           \
+    for (size_t i = prev_max_entries; i < table->max_entries; ++i)             \
       table->entries[i] = NULL;                                                \
-    }                                                                          \
                                                                                \
-    for (size_t i = 0; i < prev_max_entries; ++i) {                            \
-      if (table->entries[i] == NULL) {                                         \
-        continue;                                                              \
-      }                                                                        \
-                                                                               \
-      type##_ht_rehash_index(table, i);                                        \
-    }                                                                          \
+    for (size_t i = 0; i < prev_max_entries; ++i)                              \
+      if (table->entries[i] != NULL)                                           \
+        type##_ht_rehash_index(table, i);                                      \
   }                                                                            \
                                                                                \
   /**                                                                          \
@@ -180,17 +163,17 @@
    *                                                                           \
    * @param table table to free memory for                                     \
    */                                                                          \
-  void type##_ht_free(const type##_ht_t *table) {                              \
+  void type##_ht_free(type##_ht_t *table) {                                    \
     for (size_t i = 0; i < table->max_entries; ++i) {                          \
       if (table->entries[i] != NULL) {                                         \
-        free((void *)table->entries[i]->key);                                  \
+        free(table->entries[i]->key);                                          \
         free(table->entries[i]->value);                                        \
         free(table->entries[i]);                                               \
       }                                                                        \
     }                                                                          \
                                                                                \
     free(table->entries);                                                      \
-    free((void *)table);                                                       \
+    free(table);                                                               \
   }                                                                            \
                                                                                \
   /**                                                                          \
@@ -216,11 +199,10 @@
    * @param key key to put in                                                  \
    * @param value value to put in                                              \
    */                                                                          \
-  void type##_ht_put(type##_ht_t *table, const char *key, type *value,         \
+  void type##_ht_put(type##_ht_t *table, const char *key, const type *value,   \
                      size_t value_size) {                                      \
-    if (table->n_entries + 1 > table->max_entries / 2) {                       \
+    if (table->n_entries + 1 > table->max_entries / 2)                         \
       type##_ht_expand(table);                                                 \
-    }                                                                          \
                                                                                \
     uint32_t hash_index = type##_hash(key, strlen(key)) % table->max_entries;  \
     const type##_ht_entry_t *existing_entry = table->entries[hash_index];      \
@@ -234,9 +216,8 @@
       while (table->entries[hash_index] != NULL) {                             \
         ++hash_index;                                                          \
                                                                                \
-        if (hash_index >= table->max_entries) {                                \
+        if (hash_index >= table->max_entries)                                  \
           hash_index = 0;                                                      \
-        }                                                                      \
       }                                                                        \
                                                                                \
       table->entries[hash_index] =                                             \

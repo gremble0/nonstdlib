@@ -13,12 +13,10 @@
  */
 int arr_contains(const void *arr, size_t arr_size, const void *val,
                  size_t type_size) {
-  for (size_t i = 0; i < arr_size; ++i) {
+  for (size_t i = 0; i < arr_size; ++i)
     // Move i * val_type_size and compare val_type_size bytes each iteration
-    if (memcmp(&arr[i * type_size], val, type_size) == 0) {
+    if (memcmp(&arr[i * type_size], val, type_size) == 0)
       return 1;
-    }
-  }
 
   return 0;
 }
@@ -35,15 +33,12 @@ int arr_contains(const void *arr, size_t arr_size, const void *val,
  */
 int arr_equals(const void *arr1, size_t arr1_size, const void *arr2,
                size_t arr2_size, size_t type_size) {
-  if (arr1_size != arr2_size) {
+  if (arr1_size != arr2_size)
     return 0;
-  }
 
-  for (size_t i = 0; i < arr1_size; ++i) {
-    if (memcmp(&arr1[i * type_size], &arr2[i * type_size], type_size) != 0) {
+  for (size_t i = 0; i < arr1_size; ++i)
+    if (memcmp(&arr1[i * type_size], &arr2[i * type_size], type_size) != 0)
       return 0;
-    }
-  }
 
   return 1;
 }
@@ -67,9 +62,8 @@ void arr_clear(void *arr, size_t arr_size, size_t type_size) {
  * @param type_size amount of bytes used for each element in arr
  */
 void arr_reverse(void *arr, size_t arr_size, size_t type_size) {
-  for (size_t i = 0; i < arr_size / 2; ++i) {
+  for (size_t i = 0; i < arr_size / 2; ++i)
     arr_swap(arr, i, arr_size - 1 - i, type_size);
-  }
 }
 
 /**

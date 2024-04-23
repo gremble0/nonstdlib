@@ -16,19 +16,16 @@ static void test_arr_clear(void) {
   const int strings_size = sizeof(strings) / sizeof(strings[0]);
 
   arr_clear(nums, nums_size, sizeof(int));
-  for (size_t i = 0; i < nums_size; ++i) {
+  for (size_t i = 0; i < nums_size; ++i)
     DEBUG_ASSERT(nums[i] == 0);
-  }
 
   arr_clear(chars, chars_size, sizeof(char));
-  for (size_t i = 0; i < chars_size; ++i) {
+  for (size_t i = 0; i < chars_size; ++i)
     DEBUG_ASSERT(chars[i] == 0);
-  }
 
   arr_clear(strings, strings_size, sizeof(char *));
-  for (size_t i = 0; i < strings_size; ++i) {
+  for (size_t i = 0; i < strings_size; ++i)
     DEBUG_ASSERT(strings[i] == 0);
-  }
 }
 
 static void test_arr_contains(void) {
@@ -99,19 +96,16 @@ static void test_arr_reverse(void) {
   char *strings_reversed[] = {"nonstdlib", "is", "this", "hello"};
 
   arr_reverse(nums, nums_size, sizeof(int));
-  for (size_t i = 0; i < nums_size; ++i) {
+  for (size_t i = 0; i < nums_size; ++i)
     DEBUG_ASSERT(nums[i] == nums_reversed[i]);
-  }
 
   arr_reverse(chars, chars_size, sizeof(char));
-  for (size_t i = 0; i < chars_size; ++i) {
+  for (size_t i = 0; i < chars_size; ++i)
     DEBUG_ASSERT(chars[i] == chars_reversed[i]);
-  }
 
   arr_reverse(strings, strings_size, sizeof(char *));
-  for (size_t i = 0; i < strings_size; ++i) {
+  for (size_t i = 0; i < strings_size; ++i)
     DEBUG_ASSERT(strcmp(strings[i], strings_reversed[i]) == 0);
-  }
 }
 
 static void test_arr_swap(void) {
