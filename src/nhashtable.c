@@ -109,20 +109,20 @@ void *ht_get(const ht_t *table, const char *key) {
  * @return a malloc'd hash table
  */
 ht_t *ht_init(uint32_t init_max_entries) {
-  ht_t *new_ht = malloc(sizeof(*new_ht));
-  if (new_ht == NULL)
+  ht_t *table = malloc(sizeof(*table));
+  if (table == NULL)
     err_malloc_fail();
 
-  new_ht->n_entries = 0;
-  new_ht->max_entries = init_max_entries;
-  new_ht->entries = malloc(init_max_entries * sizeof(new_ht->entries));
-  if (new_ht->entries == NULL)
+  table->n_entries = 0;
+  table->max_entries = init_max_entries;
+  table->entries = malloc(init_max_entries * sizeof(table->entries));
+  if (table->entries == NULL)
     err_malloc_fail();
 
   for (size_t i = 0; i < init_max_entries; ++i)
-    new_ht->entries[i] = NULL;
+    table->entries[i] = NULL;
 
-  return new_ht;
+  return table;
 }
 
 /**
@@ -218,6 +218,9 @@ void ht_put(ht_t *table, const char *key, const void *value,
     // Existing key, update its value
     table->entries[hash_index]->value =
         realloc(table->entries[hash_index]->value, value_size);
+    if (table->entries[hash_index]->value == NULL)
+      err_malloc_fail();
+
     memcpy(table->entries[hash_index]->value, value, value_size);
   }
 }

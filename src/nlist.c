@@ -43,10 +43,8 @@ static void list_shift_left(const list_t *list) {
 static void list_expand(list_t *list) {
   size_t new_size = list->max_size * 2;
   list->entries = realloc(list->entries, new_size * sizeof(list->entries));
-  if (list->entries == NULL) {
-    free(list);
+  if (list->entries == NULL)
     err_malloc_fail();
-  }
 
   list->max_size = new_size;
 }
@@ -81,10 +79,8 @@ list_t *list_init(const size_t init_size) {
   list->max_size = init_size;
   list->cur_size = 0;
   list->entries = malloc(init_size * sizeof(*list->entries));
-  if (list->entries == NULL) {
-    free(list);
+  if (list->entries == NULL)
     err_malloc_fail();
-  }
 
   return list;
 }
@@ -162,9 +158,8 @@ void list_free(list_t *list) {
  * @param list list to map functions onto
  */
 void list_map(const list_t *list, void(func)(void *)) {
-  for (size_t i = 0; i < list->cur_size; ++i) {
+  for (size_t i = 0; i < list->cur_size; ++i)
     func(list->entries[i]);
-  }
 }
 
 /**

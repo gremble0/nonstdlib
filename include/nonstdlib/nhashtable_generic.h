@@ -124,20 +124,20 @@
    * @return a malloc'd hash table                                             \
    */                                                                          \
   type##_ht_t *type##_ht_init(uint32_t init_max_entries) {                     \
-    type##_ht_t *new_ht = malloc(sizeof(*new_ht));                             \
-    if (new_ht == NULL)                                                        \
+    type##_ht_t *table = malloc(sizeof(*table));                               \
+    if (table == NULL)                                                         \
       err_malloc_fail();                                                       \
                                                                                \
-    new_ht->n_entries = 0;                                                     \
-    new_ht->max_entries = init_max_entries;                                    \
-    new_ht->entries = malloc(init_max_entries * sizeof(new_ht->entries));      \
-    if (new_ht->entries == NULL)                                               \
+    table->n_entries = 0;                                                      \
+    table->max_entries = init_max_entries;                                     \
+    table->entries = malloc(init_max_entries * sizeof(table->entries));        \
+    if (table->entries == NULL)                                                \
       err_malloc_fail();                                                       \
                                                                                \
     for (size_t i = 0; i < init_max_entries; ++i)                              \
-      new_ht->entries[i] = NULL;                                               \
+      table->entries[i] = NULL;                                                \
                                                                                \
-    return new_ht;                                                             \
+    return table;                                                              \
   }                                                                            \
                                                                                \
   /**                                                                          \
@@ -150,6 +150,9 @@
     table->max_entries *= 2;                                                   \
     table->entries = realloc(table->entries, table->max_entries *              \
                                                  sizeof(type##_ht_entry_t *)); \
+    if (table->entries == NULL)                                                \
+      err_malloc_fail();                                                       \
+                                                                               \
     for (size_t i = prev_max_entries; i < table->max_entries; ++i)             \
       table->entries[i] = NULL;                                                \
                                                                                \
@@ -226,6 +229,9 @@
     } else {                                                                   \
       table->entries[hash_index]->value =                                      \
           realloc(table->entries[hash_index]->value, value_size);              \
+      if (table->entries[hash_index]->value == NULL)                           \
+        err_malloc_fail();                                                     \
+                                                                               \
       memcpy(table->entries[hash_index]->value, value, value_size);            \
     }                                                                          \
   }\
