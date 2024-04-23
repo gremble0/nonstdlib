@@ -5,8 +5,6 @@
 #include "nerror.h"
 #include "nlist.h"
 
-// TODO: negative indicies to index from the back of lists
-
 /**
  * @brief Move each list element one index to the right, assumes the list has
  * allocated memory for one more element
@@ -79,19 +77,15 @@ int list_contains(const list_t *list, const void *val) {
  * @param type_size amount of bytes used for each element in the list
  * @return a malloc'd list that should to be freed using list_free()
  */
-list_t *list_init(const size_t init_size) {
-  list_t *list = malloc(sizeof(*list));
-  if (list == NULL) {
-    err_malloc_fail();
-  }
+list_t list_init(const size_t init_size) {
+  list_t list = {
+      .max_size = init_size,
+      .cur_size = 0,
+      .entries = malloc(init_size * sizeof(list.entries)),
+  };
 
-  list->max_size = init_size;
-  list->cur_size = 0;
-  list->entries = malloc(init_size * sizeof(list->entries));
-  if (list->entries == NULL) {
-    free(list);
+  if (list.entries == NULL)
     err_malloc_fail();
-  }
 
   return list;
 }
@@ -149,9 +143,8 @@ void *list_pop_front(list_t *list) {
  * @param list list to clear
  */
 void list_clear(list_t *list) {
-  for (size_t i = 0; i < list->cur_size; ++i) {
+  for (size_t i = 0; i < list->cur_size; ++i)
     list->entries[i] = NULL;
-  }
 
   list->cur_size = 0;
 }
@@ -161,10 +154,7 @@ void list_clear(list_t *list) {
  *
  * @param list list to free
  */
-void list_free(list_t *list) {
-  free(list->entries);
-  free(list);
-}
+void list_free(list_t *list) { free(list->entries); }
 
 /**
  * @brief Map a function on each element in the list. For example you could map
