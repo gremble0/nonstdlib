@@ -17,7 +17,6 @@ void test_hashtable_int(void) {
   ht_put(table, "bbb", strlen("bbb") + 1, &b, sizeof(int));
   DEBUG_ASSERT(table->n_entries == 2);
   ht_put(table, "bbb", strlen("bbb") + 1, &c, sizeof(int));
-  ht_print(table);
   DEBUG_ASSERT(table->n_entries == 2);
 
   DEBUG_ASSERT(*(int *)ht_get(table, "asd", strlen("asd") + 1) == 4);

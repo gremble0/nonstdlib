@@ -17,13 +17,14 @@ string_t *string_of(const char *s, size_t s_len) {
 }
 
 void string_clear(string_t *str) {
-  str->s = realloc(str->s, 0);
+  free(str->s);
   str->s = NULL;
   str->len = 0;
 }
 
 void string_set(string_t *str, const char *s, size_t s_len) {
-  str->s = realloc(str->s, s_len * sizeof(char));
+  free(str->s); // This is safe because free(NULL) is a no-op
+  str->s = malloc(s_len * sizeof(char));
   if (str->s == NULL)
     err_malloc_fail();
 
