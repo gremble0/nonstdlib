@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "nerror.h"
-#include "nstring.h"
+#include "nonstdlib/nerror.h"
+#include "nonstdlib/nstring.h"
 
 string_t *string_of(const char *s, size_t s_len) {
   string_t *str = malloc(s_len * sizeof(char));
@@ -16,6 +16,7 @@ string_t *string_of(const char *s, size_t s_len) {
 }
 
 void string_clear(string_t *str) {
+  str->s = realloc(str->s, 0);
   str->s = NULL;
   str->len = 0;
 }

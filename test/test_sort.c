@@ -1,5 +1,5 @@
-#include "nerror.h"
-#include "nsort.h"
+#include "nonstdlib/nerror.h"
+#include "nonstdlib/nsort.h"
 #include "test.h"
 
 static void test_sort(void (*sort_func)(int[], int)) {

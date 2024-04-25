@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "nerror.h"
-#include "nhashtable_generic.h"
+#include "nonstdlib/nerror.h"
+#include "nonstdlib/nhashtable_generic.h"
 #include "test.h"
 
 ht_prototype(int);

@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "nerror.h"
-#include "nlist.h"
+#include "nonstdlib/nerror.h"
+#include "nonstdlib/nlist.h"
 
 // TODO: negative indicies to index from the back of lists
 

@@ -1,9 +1,11 @@
+INCLUDEDIR := ../include
+
 CC := clang
-CFLAGS := -Wall -Wextra -I../include/nonstdlib
+CFLAGS := -Wall -Wextra -I$(INCLUDEDIR)
 RELEASE_FLAGS := $(CFLAGS) -O2
 DEBUG_FLAGS := $(CFLAGS) -g -O0
 
-OBJS := nhashtable.o nlinked_list.o nsort.o narray.o nlist.o nerror.o
+OBJS := nhashtable.o nlinked_list.o nsort.o narray.o nlist.o nerror.o nstring.o
 DEBUG_OBJS := $(OBJS:.o=_debug.o)
 LIB := libnonstdlib.a
 

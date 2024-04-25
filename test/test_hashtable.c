@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "nerror.h"
-#include "nhashtable.h"
+#include "nonstdlib/nerror.h"
+#include "nonstdlib/nhashtable.h"
 #include "test.h"
 
 void test_hashtable_int(void) {

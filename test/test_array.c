@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "narray.h"
-#include "nerror.h"
+#include "nonstdlib/narray.h"
+#include "nonstdlib/nerror.h"
 #include "test.h"
 
 static void test_arr_clear(void) {

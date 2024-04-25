@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "nerror.h"
-#include "nlist.h"
+#include "nonstdlib/nerror.h"
+#include "nonstdlib/nlist.h"
 #include "test.h"
 
 static void test_list_push_pop(void) {

@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "nerror.h"
-#include "nhashtable.h"
+#include "nonstdlib/nerror.h"
+#include "nonstdlib/nhashtable.h"
 
 // TODO: expose as public
 /**

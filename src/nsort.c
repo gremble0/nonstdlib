@@ -1,5 +1,5 @@
-#include "nsort.h"
-#include "narray.h"
+#include "nonstdlib/nsort.h"
+#include "nonstdlib/narray.h"
 
 /**
  * @brief Sort an array using some sorting algorithm

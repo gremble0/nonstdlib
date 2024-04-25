@@ -16,9 +16,10 @@
 #define TEST_MODULE_END(module)                                                \
   printf("\033[0;32mTest successful for module '%s' \033[0;37m\n", module)
 
+void test_all_sorts();
 void test_arr();
 void test_hashtable();
 void test_hashtable_generic();
 void test_linked_list();
 void test_list();
-void test_all_sorts();
+void test_string();
