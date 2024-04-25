@@ -11,7 +11,7 @@ git clone git@github.com:gremble0/nonstdlib.git
 cd nonstdlib/src
 make
 ```
-Now the static library `libnonstdlib.a` will be generated inside nonstdlib/src. You can link with the static library and include the headers in your project. All the modules in nonstdlib are prefixed with `n`, see [Modules](#modules) for more details about all the library's features.
+Now the static library `libnonstdlib.a` will be generated inside nonstdlib/src. You can link with the static library and include the headers in your project. All the modules in nonstdlib are prefixed with `n`, see [Modules](#modules) for a full list of modules in the library.
 
 ## Example
 Consider this simple file structure:
@@ -35,7 +35,7 @@ cd ../../src
 cc main.c -L../nonstdlib/src -I../nonstdlib/include -lnonstdlib
 ```
 
-And then use it in main.c like this (this should print "nonstdlib" to stdout):
+And then use it in main.c like this (this should print "this is in a hashtable" and "this is in a list" to stdout):
 ```c
 #include <stdio.h>
 
@@ -48,17 +48,19 @@ typedef struct {
 } list_element;
 
 int main(void) {
-  ht_t *table = ht_init(5);
+  // Small hashtable demo
+  ht_t *table = ht_init(8);
   char key[] = "yo";
-  char value[] = "nonstdlib";
-  ht_put(table, "yo", sizeof(key), "nonstdlib", sizeof(value));
+  char value[] = "this is in a hashtable";
+  ht_put(table, key, sizeof(key), value, sizeof(value));
 
   printf("%s\n", (char *)ht_get(table, key, sizeof(key)));
 
-  list_t *list = list_init(5);
+  // Small list demo
+  list_t *list = list_init(8);
   list_push_back(list, &(list_element){
                            .x = 10,
-                           .s = "hello",
+                           .s = "this is in a list",
                        });
 
   printf("%s\n", ((list_element *)list_pop_front(list))->s);
