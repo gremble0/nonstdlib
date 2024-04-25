@@ -5,10 +5,11 @@
 #include "nonstdlib/nstring.h"
 
 string_t *string_of(const char *s, size_t s_len) {
-  string_t *str = malloc(s_len * sizeof(char));
+  string_t *str = malloc(sizeof(*str));
   if (str == NULL)
     err_malloc_fail();
 
+  str->s = malloc(s_len * sizeof(char));
   memcpy(str->s, s, s_len);
   str->len = s_len;
 

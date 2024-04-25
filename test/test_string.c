@@ -8,7 +8,15 @@ void test_string_of() {
   const char s[] = "Hello, World";
   string_t *str = string_of(s, sizeof(s) - 1);
 
+  DEBUG_ASSERT(strlen(s) == str->len);
   DEBUG_ASSERT(strncmp(str->s, s, str->len) == 0);
+
+  string_t *str_copy = string_of(str->s, str->len);
+  DEBUG_ASSERT(str_copy->len == str->len);
+  DEBUG_ASSERT(strncmp(str_copy->s, str->s, str_copy->len) == 0);
+
+  string_free(str);
+  string_free(str_copy);
 }
 
 void test_string() {
