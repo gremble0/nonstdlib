@@ -28,6 +28,7 @@ void string_set(string_t *str, const char *s, size_t s_len) {
   if (str->s == NULL)
     err_malloc_fail();
 
+  str->len = s_len;
   memcpy(str->s, s, s_len);
 }
 

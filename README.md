@@ -18,7 +18,8 @@ Consider this simple file structure:
 ```
 .
 ├─nonstdlib/
-│ ├─...
+│ ├─include/
+│ │ └─...
 │ └─src/
 │   └─...
 └─src/
@@ -31,21 +32,39 @@ cd nonstdlib/src
 make
 
 cd ../../src
-clang main.c -L../nonstdlib/src -I../nonstdlib/src -lnonstdlib
+cc main.c -L../nonstdlib/src -I../nonstdlib/include -lnonstdlib
 ```
 
 And then use it in main.c like this (this should print "nonstdlib" to stdout):
 ```c
 #include <stdio.h>
-#include "nhashtable.h"
+
+#include "nonstdlib/nhashtable.h"
+#include "nonstdlib/nlist.h"
+
+typedef struct {
+  int x;
+  char *s;
+} list_element;
 
 int main(void) {
-    ht_t *table = ht_init(5);
-    ht_put(table, "yo", "nonstdlib");
+  ht_t *table = ht_init(5);
+  char key[] = "yo";
+  char value[] = "nonstdlib";
+  ht_put(table, "yo", sizeof(key), "nonstdlib", sizeof(value));
 
-    printf("%s\n", (char*)ht_get(table, "yo"));
-    
-    return 0;
+  printf("%s\n", (char *)ht_get(table, key, sizeof(key)));
+
+  list_t *list = list_init(5);
+  list_push_back(list, &(list_element){
+                           .x = 10,
+                           .s = "hello",
+                       });
+
+  printf("%s\n", ((list_element *)list_pop_front(list))->s);
+
+  ht_free(table);
+  list_free(list);
 }
 ```
 
@@ -56,4 +75,5 @@ List of currently implemented modules:
 - `nlinked_list.h`: Type and functions for the linked list data structure.
 - `nlist.h` (WIP): Type and functions for the list data structure.
 - `narray.h`: Utilities for normal C arrays.
+- `nstring.h`: Simple string interface that saves the length of strings instead of relying on nullbytes.
 - `nsort.h`: Some sorting algorithms for builtin C arrays.

@@ -39,6 +39,11 @@ void test_string_set(void) {
   string_set(str, s2, sizeof(s2) - 1);
   DEBUG_ASSERT(strncmp(str->s, s2, str->len) == 0);
 
+  string_clear(str);
+  string_set(str, s1, sizeof(s1) - 1);
+  DEBUG_ASSERT(strlen(s1) == str->len);
+  DEBUG_ASSERT(strncmp(str->s, s1, str->len) == 0);
+
   string_free(str);
 }
 
