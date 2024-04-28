@@ -16,7 +16,7 @@
 static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
   ht_entry_t *old = table->entries[old_hash_index];
   uint32_t old_rehashed =
-      ht_hash(old->key, strlen(old->key) + 1) % table->max_entries;
+      ht_hash(old->key, strlen(old->key) + 1) % table->max_size;
   if (old_rehashed == old_hash_index)
     return;
 
@@ -25,7 +25,7 @@ static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
   while (table->entries[old_rehashed] != NULL) {
     ++old_rehashed;
 
-    if (old_rehashed >= table->max_entries)
+    if (old_rehashed >= table->max_size)
       old_rehashed = 0;
   }
 
@@ -56,7 +56,7 @@ uint32_t ht_hash(const char *key, size_t key_size) {
  * @return value of the given key
  */
 void *ht_get(const ht_t *table, const char *key, size_t key_size) {
-  uint32_t index = ht_hash(key, key_size) % table->max_entries;
+  uint32_t index = ht_hash(key, key_size) % table->max_size;
   ht_entry_t *entry = table->entries[index];
   if (entry == NULL)
     return NULL;
@@ -77,14 +77,14 @@ void *ht_get(const ht_t *table, const char *key, size_t key_size) {
  * @param init_size the initial size of the hash table, can be changed by ht_put
  * @return a malloc'd hash table
  */
-ht_t *ht_init(size_t init_max_entries) {
+ht_t *ht_init(size_t init_max_size) {
   ht_t *table = malloc(sizeof(*table));
   if (table == NULL)
     err_malloc_fail();
 
-  table->n_entries = 0;
-  table->max_entries = init_max_entries;
-  table->entries = calloc(init_max_entries, sizeof(table->entries));
+  table->cur_size = 0;
+  table->max_size = init_max_size;
+  table->entries = calloc(init_max_size, sizeof(table->entries));
   if (table->entries == NULL)
     err_malloc_fail();
 
@@ -97,19 +97,19 @@ ht_t *ht_init(size_t init_max_entries) {
  * @param table hash table to expand the size of
  */
 void ht_expand(ht_t *table) {
-  size_t prev_max_entries = table->max_entries;
-  table->max_entries *= 2;
+  size_t prev_max_size = table->max_size;
+  table->max_size *= 2;
   table->entries =
-      realloc(table->entries, table->max_entries * sizeof(table->entries));
+      realloc(table->entries, table->max_size * sizeof(table->entries));
   if (table->entries == NULL)
     err_malloc_fail();
 
   // Set new indexes to NULL
-  for (size_t i = prev_max_entries; i < table->max_entries; ++i)
+  for (size_t i = prev_max_size; i < table->max_size; ++i)
     table->entries[i] = NULL;
 
   // Loop through table and reindex based on new size
-  for (size_t i = 0; i < prev_max_entries; ++i)
+  for (size_t i = 0; i < prev_max_size; ++i)
     if (table->entries[i] != NULL)
       ht_rehash_index(table, i);
 }
@@ -120,7 +120,7 @@ void ht_expand(ht_t *table) {
  * @param table table to free memory for
  */
 void ht_free(ht_t *table) {
-  for (size_t i = 0; i < table->max_entries; ++i) {
+  for (size_t i = 0; i < table->max_size; ++i) {
     if (table->entries[i] != NULL)
       free(table->entries[i]);
   }
@@ -135,7 +135,7 @@ void ht_free(ht_t *table) {
  * @param table table to print
  */
 void ht_print(const ht_t *table) {
-  for (size_t i = 0; i < table->max_entries; ++i) {
+  for (size_t i = 0; i < table->max_size; ++i) {
     if (table->entries[i] == NULL) {
       printf("[%zu]: --empty--\n", i);
     } else {
@@ -149,7 +149,7 @@ static void ht_put_new(ht_t *table, char *key, void *value, size_t hash_index) {
   table->entries[hash_index] = malloc(sizeof(*table->entries[hash_index]));
   table->entries[hash_index]->key = key;
   table->entries[hash_index]->value = value;
-  ++table->n_entries;
+  ++table->cur_size;
 }
 
 /**
@@ -163,10 +163,10 @@ static void ht_put_new(ht_t *table, char *key, void *value, size_t hash_index) {
  */
 void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
   // Table should at maximum be at 50% capacity to avoid collisions
-  if (table->n_entries + 1 > table->max_entries / 2)
+  if (table->cur_size + 1 > table->max_size / 2)
     ht_expand(table);
 
-  uint32_t hash_index = ht_hash(key, key_size) % table->max_entries;
+  uint32_t hash_index = ht_hash(key, key_size) % table->max_size;
   const ht_entry_t *existing_entry = table->entries[hash_index];
 
   if (existing_entry == NULL) {
@@ -179,7 +179,7 @@ void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
       ++hash_index;
 
       // Wrap around to 0 for overflows
-      if (hash_index >= table->max_entries)
+      if (hash_index >= table->max_size)
         hash_index = 0;
     }
 

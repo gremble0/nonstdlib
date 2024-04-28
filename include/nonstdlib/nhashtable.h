@@ -10,8 +10,8 @@ typedef struct {
 
 typedef struct {
   ht_entry_t **entries;
-  size_t n_entries;
-  size_t max_entries;
+  size_t cur_size;
+  size_t max_size;
 } ht_t;
 
 uint32_t ht_hash(const char *key, size_t key_size);
