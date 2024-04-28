@@ -72,7 +72,7 @@ int main(void) {
 
 ## Modules
 List of currently implemented modules:
-- `nhashtable.h` and `ngeneric_hashtable.h`: Type and functions for the hashtable data structure.
+- `nhashtable.h`: Type and functions for a typical hashtable data structure.
 - `nerror.h`: Contains some functions for handling typical errors and printing more useful debug information. Also has a custom assert macro that uses nonstdlib's error handling on error
 - `nlinked_list.h`: Type and functions for the linked list data structure.
 - `nlist.h` (WIP): Type and functions for the list data structure.

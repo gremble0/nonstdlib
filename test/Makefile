@@ -4,7 +4,7 @@ INCLUDEDIR := ../include
 CC := clang
 CFLAGS := -Wall -Wextra -g -O0 -I../include/nonstdlib
 
-OBJS := test_array.o test_hashtable.o test_hashtable_generic.o test_linked_list.o test_list.o test_sort.o test_string.o
+OBJS := test_array.o test_hashtable.o test_linked_list.o test_list.o test_sort.o test_string.o
 DEBUG_OBJS := $(OBJS:.o=_debug.o)
 
 all: clean src_release $(OBJS)
