@@ -6,21 +6,6 @@
 #include "nonstdlib/nhashtable.h"
 
 /**
- * @brief djb2 hash function.
- *
- * @return the key hashed. (needs to be %'d by table size to get index into
- * a hashtable)
- */
-uint32_t ht_hash(const char *key, size_t key_size) {
-  uint32_t hash = 5381;
-
-  for (size_t i = 0; i < key_size; ++i)
-    hash = hash * 33 + key[i];
-
-  return hash;
-}
-
-/**
  * @brief Rehashes entry at old_hash_index and inserts it into the new hash
  * index. Used if the tables max entries has changed and the old hash index may
  * no longer be correct for the given entry.
@@ -45,6 +30,21 @@ static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
   }
 
   table->entries[old_rehashed] = old;
+}
+
+/**
+ * @brief djb2 hash function.
+ *
+ * @return the key hashed. (needs to be %'d by table size to get index into
+ * a hashtable)
+ */
+uint32_t ht_hash(const char *key, size_t key_size) {
+  uint32_t hash = 5381;
+
+  for (size_t i = 0; i < key_size; ++i)
+    hash = hash * 33 + key[i];
+
+  return hash;
 }
 
 /**
@@ -84,13 +84,9 @@ ht_t *ht_init(size_t init_max_entries) {
 
   table->n_entries = 0;
   table->max_entries = init_max_entries;
-  table->entries =
-      malloc(init_max_entries * sizeof(table->entries)); // TODO: calloc
+  table->entries = calloc(init_max_entries, sizeof(table->entries));
   if (table->entries == NULL)
     err_malloc_fail();
-
-  for (size_t i = 0; i < init_max_entries; ++i)
-    table->entries[i] = NULL;
 
   return table;
 }
@@ -149,6 +145,13 @@ void ht_print(const ht_t *table) {
   }
 }
 
+static void ht_put_new(ht_t *table, char *key, void *value, size_t hash_index) {
+  table->entries[hash_index] = malloc(sizeof(*table->entries[hash_index]));
+  table->entries[hash_index]->key = key;
+  table->entries[hash_index]->value = value;
+  ++table->n_entries;
+}
+
 /**
  * @brief Put (insert) a value into a hash table
  *
@@ -159,7 +162,7 @@ void ht_print(const ht_t *table) {
  * @param value_size size of value to put in
  */
 void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
-  // Table should at maximum be at 50% capacity
+  // Table should at maximum be at 50% capacity to avoid collisions
   if (table->n_entries + 1 > table->max_entries / 2)
     ht_expand(table);
 
@@ -167,11 +170,8 @@ void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
   const ht_entry_t *existing_entry = table->entries[hash_index];
 
   if (existing_entry == NULL) {
-    // New key
-    table->entries[hash_index] = malloc(sizeof(*table->entries[hash_index]));
-    table->entries[hash_index]->key = key;
-    table->entries[hash_index]->value = value;
-    ++table->n_entries;
+    // New key, no collision
+    ht_put_new(table, key, value, hash_index);
 
   } else if (strncmp(existing_entry->key, key, key_size) != 0) {
     // New key, but hash_index is occupied (collision)
@@ -183,10 +183,8 @@ void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
         hash_index = 0;
     }
 
-    table->entries[hash_index] = malloc(sizeof(*table->entries[hash_index]));
-    table->entries[hash_index]->key = key;
-    table->entries[hash_index]->value = value;
-    ++table->n_entries;
+    ht_put_new(table, key, value, hash_index);
+
   } else {
     // Existing key, update its value
     table->entries[hash_index]->value = value;
