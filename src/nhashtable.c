@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,14 +5,13 @@
 #include "nonstdlib/nerror.h"
 #include "nonstdlib/nhashtable.h"
 
-// TODO: expose as public
 /**
  * @brief djb2 hash function.
  *
  * @return the key hashed. (needs to be %'d by table size to get index into
- * hashtable)
+ * a hashtable)
  */
-static uint32_t hash(const char *key, size_t key_size) {
+uint32_t ht_hash(const char *key, size_t key_size) {
   uint32_t hash = 5381;
 
   for (size_t i = 0; i < key_size; ++i)
@@ -33,7 +31,7 @@ static uint32_t hash(const char *key, size_t key_size) {
 static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
   ht_entry_t *old = table->entries[old_hash_index];
   uint32_t old_rehashed =
-      hash(old->key, strlen(old->key) + 1) % table->max_entries;
+      ht_hash(old->key, strlen(old->key) + 1) % table->max_entries;
   if (old_rehashed == old_hash_index)
     return;
 
@@ -58,7 +56,7 @@ static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
  * @return value of the given key
  */
 void *ht_get(const ht_t *table, const char *key, size_t key_size) {
-  uint32_t index = hash(key, key_size) % table->max_entries;
+  uint32_t index = ht_hash(key, key_size) % table->max_entries;
   ht_entry_t *entry = table->entries[index];
   if (entry == NULL)
     return NULL;
@@ -165,7 +163,7 @@ void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
   if (table->n_entries + 1 > table->max_entries / 2)
     ht_expand(table);
 
-  uint32_t hash_index = hash(key, key_size) % table->max_entries;
+  uint32_t hash_index = ht_hash(key, key_size) % table->max_entries;
   const ht_entry_t *existing_entry = table->entries[hash_index];
 
   if (existing_entry == NULL) {
@@ -173,7 +171,6 @@ void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
     table->entries[hash_index] = malloc(sizeof(*table->entries[hash_index]));
     table->entries[hash_index]->key = key;
     table->entries[hash_index]->value = value;
-    // ht_create_entry(key, key_size, value, value_size);
     ++table->n_entries;
 
   } else if (strncmp(existing_entry->key, key, key_size) != 0) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdint.h>
 
 typedef struct {
   char *key;
@@ -13,6 +14,7 @@ typedef struct {
   size_t max_entries;
 } ht_t;
 
+uint32_t ht_hash(const char *key, size_t key_size);
 void *ht_get(const ht_t *table, const char *key, size_t key_size);
 ht_t *ht_init(size_t init_size);
 void ht_expand(ht_t *table);
