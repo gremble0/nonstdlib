@@ -12,11 +12,11 @@ void test_hashtable_int(void) {
   int b = 0;
   int c = 9;
 
-  ht_put(table, "asd", strlen("asd") + 1, &a, sizeof(int));
+  ht_put(table, "asd", strlen("asd") + 1, &a);
   DEBUG_ASSERT(table->n_entries == 1);
-  ht_put(table, "bbb", strlen("bbb") + 1, &b, sizeof(int));
+  ht_put(table, "bbb", strlen("bbb") + 1, &b);
   DEBUG_ASSERT(table->n_entries == 2);
-  ht_put(table, "bbb", strlen("bbb") + 1, &c, sizeof(int));
+  ht_put(table, "bbb", strlen("bbb") + 1, &c);
   DEBUG_ASSERT(table->n_entries == 2);
 
   DEBUG_ASSERT(*(int *)ht_get(table, "asd", strlen("asd") + 1) == 4);
@@ -28,15 +28,15 @@ void test_hashtable_int(void) {
 void test_hashtable_string(void) {
   ht_t *table = ht_init(5);
 
-  ht_put(table, "asd", strlen("asd") + 1, "YOYO", strlen("YOYO") + 1);
+  ht_put(table, "asd", strlen("asd") + 1, "YOYO");
   DEBUG_ASSERT(table->n_entries == 1);
-  ht_put(table, "asd", strlen("asd") + 1, "YAYA", strlen("YAYA") + 1);
+  ht_put(table, "asd", strlen("asd") + 1, "YAYA");
   DEBUG_ASSERT(table->n_entries == 1);
-  ht_put(table, "qwerty", strlen("qwerty") + 1, "123", strlen("123") + 1);
+  ht_put(table, "qwerty", strlen("qwerty") + 1, "123");
   DEBUG_ASSERT(table->n_entries == 2);
-  ht_put(table, "qwertz", strlen("qwertz") + 1, "BABA", strlen("BABA") + 1);
+  ht_put(table, "qwertz", strlen("qwertz") + 1, "BABA");
   DEBUG_ASSERT(table->n_entries == 3);
-  ht_put(table, "qwertyb", strlen("qwertyb") + 1, "POPO", strlen("POPO") + 1);
+  ht_put(table, "qwertyb", strlen("qwertyb") + 1, "POPO");
   DEBUG_ASSERT(table->n_entries == 4);
 
   DEBUG_ASSERT(strcmp(ht_get(table, "asd", strlen("asd") + 1), "YAYA") == 0);
@@ -48,12 +48,10 @@ void test_hashtable_string(void) {
 
   ht_put(table, "iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirlur",
          strlen("iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirlur") + 1,
-         "POPO", strlen("POPO") + 1);
+         "POPO");
   DEBUG_ASSERT(table->n_entries == 5);
   ht_put(table, "", strlen("") + 1,
-         "qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfj",
-         strlen("qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfj") +
-             1 + 1);
+         "qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfj");
   DEBUG_ASSERT(table->n_entries == 6);
   DEBUG_ASSERT(table->max_entries == 20);
 
