@@ -6,6 +6,7 @@
 typedef struct {
   char *key;
   void *value;
+  uint32_t hash; // So we don't need to resize when expanding
 } ht_entry_t;
 
 typedef struct {

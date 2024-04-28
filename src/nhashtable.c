@@ -15,16 +15,14 @@
  */
 static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
   ht_entry_t *old = table->entries[old_hash_index];
-  uint32_t old_rehashed =
-      ht_hash(old->key, strlen(old->key) + 1) % table->max_size;
-  if (old_rehashed == old_hash_index)
-    return;
+  uint32_t old_rehashed = old->hash % table->max_size;
 
   // Move from old index to first available index at or after the new index
   table->entries[old_hash_index] = NULL;
   while (table->entries[old_rehashed] != NULL) {
     ++old_rehashed;
 
+    // Wrap to 0 on overflow
     if (old_rehashed >= table->max_size)
       old_rehashed = 0;
   }
@@ -145,11 +143,13 @@ void ht_print(const ht_t *table) {
   }
 }
 
-static void ht_put_new(ht_t *table, char *key, void *value, size_t hash_index) {
-  table->entries[hash_index] = malloc(sizeof(*table->entries[hash_index]));
-  table->entries[hash_index]->key = key;
-  table->entries[hash_index]->value = value;
-  ++table->cur_size;
+static ht_entry_t *ht_create_entry(char *key, void *value, size_t hash) {
+  ht_entry_t *entry = malloc(sizeof(*entry));
+  entry->key = key;
+  entry->value = value;
+  entry->hash = hash;
+
+  return entry;
 }
 
 /**
@@ -166,12 +166,14 @@ void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
   if (table->cur_size + 1 > table->max_size / 2)
     ht_expand(table);
 
-  uint32_t hash_index = ht_hash(key, key_size) % table->max_size;
+  uint32_t hash = ht_hash(key, key_size);
+  uint32_t hash_index = hash % table->max_size;
   const ht_entry_t *existing_entry = table->entries[hash_index];
 
   if (existing_entry == NULL) {
     // New key, no collision
-    ht_put_new(table, key, value, hash_index);
+    table->entries[hash_index] = ht_create_entry(key, value, hash);
+    ++table->cur_size;
 
   } else if (strncmp(existing_entry->key, key, key_size) != 0) {
     // New key, but hash_index is occupied (collision)
@@ -183,7 +185,8 @@ void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
         hash_index = 0;
     }
 
-    ht_put_new(table, key, value, hash_index);
+    table->entries[hash_index] = ht_create_entry(key, value, hash);
+    ++table->cur_size;
 
   } else {
     // Existing key, update its value
