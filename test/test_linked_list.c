@@ -40,25 +40,19 @@ static void test_ll_push_front_pop(void) {
   ll_push_front(ll, &c);
   // ll should be: 3 -> 2 -> 1
 
-  int *popped_a = ll_pop_front(ll);
+  DEBUG_ASSERT(*(int *)ll_pop_front(ll) == 3);
   // ll should be: 2 -> 1
-  int *popped_b = ll_pop_back(ll);
+  DEBUG_ASSERT(*(int *)ll_pop_back(ll) == 1);
   // ll should be: 2
-  int *popped_c = ll_pop_back(ll);
+  DEBUG_ASSERT(*(int *)ll_pop_back(ll) == 2);
   // ll should be: (nil)
-
-  DEBUG_ASSERT(*popped_a == 3);
-  DEBUG_ASSERT(*popped_b == 1);
-  DEBUG_ASSERT(*popped_c == 2);
   DEBUG_ASSERT(ll_peek_front(ll) == NULL);
 
   ll_push_front(ll, &a);
   // ll should be: 1
 
-  int *popped_d = ll_pop_back(ll);
+  DEBUG_ASSERT(*(int *)ll_pop_back(ll) == 1);
   // ll should be: (nil)
-
-  DEBUG_ASSERT(*popped_d == 1);
   DEBUG_ASSERT(ll_peek_front(ll) == NULL);
 
   ll_free(ll);
