@@ -9,7 +9,7 @@ To use the library copy it into your project however you want (as a git submodul
 ```sh
 git clone git@github.com:gremble0/nonstdlib.git
 cd nonstdlib/src
-make
+make # or `make debug` if you want to keep debug symbols
 ```
 Now the static library `libnonstdlib.a` will be generated inside nonstdlib/src. You can link with the static library and include the headers in your project. All the modules in nonstdlib are prefixed with `n`, see [Modules](#modules) for a full list of modules in the library.
 

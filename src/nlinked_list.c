@@ -48,8 +48,7 @@ void *ll_peek_front(ll_t *ll) {
 }
 
 /**
- * @brief Removes last entry in the linked list and returns it. Returned value
- * needs to be freed.
+ * @brief Removes last entry in the linked list and returns it.
  *
  * @param s linked list to pop from
  */
@@ -73,8 +72,7 @@ void *ll_pop_back(ll_t *ll) {
 }
 
 /**
- * @brief Pops value of first entry in the linked list and returns it. Returned
- * value needs to be freed.
+ * @brief Pops first entry in the linked list and returns it.
  *
  * @param s linked list to pop from
  */
@@ -135,7 +133,6 @@ void ll_free(ll_t *ll) {
   ll_entry_t *entry = ll->first;
   while (entry != NULL) {
     ll_entry_t *next = entry->next;
-    free(entry->value);
     free(entry);
     entry = next;
   }
@@ -164,38 +161,17 @@ void ll_print(ll_t *ll) {
 }
 
 /**
- * @brief Helper function to initialize an ll_entry that handles potential
- * errors. ALL MY HOMIES HATE MACROS
- *
- * @param value what to assign to the ll_entry
- * @param type_size size of value's type
- * @return ll_entry with a value, but prev and next set to NULL
- */
-static ll_entry_t *ll_create_entry(const void *value, size_t type_size) {
-  ll_entry_t *ll = malloc(sizeof(*ll));
-  if (ll == NULL)
-    err_malloc_fail();
-
-  ll->value = malloc(type_size);
-  if (ll->value == NULL)
-    err_malloc_fail();
-
-  memcpy(ll->value, value, type_size);
-  ll->prev = NULL;
-  ll->next = NULL;
-
-  return ll;
-}
-
-/**
- * @brief Pushes a value to the end of a linked list (after ll->last). Mallocs
- * and copies ll->type_size bytes from value into the linked list entries value
+ * @brief Pushes a value to the end of a linked list (after ll->last).
  *
  * @param ll linked list to push onto
  * @param value what to push
  */
-void ll_push_back(ll_t *ll, const void *value) {
-  ll_entry_t *new = ll_create_entry(value, ll->type_size);
+void ll_push_back(ll_t *ll, void *value) {
+  ll_entry_t *new = malloc(sizeof(*ll));
+  if (new == NULL)
+    err_malloc_fail();
+
+  new->value = value;
   new->prev = ll->last;
   new->next = NULL;
 
@@ -211,14 +187,16 @@ void ll_push_back(ll_t *ll, const void *value) {
 
 /**
  * @brief Pushes an entry onto the front of the linked list (before ll->first).
- * Mallocs and copies ll->type_size bytes from value into the linked list
- * entries value
  *
  * @param ll linked list to push onto
  * @param value what to push
  */
-void ll_push_front(ll_t *ll, const void *value) {
-  ll_entry_t *new = ll_create_entry(value, ll->type_size);
+void ll_push_front(ll_t *ll, void *value) {
+  ll_entry_t *new = malloc(sizeof(*new));
+  if (new == NULL)
+    err_malloc_fail();
+
+  new->value = value;
   new->prev = NULL;
   new->next = ll->first;
 

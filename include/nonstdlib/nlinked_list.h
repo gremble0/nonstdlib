@@ -24,6 +24,6 @@ void *ll_pop_front(ll_t *ll);
 void *ll_seek(ll_t *ll, size_t index);
 void ll_free(ll_t *ll);
 void ll_print(ll_t *ll);
-void ll_push_back(ll_t *ll, const void *value);
-void ll_push_front(ll_t *ll, const void *value);
+void ll_push_back(ll_t *ll, void *value);
+void ll_push_front(ll_t *ll, void *value);
 void ll_reverse(ll_t *ll);

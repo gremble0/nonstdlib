@@ -32,9 +32,9 @@ static void test_ll_push_back_seek(void) {
 static void test_ll_push_front_pop(void) {
   ll_t *ll = ll_init(sizeof(int));
 
-  const int a = 1;
-  const int b = 2;
-  const int c = 3;
+  int a = 1;
+  int b = 2;
+  int c = 3;
   ll_push_front(ll, &a);
   ll_push_front(ll, &b);
   ll_push_front(ll, &c);
@@ -61,10 +61,6 @@ static void test_ll_push_front_pop(void) {
   DEBUG_ASSERT(*popped_d == 1);
   DEBUG_ASSERT(ll_peek_front(ll) == NULL);
 
-  free(popped_a);
-  free(popped_b);
-  free(popped_c);
-  free(popped_d);
   ll_free(ll);
 }
 
@@ -108,16 +104,16 @@ static void test_ll_all(void) {
   DEBUG_ASSERT(strcmp(ll_seek(ll, 2), "c") == 0);
   DEBUG_ASSERT(strcmp(ll_peek_front(ll), "b") == 0);
 
-  free(ll_pop_back(ll));
+  ll_pop_back(ll);
   // ll should be: "b" -> "a"
   DEBUG_ASSERT(strcmp(ll_peek_front(ll), "b") == 0);
   DEBUG_ASSERT(strcmp(ll_seek(ll, 1), "a") == 0);
 
-  free(ll_pop_back(ll));
+  ll_pop_back(ll);
   // ll should be: "b"
   DEBUG_ASSERT(strcmp(ll_peek_front(ll), "b") == 0);
 
-  free(ll_pop_back(ll));
+  ll_pop_back(ll);
   // ll should be: (nil)
   DEBUG_ASSERT(ll_peek_front(ll) == NULL);
 
