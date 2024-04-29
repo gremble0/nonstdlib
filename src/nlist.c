@@ -5,8 +5,6 @@
 #include "nonstdlib/nerror.h"
 #include "nonstdlib/nlist.h"
 
-// TODO: negative indicies to index from the back of lists
-
 /**
  * @brief Expand max capacity of a list
  *

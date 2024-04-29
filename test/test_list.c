@@ -199,6 +199,9 @@ void test_list_remove(void) {
   DEBUG_ASSERT(list_get(list, 1) == c);
 
   DEBUG_ASSERT(list_remove(list, c) == c);
+  DEBUG_ASSERT(list->cur_size == 1);
+  DEBUG_ASSERT(list_remove(list, c) == NULL);
+  DEBUG_ASSERT(list->cur_size == 1);
 
   list_free(list);
 }

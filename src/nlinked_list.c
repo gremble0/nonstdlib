@@ -5,8 +5,6 @@
 #include "nonstdlib/nerror.h"
 #include "nonstdlib/nlinked_list.h"
 
-// TODO: malloc some return values
-
 /**
  * @brief Initializes an empty linked list
  *

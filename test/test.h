@@ -1,5 +1,3 @@
-// TODO: make this a part of the libarary?
-
 // Assert something is true, if it's not print error message without crashing
 #define ASSERT_TRUE(expr)                                                      \
   do {                                                                         \
