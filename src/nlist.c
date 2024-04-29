@@ -157,7 +157,7 @@ void list_free(list_t *list) {
  *
  * @param list list to map functions onto
  */
-void list_map(const list_t *list, void(func)(void *)) {
+void list_map(const list_t *list, void (*func)(void *)) {
   for (size_t i = 0; i < list->cur_size; ++i)
     func(list->entries[i]);
 }

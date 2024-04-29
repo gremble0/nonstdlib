@@ -2,7 +2,7 @@
 #include "nonstdlib/nsort.h"
 #include "test.h"
 
-static void test_sort(void (*sort_func)(int[], int)) {
+static void test_sort(void (*sort_func)(int *, int)) {
   int nums[] = {5, 1, 4, 2, 8};
   const int nums_size = sizeof(nums) / sizeof(nums[0]);
   int sorted[] = {1, 2, 4, 5, 8};

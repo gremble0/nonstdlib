@@ -1,10 +1,10 @@
 #pragma once
 
 typedef enum {
-  QUICKSORT,
-  BUBBLESORT,
-  INSERTIONSORT,
-  SELECTIONSORT,
+  SORT_QUICKSORT,
+  SORT_BUBBLESORT,
+  SORT_INSERTIONSORT,
+  SORT_SELECTIONSORT,
 } sorting_algorithm;
 
 void sort(int *arr, int size, sorting_algorithm sa);

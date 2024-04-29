@@ -10,16 +10,16 @@
  */
 void sort(int *arr, int size, sorting_algorithm sa) {
   switch (sa) {
-  case BUBBLESORT:
+  case SORT_BUBBLESORT:
     bubblesort(arr, size);
     break;
-  case QUICKSORT:
+  case SORT_QUICKSORT:
     quicksort(arr, size);
     break;
-  case INSERTIONSORT:
+  case SORT_INSERTIONSORT:
     insertionsort(arr, size);
     break;
-  case SELECTIONSORT:
+  case SORT_SELECTIONSORT:
     selectionsort(arr, size);
     break;
   }
@@ -34,7 +34,7 @@ void sort(int *arr, int size, sorting_algorithm sa) {
 void bubblesort(int *arr, int size) {
   char swapped = 0;
   // Loop through each number
-  for (int i = 0; i < size - 1; ++i) {
+  for (int i = 0; i < size; ++i) {
     // Propogate as far down the array as we can one index at a time
     // (We could also use an if test to only swap once, but then we would
     // just have to do more recursive calls instead)
