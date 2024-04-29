@@ -5,7 +5,7 @@
 #include "nonstdlib/nstring.h"
 #include "test.h"
 
-void test_string_of(void) {
+static void test_string_of(void) {
   const char s[] = "Hello, World";
   string_t *str = string_of(s, sizeof(s) - 1);
 
@@ -20,7 +20,7 @@ void test_string_of(void) {
   string_free(str_copy);
 }
 
-void test_string_clear(void) {
+static void test_string_clear(void) {
   const char s[] = "Nonstdlib";
   string_t *str = string_of(s, sizeof(s) - 1);
 
@@ -31,7 +31,7 @@ void test_string_clear(void) {
   string_free(str);
 }
 
-void test_string_set(void) {
+static void test_string_set(void) {
   const char s1[] = "Nonstdlib";
   const char s2[] = "Nonstdlib version 2";
   string_t *str = string_of(s1, sizeof(s1) - 1);
@@ -47,6 +47,32 @@ void test_string_set(void) {
   string_free(str);
 }
 
+static void test_string_compare(void) {
+  const char s1[] = "Nonstdlib";
+  const char s2[] = "nonstdlib";
+  const char s3[] = "ns";
+  const char s4[] = "N";
+  const char s5[] = "N";
+
+  string_t *str1 = string_of(s1, sizeof(s1) - 1);
+  string_t *str2 = string_of(s2, sizeof(s2) - 1);
+  string_t *str3 = string_of(s3, sizeof(s3) - 1);
+  string_t *str4 = string_of(s4, sizeof(s4) - 1);
+  string_t *str5 = string_of(s5, sizeof(s5) - 1);
+
+  DEBUG_ASSERT(string_compare(str1, str1) == 0);
+  DEBUG_ASSERT(string_compare(str1, str2) == 1);
+  DEBUG_ASSERT(string_compare(str2, str1) == -1);
+  DEBUG_ASSERT(string_compare(str1, str3) == -1);
+  DEBUG_ASSERT(string_compare(str3, str4) == -1);
+  DEBUG_ASSERT(string_compare(str4, str5) == 0);
+
+  string_free(str1);
+  string_free(str2);
+  string_free(str3);
+  string_free(str4);
+}
+
 void test_string(void) {
 
   TEST_MODULE_START("string");
@@ -54,6 +80,7 @@ void test_string(void) {
   test_string_of();
   test_string_clear();
   test_string_set();
+  test_string_compare();
 
   TEST_MODULE_END("string");
 }

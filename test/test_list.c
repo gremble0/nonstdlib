@@ -155,7 +155,7 @@ static void test_list_structs(void) {
   list_free(list);
 }
 
-void test_list_reverse(void) {
+static void test_list_reverse(void) {
   list_t *list = list_init(5);
 
   list_push_back(list, "hello");
@@ -180,7 +180,7 @@ void test_list_reverse(void) {
   list_free(list);
 }
 
-void test_list_remove(void) {
+static void test_list_remove(void) {
   list_t *list = list_init(5);
 
   char *a = "a";

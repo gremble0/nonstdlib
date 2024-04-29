@@ -5,7 +5,7 @@
 #include "nonstdlib/nhashtable.h"
 #include "test.h"
 
-void test_hashtable_int(void) {
+static void test_hashtable_int(void) {
   ht_t *table = ht_init(5);
 
   int a = 4;
@@ -27,7 +27,7 @@ void test_hashtable_int(void) {
   ht_free(table);
 }
 
-void test_hashtable_string(void) {
+static void test_hashtable_string(void) {
   ht_t *table = ht_init(5);
 
   char asd[] = "asd";
