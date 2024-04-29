@@ -38,7 +38,7 @@ void bubblesort(int *arr, int size) {
     // Propogate as far down the array as we can one index at a time
     // (We could also use an if test to only swap once, but then we would
     // just have to do more recursive calls instead)
-    for (int j = i; arr[j] > arr[j + 1] && j < size - 1; ++j) {
+    for (int j = i; j < size - 1 && arr[j] > arr[j + 1]; ++j) {
       arr_swap(arr, j, j + 1, sizeof(int));
       swapped = 1;
     }
@@ -59,7 +59,7 @@ void bubblesort(int *arr, int size) {
  */
 void insertionsort(int *arr, int size) {
   for (int i = 1; i < size; ++i)
-    for (int j = i; arr[j - 1] > arr[j] && j > 0; --j)
+    for (int j = i; j > 0 && arr[j - 1] > arr[j]; --j)
       arr_swap(arr, j - 1, j, sizeof(int));
 }
 
@@ -81,11 +81,11 @@ void quicksort_impl(int *arr, int start, int end) {
   int left_i = start;
   int right_i = end - 2;
   // Increment left_i until arr[left_i] is greater than pivot
-  while (arr[left_i] < pivot && ++left_i)
-    ;
+  while (left_i < end - 1 && arr[left_i] < pivot)
+    ++left_i;
   // Decrement right_i until arr[right_i] is less than pivot
-  while (arr[right_i] >= pivot && --right_i)
-    ;
+  while (right_i > 0 && arr[right_i] >= pivot)
+    --right_i;
 
   if (left_i < right_i) {
     // If left_i < right_i there are still more elements smaller than the pivot
