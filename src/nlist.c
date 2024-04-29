@@ -8,34 +8,6 @@
 // TODO: negative indicies to index from the back of lists
 
 /**
- * @brief Move each list element one index to the right, assumes the list has
- * allocated memory for one more element
- *
- * @param list list to right shift
- */
-static void list_shift_right(const list_t *list) {
-  if (list->cur_size >= list->max_size)
-    err_index_out_of_bounds(list->cur_size, list->max_size);
-
-  for (size_t i = list->cur_size; i > 0; i--)
-    list->entries[i] = list->entries[i - 1];
-}
-
-/**
- * @brief Move each list element one index to the left, element at index 0 will
- * be overwritten
- *
- * @param list list to right shift
- */
-static void list_shift_left(const list_t *list) {
-  if (list->cur_size >= list->max_size)
-    err_index_out_of_bounds(list->cur_size, list->max_size);
-
-  for (size_t i = 1; i < list->cur_size; i++)
-    list->entries[i - 1] = list->entries[i];
-}
-
-/**
  * @brief Expand max capacity of a list
  *
  * @param list list to expand
@@ -47,6 +19,34 @@ static void list_expand(list_t *list) {
     err_malloc_fail();
 
   list->max_size = new_size;
+}
+
+/**
+ * @brief Move each list element one index to the right, expands list if full
+ *
+ * @param list list to right shift
+ */
+static void list_shift_right(list_t *list) {
+  if (list->cur_size == list->max_size)
+    list_expand(list);
+
+  for (size_t i = list->cur_size; i > 0; i--)
+    list->entries[i] = list->entries[i - 1];
+}
+
+/**
+ * @brief Move each list element after `from` one index to the left, element at
+ * index 0 will be overwritten if `from` is 1
+ *
+ * @param list list to right shift
+ * @param from first index to start shifting from
+ */
+static void list_shift_left(const list_t *list, size_t from) {
+  if (from > list->cur_size)
+    err_index_out_of_bounds(from, list->cur_size);
+
+  for (size_t i = from; i < list->cur_size; i++)
+    list->entries[i - 1] = list->entries[i];
 }
 
 /**
@@ -123,10 +123,30 @@ void *list_pop_front(list_t *list) {
 
   // Save retun value before it gets overwritten by list_left_shift
   void *popped = list->entries[0];
-  list_shift_left(list);
+  list_shift_left(list, 1);
   --list->cur_size;
 
   return popped;
+}
+
+/**
+ * @brief Remove a value from a list (only compares pointers). If value is found
+ * return it and shift values after the values index to the left. If not found
+ * return NULL.
+ *
+ * @param list list to remove from
+ * @param val value to remove
+ */
+void *list_remove(list_t *list, void *val) {
+  for (size_t i = 0; i < list->cur_size; ++i) {
+    if (list->entries[i] == val) {
+      list_shift_left(list, i + 1);
+      --list->cur_size;
+      return val;
+    }
+  }
+
+  return NULL;
 }
 
 /**
@@ -212,9 +232,12 @@ static void list_swap(list_t *list, size_t i, size_t j) {
   list->entries[j] = temp;
 }
 
+/**
+ * @brief Reverse a list in-place
+ *
+ * @param list list to reverse
+ */
 void list_reverse(list_t *list) {
   for (size_t i = 0; i < list->cur_size / 2; ++i)
     list_swap(list, i, list->cur_size - 1 - i);
 }
-
-void list_remove(list_t *list, void *val);

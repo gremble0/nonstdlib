@@ -180,6 +180,29 @@ void test_list_reverse(void) {
   list_free(list);
 }
 
+void test_list_remove(void) {
+  list_t *list = list_init(5);
+
+  char *a = "a";
+  char *b = "b";
+  char *c = "c";
+
+  list_push_back(list, a);
+  list_push_back(list, b);
+  list_push_back(list, c);
+
+  DEBUG_ASSERT(list->cur_size == 3);
+  DEBUG_ASSERT(list_remove(list, a) == a);
+  DEBUG_ASSERT(list->cur_size == 2);
+
+  DEBUG_ASSERT(list_get(list, 0) == b);
+  DEBUG_ASSERT(list_get(list, 1) == c);
+
+  DEBUG_ASSERT(list_remove(list, c) == c);
+
+  list_free(list);
+}
+
 void test_list(void) {
   TEST_MODULE_START("list");
 
@@ -189,6 +212,7 @@ void test_list(void) {
   test_list_contains();
   test_list_structs();
   test_list_reverse();
+  test_list_remove();
 
   TEST_MODULE_END("list");
 }
