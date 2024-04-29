@@ -71,6 +71,7 @@ static void test_string_compare(void) {
   string_free(str2);
   string_free(str3);
   string_free(str4);
+  string_free(str5);
 }
 
 void test_string(void) {
