@@ -155,7 +155,32 @@ static void test_list_structs(void) {
   list_free(list);
 }
 
-void test_list() {
+void test_list_reverse(void) {
+  list_t *list = list_init(5);
+
+  list_push_back(list, "hello");
+  list_push_back(list, "world");
+  list_push_back(list, "this is a list of strings");
+  list_push_back(list, "another one");
+
+  list_reverse(list);
+  DEBUG_ASSERT(strcmp("another one", list_get(list, 0)) == 0);
+  DEBUG_ASSERT(strcmp("this is a list of strings", list_get(list, 1)) == 0);
+  DEBUG_ASSERT(strcmp("world", list_get(list, 2)) == 0);
+  DEBUG_ASSERT(strcmp("hello", list_get(list, 3)) == 0);
+
+  list_push_back(list, "odd number of elements now");
+  list_reverse(list);
+  DEBUG_ASSERT(strcmp("odd number of elements now", list_get(list, 0)) == 0);
+  DEBUG_ASSERT(strcmp("hello", list_get(list, 1)) == 0);
+  DEBUG_ASSERT(strcmp("world", list_get(list, 2)) == 0);
+  DEBUG_ASSERT(strcmp("this is a list of strings", list_get(list, 3)) == 0);
+  DEBUG_ASSERT(strcmp("another one", list_get(list, 4)) == 0);
+
+  list_free(list);
+}
+
+void test_list(void) {
   TEST_MODULE_START("list");
 
   test_list_push_pop();
@@ -163,6 +188,7 @@ void test_list() {
   test_list_clear();
   test_list_contains();
   test_list_structs();
+  test_list_reverse();
 
   TEST_MODULE_END("list");
 }

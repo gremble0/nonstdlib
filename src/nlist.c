@@ -206,6 +206,15 @@ void list_push_front(list_t *list, void *val) {
   ++list->cur_size;
 }
 
-// TODO: implement
-void list_reverse(list_t *list);
+static void list_swap(list_t *list, size_t i, size_t j) {
+  void *temp = list->entries[i];
+  list->entries[i] = list->entries[j];
+  list->entries[j] = temp;
+}
+
+void list_reverse(list_t *list) {
+  for (size_t i = 0; i < list->cur_size / 2; ++i)
+    list_swap(list, i, list->cur_size - 1 - i);
+}
+
 void list_remove(list_t *list, void *val);
