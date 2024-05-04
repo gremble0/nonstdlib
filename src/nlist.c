@@ -40,10 +40,10 @@ static void list_shift_right(list_t *list) {
  * @param from first index to start shifting from
  */
 static void list_shift_left(const list_t *list, size_t from) {
-  if (from > list->cur_size)
+  if (from >= list->cur_size)
     err_index_out_of_bounds(from, list->cur_size);
 
-  for (size_t i = from; i < list->cur_size; i++)
+  for (size_t i = from + 1; i < list->cur_size; i++)
     list->entries[i - 1] = list->entries[i];
 }
 
@@ -69,7 +69,7 @@ int list_contains(const list_t *list, const void *val) {
  * @param type_size amount of bytes used for each element in the list
  * @return a malloc'd list that should to be freed using list_free()
  */
-list_t *list_init(const size_t init_size) {
+list_t *list_init(size_t init_size) {
   list_t *list = malloc(sizeof(*list));
   if (list == NULL)
     err_malloc_fail();
@@ -89,11 +89,29 @@ list_t *list_init(const size_t init_size) {
  * @param list list to index
  * @param index index into list
  */
-void *list_get(const list_t *list, const size_t index) {
+void *list_get(const list_t *list, size_t index) {
   if (index >= list->cur_size)
     err_index_out_of_bounds(index, list->cur_size);
 
   return list->entries[index];
+}
+
+/**
+ * @brief Pops the elemnt at the given index and returns it
+ *
+ * @param list list to pop from
+ * @param index index of element to pop
+ * @return element at the given index
+ */
+void *list_pop_at(list_t *list, size_t index) {
+  if (index >= list->cur_size)
+    err_index_out_of_bounds(index, list->cur_size);
+
+  void *at_index = list->entries[index];
+  list_shift_left(list, index);
+  --list->cur_size;
+
+  return at_index;
 }
 
 /**
@@ -121,7 +139,7 @@ void *list_pop_front(list_t *list) {
 
   // Save retun value before it gets overwritten by list_left_shift
   void *popped = list->entries[0];
-  list_shift_left(list, 1);
+  list_shift_left(list, 0);
   --list->cur_size;
 
   return popped;
@@ -138,7 +156,7 @@ void *list_pop_front(list_t *list) {
 void *list_remove(list_t *list, void *val) {
   for (size_t i = 0; i < list->cur_size; ++i) {
     if (list->entries[i] == val) {
-      list_shift_left(list, i + 1);
+      list_shift_left(list, i);
       --list->cur_size;
       return val;
     }

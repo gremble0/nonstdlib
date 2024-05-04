@@ -16,8 +16,9 @@ typedef struct {
 typedef void (*list_map_func)(void *);
 
 int list_contains(const list_t *list, const void *val);
-list_t *list_init(const size_t init_size);
+list_t *list_init(size_t init_size);
 void *list_get(const list_t *list, size_t index);
+void *list_pop_at(list_t *list, size_t index);
 void *list_pop_back(list_t *list);
 void *list_pop_front(list_t *list);
 void *list_remove(list_t *list, void *val);

@@ -58,6 +58,27 @@ static void test_list_push_pop(void) {
   list_free(list);
 }
 
+static void test_list_pop_at(void) {
+  list_t *list = list_init(8);
+
+  list_push_back(list, "a");
+  list_push_back(list, "b");
+  list_push_back(list, "c");
+  list_push_back(list, "d");
+  list_push_back(list, "e");
+  list_push_back(list, "f");
+
+  DEBUG_ASSERT(list->cur_size == 6);
+  DEBUG_ASSERT(strcmp(list_pop_at(list, 0), "a") == 0);
+  DEBUG_ASSERT(list->cur_size == 5);
+  DEBUG_ASSERT(strcmp(list_pop_at(list, 1), "c") == 0);
+  DEBUG_ASSERT(list->cur_size == 4);
+  DEBUG_ASSERT(strcmp(list_pop_at(list, list->cur_size - 1), "f") == 0);
+  DEBUG_ASSERT(list->cur_size == 3);
+
+  list_free(list);
+}
+
 static void test_list_expand(void) {
   list_t *list = list_init(1);
 
@@ -210,6 +231,7 @@ void test_list(void) {
   TEST_MODULE_START("list");
 
   test_list_push_pop();
+  test_list_pop_at();
   test_list_expand();
   test_list_clear();
   test_list_contains();
