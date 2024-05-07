@@ -17,7 +17,7 @@ static void test_ll_push_back_seek(void) {
   ll_push_back(ll, "f");
   // ll should be: "a" -> "b" -> "c" -> "d" -> "e" -> "f"
 
-  DEBUG_ASSERT(ll->cur_size == 6);
+  DEBUG_ASSERT(ll->size == 6);
   DEBUG_ASSERT(strcmp(ll_peek_front(ll), "a") == 0);
   DEBUG_ASSERT(strcmp(ll_seek(ll, 5), "f") == 0);
   DEBUG_ASSERT(strcmp(ll_seek(ll, 2), "c") == 0);
@@ -94,7 +94,7 @@ static void test_ll_all(void) {
   ll_push_back(ll, "c");
   // ll should be: "b" -> "a" -> "c"
 
-  DEBUG_ASSERT(ll->cur_size == 3);
+  DEBUG_ASSERT(ll->size == 3);
   DEBUG_ASSERT(strcmp(ll_seek(ll, 2), "c") == 0);
   DEBUG_ASSERT(strcmp(ll_peek_front(ll), "b") == 0);
 

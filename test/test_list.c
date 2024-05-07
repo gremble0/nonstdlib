@@ -68,13 +68,13 @@ static void test_list_pop_at(void) {
   list_push_back(list, "e");
   list_push_back(list, "f");
 
-  DEBUG_ASSERT(list->cur_size == 6);
+  DEBUG_ASSERT(list->size == 6);
   DEBUG_ASSERT(strcmp(list_pop_at(list, 0), "a") == 0);
-  DEBUG_ASSERT(list->cur_size == 5);
+  DEBUG_ASSERT(list->size == 5);
   DEBUG_ASSERT(strcmp(list_pop_at(list, 1), "c") == 0);
-  DEBUG_ASSERT(list->cur_size == 4);
-  DEBUG_ASSERT(strcmp(list_pop_at(list, list->cur_size - 1), "f") == 0);
-  DEBUG_ASSERT(list->cur_size == 3);
+  DEBUG_ASSERT(list->size == 4);
+  DEBUG_ASSERT(strcmp(list_pop_at(list, list->size - 1), "f") == 0);
+  DEBUG_ASSERT(list->size == 3);
 
   list_free(list);
 }
@@ -83,28 +83,28 @@ static void test_list_expand(void) {
   list_t *list = list_init(1);
 
   list_push_back(list, "");
-  DEBUG_ASSERT(list->cur_size == 1);
-  DEBUG_ASSERT(list->max_size == 1);
+  DEBUG_ASSERT(list->size == 1);
+  DEBUG_ASSERT(list->capacity == 1);
 
   list_push_back(list, "");
-  DEBUG_ASSERT(list->cur_size == 2);
-  DEBUG_ASSERT(list->max_size == 2);
+  DEBUG_ASSERT(list->size == 2);
+  DEBUG_ASSERT(list->capacity == 2);
 
   list_push_back(list, "");
-  DEBUG_ASSERT(list->cur_size == 3);
-  DEBUG_ASSERT(list->max_size == 4);
+  DEBUG_ASSERT(list->size == 3);
+  DEBUG_ASSERT(list->capacity == 4);
 
   list_push_back(list, "");
-  DEBUG_ASSERT(list->cur_size == 4);
-  DEBUG_ASSERT(list->max_size == 4);
+  DEBUG_ASSERT(list->size == 4);
+  DEBUG_ASSERT(list->capacity == 4);
 
   list_push_back(list, "");
-  DEBUG_ASSERT(list->cur_size == 5);
-  DEBUG_ASSERT(list->max_size == 8);
+  DEBUG_ASSERT(list->size == 5);
+  DEBUG_ASSERT(list->capacity == 8);
 
   list_push_back(list, "");
-  DEBUG_ASSERT(list->cur_size == 6);
-  DEBUG_ASSERT(list->max_size == 8);
+  DEBUG_ASSERT(list->size == 6);
+  DEBUG_ASSERT(list->capacity == 8);
 
   list_free(list);
 }
@@ -116,9 +116,9 @@ static void test_list_clear(void) {
   list_push_back(list, "abc");
   list_push_back(list, "abc");
   list_push_back(list, "abc");
-  DEBUG_ASSERT(list->cur_size == 4);
+  DEBUG_ASSERT(list->size == 4);
   list_clear(list);
-  DEBUG_ASSERT(list->cur_size == 0);
+  DEBUG_ASSERT(list->size == 0);
 
   list_free(list);
 }
@@ -212,17 +212,17 @@ static void test_list_remove(void) {
   list_push_back(list, b);
   list_push_back(list, c);
 
-  DEBUG_ASSERT(list->cur_size == 3);
+  DEBUG_ASSERT(list->size == 3);
   DEBUG_ASSERT(list_remove(list, a) == a);
-  DEBUG_ASSERT(list->cur_size == 2);
+  DEBUG_ASSERT(list->size == 2);
 
   DEBUG_ASSERT(list_get(list, 0) == b);
   DEBUG_ASSERT(list_get(list, 1) == c);
 
   DEBUG_ASSERT(list_remove(list, c) == c);
-  DEBUG_ASSERT(list->cur_size == 1);
+  DEBUG_ASSERT(list->size == 1);
   DEBUG_ASSERT(list_remove(list, c) == NULL);
-  DEBUG_ASSERT(list->cur_size == 1);
+  DEBUG_ASSERT(list->size == 1);
 
   list_free(list);
 }

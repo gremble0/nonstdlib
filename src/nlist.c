@@ -11,12 +11,12 @@
  * @param list list to expand
  */
 static void list_expand(list_t *list) {
-  size_t new_size = list->max_size * 2;
+  size_t new_size = list->capacity * 2;
   list->entries = realloc(list->entries, new_size * sizeof(list->entries));
   if (list->entries == NULL)
     err_malloc_fail();
 
-  list->max_size = new_size;
+  list->capacity = new_size;
 }
 
 /**
@@ -25,10 +25,10 @@ static void list_expand(list_t *list) {
  * @param list list to right shift
  */
 static void list_shift_right(list_t *list) {
-  if (list->cur_size == list->max_size)
+  if (list->size == list->capacity)
     list_expand(list);
 
-  for (size_t i = list->cur_size; i > 0; i--)
+  for (size_t i = list->size; i > 0; i--)
     list->entries[i] = list->entries[i - 1];
 }
 
@@ -40,10 +40,10 @@ static void list_shift_right(list_t *list) {
  * @param from first index to start shifting from
  */
 static void list_shift_left(const list_t *list, size_t from) {
-  if (from >= list->cur_size)
-    err_index_out_of_bounds(from, list->cur_size);
+  if (from >= list->size)
+    err_index_out_of_bounds(from, list->size);
 
-  for (size_t i = from + 1; i < list->cur_size; i++)
+  for (size_t i = from + 1; i < list->size; i++)
     list->entries[i - 1] = list->entries[i];
 }
 
@@ -55,7 +55,7 @@ static void list_shift_left(const list_t *list, size_t from) {
  * @return 1 if present 0 if not
  */
 int list_contains(const list_t *list, const void *val) {
-  for (size_t i = 0; i < list->cur_size; ++i)
+  for (size_t i = 0; i < list->size; ++i)
     if (list->entries[i] == val)
       return 1;
 
@@ -74,8 +74,8 @@ list_t *list_init(size_t init_size) {
   if (list == NULL)
     err_malloc_fail();
 
-  list->max_size = init_size;
-  list->cur_size = 0;
+  list->capacity = init_size;
+  list->size = 0;
   list->entries = malloc(init_size * sizeof(*list->entries));
   if (list->entries == NULL)
     err_malloc_fail();
@@ -90,8 +90,8 @@ list_t *list_init(size_t init_size) {
  * @param index index into list
  */
 void *list_get(const list_t *list, size_t index) {
-  if (index >= list->cur_size)
-    err_index_out_of_bounds(index, list->cur_size);
+  if (index >= list->size)
+    err_index_out_of_bounds(index, list->size);
 
   return list->entries[index];
 }
@@ -104,12 +104,12 @@ void *list_get(const list_t *list, size_t index) {
  * @return element at the given index
  */
 void *list_pop_at(list_t *list, size_t index) {
-  if (index >= list->cur_size)
-    err_index_out_of_bounds(index, list->cur_size);
+  if (index >= list->size)
+    err_index_out_of_bounds(index, list->size);
 
   void *at_index = list->entries[index];
   list_shift_left(list, index);
-  --list->cur_size;
+  --list->size;
 
   return at_index;
 }
@@ -121,10 +121,10 @@ void *list_pop_at(list_t *list, size_t index) {
  * @return element at the end of the list
  */
 void *list_pop_back(list_t *list) {
-  if (list->cur_size == 0)
+  if (list->size == 0)
     return NULL;
 
-  return list->entries[--list->cur_size];
+  return list->entries[--list->size];
 }
 
 /**
@@ -134,13 +134,13 @@ void *list_pop_back(list_t *list) {
  * @return element at the end of the list
  */
 void *list_pop_front(list_t *list) {
-  if (list->cur_size == 0)
+  if (list->size == 0)
     return NULL;
 
   // Save retun value before it gets overwritten by list_left_shift
   void *popped = list->entries[0];
   list_shift_left(list, 0);
-  --list->cur_size;
+  --list->size;
 
   return popped;
 }
@@ -154,10 +154,10 @@ void *list_pop_front(list_t *list) {
  * @param val value to remove
  */
 void *list_remove(list_t *list, void *val) {
-  for (size_t i = 0; i < list->cur_size; ++i) {
+  for (size_t i = 0; i < list->size; ++i) {
     if (list->entries[i] == val) {
       list_shift_left(list, i);
-      --list->cur_size;
+      --list->size;
       return val;
     }
   }
@@ -171,10 +171,10 @@ void *list_remove(list_t *list, void *val) {
  * @param list list to clear
  */
 void list_clear(list_t *list) {
-  for (size_t i = 0; i < list->cur_size; ++i)
+  for (size_t i = 0; i < list->size; ++i)
     list->entries[i] = NULL;
 
-  list->cur_size = 0;
+  list->size = 0;
 }
 
 /**
@@ -187,6 +187,8 @@ void list_free(list_t *list) {
   free(list);
 }
 
+void list_insert_at(list_t *list, void *val) {}
+
 /**
  * @brief Map a function on each element in the list. For example you could map
  * free onto the list if you know all elements are heap allocated
@@ -194,7 +196,7 @@ void list_free(list_t *list) {
  * @param list list to map functions onto
  */
 void list_map(const list_t *list, void (*func)(void *)) {
-  for (size_t i = 0; i < list->cur_size; ++i)
+  for (size_t i = 0; i < list->size; ++i)
     func(list->entries[i]);
 }
 
@@ -204,7 +206,7 @@ void list_map(const list_t *list, void (*func)(void *)) {
  * @param list list to print bytes of
  */
 void list_print(const list_t *list) {
-  for (size_t i = 0; i < list->cur_size; ++i)
+  for (size_t i = 0; i < list->size; ++i)
     printf("[%zu]: %p\n", i, list->entries[i]);
 }
 
@@ -216,11 +218,11 @@ void list_print(const list_t *list) {
  */
 void list_push_back(list_t *list, void *val) {
   // Resize if necessary
-  if (list->cur_size == list->max_size)
+  if (list->size == list->capacity)
     list_expand(list);
 
-  list->entries[list->cur_size] = val;
-  ++list->cur_size;
+  list->entries[list->size] = val;
+  ++list->size;
 }
 
 /**
@@ -232,14 +234,14 @@ void list_push_back(list_t *list, void *val) {
  */
 void list_push_front(list_t *list, void *val) {
   // Resize if necessary
-  if (list->cur_size == list->max_size)
+  if (list->size == list->capacity)
     list_expand(list);
 
-  if (list->cur_size > 0)
+  if (list->size > 0)
     list_shift_right(list);
 
   list->entries[0] = val;
-  ++list->cur_size;
+  ++list->size;
 }
 
 static void list_swap(list_t *list, size_t i, size_t j) {
@@ -254,6 +256,6 @@ static void list_swap(list_t *list, size_t i, size_t j) {
  * @param list list to reverse
  */
 void list_reverse(list_t *list) {
-  for (size_t i = 0; i < list->cur_size / 2; ++i)
-    list_swap(list, i, list->cur_size - 1 - i);
+  for (size_t i = 0; i < list->size / 2; ++i)
+    list_swap(list, i, list->size - 1 - i);
 }

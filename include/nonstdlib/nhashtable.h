@@ -11,8 +11,8 @@ typedef struct {
 
 typedef struct {
   ht_entry_t **entries;
-  size_t cur_size;
-  size_t max_size;
+  size_t size;
+  size_t capacity;
 } ht_t;
 
 uint32_t ht_hash(const char *key, size_t key_size);

@@ -15,7 +15,7 @@ ll_t *ll_init(size_t type_size) {
   if (ll == NULL)
     err_malloc_fail();
 
-  ll->cur_size = 0;
+  ll->size = 0;
   ll->type_size = type_size;
   ll->first = NULL;
   ll->last = NULL;
@@ -65,7 +65,7 @@ void *ll_pop_back(ll_t *ll) {
   else
     ll->last->next = NULL;
 
-  --ll->cur_size;
+  --ll->size;
   free(popped);
 
   return ret;
@@ -89,7 +89,7 @@ void *ll_pop_front(ll_t *ll) {
   else
     ll->first->prev = NULL;
 
-  --ll->cur_size;
+  --ll->size;
   free(popped);
 
   return ret;
@@ -103,18 +103,18 @@ void *ll_pop_front(ll_t *ll) {
  */
 void *ll_seek(ll_t *ll, size_t index) {
   // Index out of bounds
-  if (index >= ll->cur_size)
+  if (index >= ll->size)
     return NULL;
 
   // Seek front to back if index is small, back to front if index is large
-  if (index <= ll->cur_size / 2) {
+  if (index <= ll->size / 2) {
     ll_entry_t *entry = ll->first;
     while (index-- > 0)
       entry = entry->next;
 
     return entry->value;
   } else {
-    index = ll->cur_size - index;
+    index = ll->size - index;
     ll_entry_t *entry = ll->last;
     while (--index > 0)
       entry = entry->prev;
@@ -182,7 +182,7 @@ void ll_push_back(ll_t *ll, void *value) {
     ll->last->next = new;
 
   ll->last = new;
-  ++ll->cur_size;
+  ++ll->size;
 }
 
 /**
@@ -207,7 +207,7 @@ void ll_push_front(ll_t *ll, void *value) {
     ll->first->prev = new;
 
   ll->first = new;
-  ++ll->cur_size;
+  ++ll->size;
 }
 
 /**

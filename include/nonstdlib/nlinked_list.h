@@ -12,7 +12,7 @@ struct ll_entry_t {
 typedef struct {
   ll_entry_t *first;
   ll_entry_t *last;
-  size_t cur_size;
+  size_t size;
   size_t type_size;
 } ll_t;
 

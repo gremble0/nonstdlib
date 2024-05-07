@@ -15,11 +15,11 @@ static void test_hashtable_int(void) {
   char bbb[] = "bbb";
 
   ht_put(table, asd, sizeof(asd), &a);
-  DEBUG_ASSERT(table->cur_size == 1);
+  DEBUG_ASSERT(table->size == 1);
   ht_put(table, bbb, sizeof(bbb), &b);
-  DEBUG_ASSERT(table->cur_size == 2);
+  DEBUG_ASSERT(table->size == 2);
   ht_put(table, bbb, sizeof(bbb), &c);
-  DEBUG_ASSERT(table->cur_size == 2);
+  DEBUG_ASSERT(table->size == 2);
 
   DEBUG_ASSERT(*(int *)ht_get(table, "asd", sizeof(asd)) == 4);
   DEBUG_ASSERT(*(int *)ht_get(table, "bbb", sizeof(bbb)) == 9);
@@ -37,28 +37,28 @@ static void test_hashtable_string(void) {
   char longstring[] = "iuerbqnwlriujqwherilqwehrilquwehrilqwehrilqweirlur";
 
   ht_put(table, asd, sizeof(asd), "YOYO");
-  DEBUG_ASSERT(table->cur_size == 1);
+  DEBUG_ASSERT(table->size == 1);
   ht_put(table, asd, sizeof(asd), "YAYA");
-  DEBUG_ASSERT(table->cur_size == 1);
+  DEBUG_ASSERT(table->size == 1);
   ht_put(table, qwerty, sizeof(qwerty), "123");
-  DEBUG_ASSERT(table->cur_size == 2);
+  DEBUG_ASSERT(table->size == 2);
   ht_put(table, qwertz, sizeof(qwertz), "BABA");
-  DEBUG_ASSERT(table->cur_size == 3);
+  DEBUG_ASSERT(table->size == 3);
   ht_put(table, qwertb, sizeof(qwertb), "POPO");
-  DEBUG_ASSERT(table->cur_size == 4);
+  DEBUG_ASSERT(table->size == 4);
 
   DEBUG_ASSERT(strcmp(ht_get(table, asd, sizeof(asd)), "YAYA") == 0);
   DEBUG_ASSERT(strcmp(ht_get(table, qwerty, sizeof(qwerty)), "123") == 0);
   DEBUG_ASSERT(strcmp(ht_get(table, qwertz, sizeof(qwertz)), "BABA") == 0);
   DEBUG_ASSERT(strcmp(ht_get(table, qwertb, sizeof(qwertb)), "POPO") == 0);
-  DEBUG_ASSERT(table->max_size == 10);
+  DEBUG_ASSERT(table->capacity == 10);
 
   ht_put(table, longstring, sizeof(longstring), "POPO");
-  DEBUG_ASSERT(table->cur_size == 5);
+  DEBUG_ASSERT(table->size == 5);
   ht_put(table, "", sizeof(""),
          "qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfj");
-  DEBUG_ASSERT(table->cur_size == 6);
-  DEBUG_ASSERT(table->max_size == 20);
+  DEBUG_ASSERT(table->size == 6);
+  DEBUG_ASSERT(table->capacity == 20);
 
   DEBUG_ASSERT(ht_get(table, "doesnt_exist", sizeof("doesnt_exist")) == NULL);
 

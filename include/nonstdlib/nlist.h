@@ -4,9 +4,8 @@
 
 typedef struct {
   void **entries;  // List of all values
-  size_t cur_size; // How many values are currently in the list
-  size_t max_size; // What is the current maximum amount of elements (can be
-                   // increased)
+  size_t size;     // How many values are currently in the list
+  size_t capacity; // The current maximum amount of elements (can be increased)
 } list_t;
 
 // Useful to cast functions that do not explicitly take a void * as a parameter.
@@ -24,6 +23,7 @@ void *list_pop_front(list_t *list);
 void *list_remove(list_t *list, void *val);
 void list_clear(list_t *list);
 void list_free(list_t *list);
+void list_insert_at(list_t *list, void *val);
 void list_map(const list_t *list, void(func)(void *));
 void list_print(const list_t *list);
 void list_push_back(list_t *list, void *val);
