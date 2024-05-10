@@ -187,8 +187,6 @@ void list_free(list_t *list) {
   free(list);
 }
 
-void list_insert_at(list_t *list, void *val) {}
-
 /**
  * @brief Map a function on each element in the list. For example you could map
  * free onto the list if you know all elements are heap allocated

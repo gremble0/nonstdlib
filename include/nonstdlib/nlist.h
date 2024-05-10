@@ -23,7 +23,6 @@ void *list_pop_front(list_t *list);
 void *list_remove(list_t *list, void *val);
 void list_clear(list_t *list);
 void list_free(list_t *list);
-void list_insert_at(list_t *list, void *val);
 void list_map(const list_t *list, void(func)(void *));
 void list_print(const list_t *list);
 void list_push_back(list_t *list, void *val);
