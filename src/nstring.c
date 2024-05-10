@@ -27,6 +27,23 @@ string_t *string_of(const char *s, size_t len) {
 }
 
 /**
+ * @brief Deep copy `str` into an identical `string_t`
+ *
+ * @param str string to copy
+ * @return copied string
+ */
+string_t *string_copy(const string_t *str) {
+  string_t *copied = malloc(sizeof(*copied));
+  if (copied == NULL)
+    err_malloc_fail();
+
+  copied->s = strndup(str->s, str->len);
+  copied->len = str->len;
+
+  return copied;
+}
+
+/**
  * @brief Compare two strings.
  *
  * @param str1 first string to compare

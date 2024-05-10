@@ -94,6 +94,28 @@ static void test_string_append(void) {
   string_free(expected);
 }
 
+static void test_string_copy(void) {
+  const char s1[] = "Hello, ";
+
+  string_t *str1 = string_of(s1, sizeof(s1));
+  string_t *str1_copied = string_copy(str1);
+  // The strings str1 and str1_copied should:
+  // - not be pointing to the same memory
+  // - not contain char pointers pointing to the same memory
+  // - have the same lengths
+  // - contain char pointers to identical strings
+  DEBUG_ASSERT(str1 != str1_copied);
+  DEBUG_ASSERT(str1->s != str1_copied->s);
+  DEBUG_ASSERT(str1->len == str1_copied->len);
+  DEBUG_ASSERT(string_compare(str1, str1_copied) == 0);
+
+  // str1_copied should work after str1 has been freed
+  string_free(str1);
+  DEBUG_ASSERT(strncmp(str1_copied->s, s1, str1_copied->len) == 0);
+
+  string_free(str1_copied);
+}
+
 void test_string(void) {
 
   TEST_MODULE_START("string");
@@ -103,6 +125,7 @@ void test_string(void) {
   test_string_set();
   test_string_compare();
   test_string_append();
+  test_string_copy();
 
   TEST_MODULE_END("string");
 }
