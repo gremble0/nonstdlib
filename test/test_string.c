@@ -74,6 +74,26 @@ static void test_string_compare(void) {
   string_free(str5);
 }
 
+static void test_string_append(void) {
+  const char s1[] = "Hello, ";
+  const char s2[] = "world!";
+
+  string_t *str1 = string_of(s1, sizeof(s1));
+  string_t *str2 = string_of(s2, sizeof(s2));
+  string_t *str3 = string_of("", sizeof(""));
+  string_t *expected = string_of("Hello, world!", sizeof("Hello, world!"));
+
+  string_append(str1, str2);
+  DEBUG_ASSERT(string_compare(str1, expected) == 0);
+  string_append(str1, str3);
+  DEBUG_ASSERT(string_compare(str1, expected) == 0);
+
+  string_free(str1);
+  string_free(str2);
+  string_free(str3);
+  string_free(expected);
+}
+
 void test_string(void) {
 
   TEST_MODULE_START("string");
@@ -82,6 +102,7 @@ void test_string(void) {
   test_string_clear();
   test_string_set();
   test_string_compare();
+  test_string_append();
 
   TEST_MODULE_END("string");
 }
