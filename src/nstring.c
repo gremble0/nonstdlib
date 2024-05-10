@@ -5,20 +5,23 @@
 #include "nonstdlib/nstring.h"
 
 /**
- * @brief Make a `string_t` by copying `s_len` bytes from `s`
+ * @brief Make a `string_t` by copying `len` bytes from `s`
  *
  * @param s string to copy
- * @param s_len amount of bytes to copy from `s`
+ * @param len amount of bytes to copy from `s`
  * @return malloc'd `string_t`
  */
-string_t *string_of(const char *s, size_t s_len) {
+string_t *string_of(const char *s, size_t len) {
   string_t *str = malloc(sizeof(*str));
   if (str == NULL)
     err_malloc_fail();
 
-  str->s = malloc(s_len * sizeof(char));
-  memcpy(str->s, s, s_len);
-  str->len = s_len;
+  str->s = malloc(len * sizeof(char));
+  if (str->s == NULL)
+    err_malloc_fail();
+
+  memcpy(str->s, s, len);
+  str->len = len;
 
   return str;
 }
@@ -62,16 +65,16 @@ void string_clear(string_t *str) {
  *
  * @param str string to write to
  * @param s string to copy into `str`
- * @param s_len amount of bytes to copy into `str`
+ * @param len amount of bytes to copy into `str`
  */
-void string_set(string_t *str, const char *s, size_t s_len) {
+void string_set(string_t *str, const char *s, size_t len) {
   free(str->s); // This is safe because free(NULL) is a no-op
-  str->s = malloc(s_len * sizeof(char));
+  str->s = malloc(len * sizeof(char));
   if (str->s == NULL)
     err_malloc_fail();
 
-  str->len = s_len;
-  memcpy(str->s, s, s_len);
+  str->len = len;
+  memcpy(str->s, s, len);
 }
 
 /**
@@ -83,6 +86,9 @@ void string_set(string_t *str, const char *s, size_t s_len) {
 void string_append(string_t *dest, string_t *src) {
   // Maybe we should free src here as well? Not sure if this is always desirable
   dest->s = realloc(dest->s, dest->len + src->len);
+  if (dest->s == NULL)
+    err_malloc_fail();
+
   // - 1 because we are overwriting a nullbyte
   memcpy(dest->s + dest->len - 1, src->s, src->len);
   dest->len += src->len - 1;
