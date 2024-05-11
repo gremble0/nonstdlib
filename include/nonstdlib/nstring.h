@@ -14,3 +14,4 @@ void string_clear(string_t *str);
 void string_free(string_t *str);
 void string_set(string_t *str, const char *s, size_t len);
 void string_append(string_t *dest, string_t *src);
+void string_append_c(string_t *dest, char c);

@@ -97,7 +97,7 @@ void string_set(string_t *str, const char *s, size_t len) {
 /**
  * @brief Append the string in `src` onto `dest` in place
  *
- * @param dest the string you want to append onto
+ * @param dest the string to append onto
  * @param src the string to append from
  */
 void string_append(string_t *dest, string_t *src) {
@@ -109,6 +109,18 @@ void string_append(string_t *dest, string_t *src) {
   // - 1 because we are overwriting a nullbyte
   memcpy(dest->s + dest->len - 1, src->s, src->len);
   dest->len += src->len - 1;
+}
+
+/**
+ * @brief Append a character to the end of a string
+ *
+ * @param dest the string to append onto
+ * @param c the character to append
+ */
+void string_append_c(string_t *dest, char c) {
+  dest->s = realloc(dest->s, dest->len + sizeof(c));
+  dest->s[dest->len] = c;
+  ++dest->len;
 }
 
 /**
