@@ -50,8 +50,8 @@ _Noreturn void err_pop_from_empty_list() {
   exit(1);
 }
 
-_Noreturn void err_assert_fail(const char *expr) {
+_Noreturn void err_assert_fail(const char *expr, const char *file, int line) {
   err_print_stacktrace();
-  fprintf(stderr, "ERROR_ASSERTION_FAIL: %s\n", expr);
+  fprintf(stderr, "ERROR_ASSERTION_FAIL: %s:%d: %s\n", file, line, expr);
   exit(1);
 }

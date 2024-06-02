@@ -5,7 +5,7 @@
 #define ASSERT(expr)                                                           \
   do {                                                                         \
     if (!(expr)) {                                                             \
-      err_assert_fail(#expr);                                                  \
+      err_assert_fail(#expr, __FILE__, __LINE__);                              \
     }                                                                          \
   } while (0)
 
@@ -15,7 +15,7 @@
     if ((expr)) {                                                              \
       printf("\033[0;32mPASSED: \033[0;37mDEBUG_ASSERT(%s)\n", #expr);         \
     } else {                                                                   \
-      err_assert_fail(#expr);                                                  \
+      err_assert_fail(#expr, __FILE__, __LINE__);                              \
     }                                                                          \
   } while (0)
 
@@ -25,4 +25,4 @@ _Noreturn void err_io_fail(const char *file_path);
 _Noreturn void err_malloc_fail();
 _Noreturn void err_pop_from_empty_linked_list();
 _Noreturn void err_pop_from_empty_list();
-_Noreturn void err_assert_fail(const char *expr);
+_Noreturn void err_assert_fail(const char *expr, const char *file, int line);
