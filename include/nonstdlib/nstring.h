@@ -7,6 +7,8 @@ typedef struct {
   size_t len;
 } string_t;
 
+#define string_of_lit(s) string_of(s, sizeof(s))
+
 string_t *string_of(const char *s, size_t len);
 string_t *string_copy(const string_t *str);
 int string_compare(const string_t *s1, const string_t *s2);
