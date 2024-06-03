@@ -8,9 +8,11 @@ typedef struct {
 } string_t;
 
 #define string_of_lit(lit) string_of(lit, sizeof(lit))
-#define string_append_lit(dest, lit) string_append(dest, &(string_t){lit, sizeof(lit)})
+#define string_append_lit(dest, lit)                                           \
+  string_append(dest, &(string_t){lit, sizeof(lit)})
 
 string_t *string_of(const char *s, size_t len);
+string_t *string_of_no_null(const char *s, size_t len);
 string_t *string_copy(const string_t *str);
 int string_compare(const string_t *s1, const string_t *s2);
 void string_clear(string_t *str);

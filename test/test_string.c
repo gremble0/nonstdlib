@@ -9,10 +9,12 @@ static void test_string_of(void) {
   const char s[] = "Hello, World";
   string_t *str = string_of(s, sizeof(s));
 
-  DEBUG_ASSERT(strlen(s) + 1 == str->len);
+  DEBUG_ASSERT(strnlen(s, sizeof(s)) == str->len);
+  DEBUG_ASSERT(strnlen(str->s, sizeof(s)) == str->len);
   DEBUG_ASSERT(strncmp(str->s, s, str->len) == 0);
 
-  string_t *str_copy = string_of(str->s, str->len);
+  // + 1 since nullbyte is not included in len
+  string_t *str_copy = string_of(str->s, str->len + 1);
   DEBUG_ASSERT(str_copy->len == str->len);
   DEBUG_ASSERT(strncmp(str_copy->s, str->s, str_copy->len) == 0);
 
@@ -92,11 +94,22 @@ static void test_string_append(void) {
   string_append_c(str1, '!');
   DEBUG_ASSERT(string_compare(str1, expected2) == 0);
 
+  const char no_null[] = {'h', 'e', 'l', 'l', 'o'};
+  const char no_null_appended[] = {'h', 'e', 'l', 'l', 'o', '!'};
+  string_t *no_null_str = string_of_no_null(no_null, sizeof(no_null));
+  string_t *no_null_str_appended =
+      string_of_no_null(no_null_appended, sizeof(no_null_appended));
+
+  string_append_c(no_null_str, '!');
+  DEBUG_ASSERT(string_compare(no_null_str, no_null_str_appended) == 0);
+
   string_free(str1);
   string_free(str2);
   string_free(str3);
   string_free(expected1);
   string_free(expected2);
+  string_free(no_null_str);
+  string_free(no_null_str_appended);
 }
 
 static void test_string_copy(void) {
