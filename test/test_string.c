@@ -121,6 +121,21 @@ static void test_string_copy(void) {
   string_free(str1_copied);
 }
 
+static void test_string_lits(void) {
+  string_t *s = string_of_lit("hello");
+  string_t *same_as_s = string_of("hello", sizeof("hello"));
+
+  DEBUG_ASSERT(string_compare(s, same_as_s) == 0);
+
+  string_append_lit(s, ", world");
+  string_append(same_as_s, &(string_t){", world", sizeof(", world")});
+
+  DEBUG_ASSERT(string_compare(s, same_as_s) == 0);
+
+  string_free(s);
+  string_free(same_as_s);
+}
+
 void test_string(void) {
 
   TEST_MODULE_START("string");
@@ -131,6 +146,7 @@ void test_string(void) {
   test_string_compare();
   test_string_append();
   test_string_copy();
+  test_string_lits();
 
   TEST_MODULE_END("string");
 }

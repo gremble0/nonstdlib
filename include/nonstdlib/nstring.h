@@ -7,7 +7,8 @@ typedef struct {
   size_t len;
 } string_t;
 
-#define string_of_lit(s) string_of(s, sizeof(s))
+#define string_of_lit(lit) string_of(lit, sizeof(lit))
+#define string_append_lit(dest, lit) string_append(dest, &(string_t){lit, sizeof(lit)})
 
 string_t *string_of(const char *s, size_t len);
 string_t *string_copy(const string_t *str);
