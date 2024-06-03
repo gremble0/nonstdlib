@@ -10,37 +10,14 @@
  * @param s string to copy
  * @param len amount of bytes to copy from `s`
  * @return malloc'd `string_t`
+ * @see string_of_no_null
  */
 string_t *string_of(const char *s, size_t len) {
   string_t *str = malloc(sizeof(*str));
   if (str == NULL)
     err_malloc_fail();
 
-  str->s = malloc(len * sizeof(char));
-  if (str->s == NULL)
-    err_malloc_fail();
-
-  memcpy(str->s, s, len);
-  str->len = len - 1;
-
-  return str;
-}
-
-/**
- * @brief Make a `string_t` by copying `len` bytes from `s` where `s` is a non
- * null terminated string. This function will add a nullbyte to the returned
- * string for you, resulting in a string of length `len + 1`
- *
- * @param s string to copy
- * @param len amount of bytes to copy from `s`
- * @return malloc'd `string_t`
- * @see string_of
- */
-string_t *string_of_no_null(const char *s, size_t len) {
-  string_t *str = malloc(sizeof(*str));
-  if (str == NULL)
-    err_malloc_fail();
-
+  // +1 for nullbyte
   str->s = malloc((len + 1) * sizeof(char));
   if (str->s == NULL)
     err_malloc_fail();
@@ -126,17 +103,19 @@ void string_set(string_t *str, const char *s, size_t len) {
  * @param dest the string to append onto
  * @param src the string to append from
  */
-void string_append(string_t *dest, string_t *src) {
-  dest->s = realloc(dest->s, dest->len + src->len);
+void string_append(string_t *dest, const string_t *src) {
+  dest->s = realloc(dest->s, dest->len + src->len + 1);
   if (dest->s == NULL)
     err_malloc_fail();
 
   // Strings must be null terminated, if not we have to do a lot of checks
   // everywhere and things get really messy.
   ASSERT(dest->s[dest->len] == '\0');
+  ASSERT(src->s[src->len] == '\0');
 
   memcpy(dest->s + dest->len, src->s, src->len);
   dest->len += src->len;
+  dest->s[dest->len] = '\0'; // Could copy src->len + 1, but this is clearer
 }
 
 /**
@@ -146,8 +125,12 @@ void string_append(string_t *dest, string_t *src) {
  * @param c the character to append
  */
 void string_append_c(string_t *dest, char c) {
-  dest->s = realloc(dest->s, dest->len + sizeof(c));
+  dest->s = realloc(dest->s, dest->len + sizeof(c) + 1);
+  if (dest->s == NULL)
+    err_malloc_fail();
+
   ASSERT(dest->s[dest->len] == '\0');
+
   dest->s[dest->len] = c;
   dest->s[++dest->len] = '\0';
 }
