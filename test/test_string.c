@@ -90,7 +90,7 @@ static void test_string_append(void) {
   DEBUG_ASSERT(string_compare(str1, expected1) == 0);
 
   string_append_c(str1, '!');
-  DEBUG_ASSERT(string_compare(str1, expected2));
+  DEBUG_ASSERT(string_compare(str1, expected2) == 0);
 
   string_free(str1);
   string_free(str2);

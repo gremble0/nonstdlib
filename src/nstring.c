@@ -119,7 +119,9 @@ void string_append(string_t *dest, string_t *src) {
  */
 void string_append_c(string_t *dest, char c) {
   dest->s = realloc(dest->s, dest->len + sizeof(c));
-  dest->s[dest->len] = c;
+  ASSERT(dest->s[dest->len - 1] == '\0');
+  dest->s[dest->len - 1] = c;
+  dest->s[dest->len] = '\0';
   ++dest->len;
 }
 
