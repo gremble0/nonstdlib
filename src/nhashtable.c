@@ -56,22 +56,21 @@ uint32_t ht_hash(const char *key, size_t key_size) {
 void *ht_get(const ht_t *table, const char *key, size_t key_size) {
   size_t index = ht_hash(key, key_size) % table->capacity;
   ht_entry_t *entry = table->entries[index];
-  if (entry == NULL)
-    return NULL;
 
-  while (strncmp(entry->key, key, key_size) != 0) {
-    entry = table->entries[index];
-    if (entry == NULL)
-      return NULL;
+  while (entry != NULL) {
+    if (strncmp(entry->key, key, key_size) == 0)
+      return entry->value;
 
-    // Wrap to 0 if overflow
+    // Wrap to 0 on overflow
     if (index >= table->capacity)
       index = 0;
     else
       ++index;
+
+    entry = table->entries[index];
   }
 
-  return entry->value;
+  return NULL;
 }
 
 /**
