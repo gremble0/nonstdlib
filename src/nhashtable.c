@@ -59,7 +59,7 @@ void *ht_get(const ht_t *table, const char *key, size_t key_size) {
   if (entry == NULL)
     return NULL;
 
-  while (strcmp(entry->key, key) != 0) {
+  while (strncmp(entry->key, key, key_size) != 0) {
     entry = table->entries[index++];
     if (entry == NULL)
       return NULL;
