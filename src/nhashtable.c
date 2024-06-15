@@ -50,19 +50,21 @@ uint32_t ht_hash(const char *key, size_t key_size) {
  *
  * @param table table to get from
  * @param key key to get
- * @param key_size string length of the key (including nullbyte)
+ * @param len string length of the key
  * @return value of the given key
  */
-void *ht_get(const ht_t *table, const char *key, size_t key_size) {
-  size_t index = ht_hash(key, key_size) % table->capacity;
+void *ht_get(const ht_t *table, const char *key, size_t len) {
+  size_t index = ht_hash(key, len) % table->capacity;
   ht_entry_t *entry = table->entries[index];
 
   while (entry != NULL) {
-    if (strncmp(entry->key, key, key_size) == 0)
+    // NOTE: cannot do strncmp, because it will be 0 if we for example call `strncmp("hello",
+    // "hello, world", 4)`. This is not what we want
+    if (strcmp(entry->key, key) == 0)
       return entry->value;
 
     // Wrap to 0 on overflow
-    if (index >= table->capacity)
+    if (index >= table->capacity - 1)
       index = 0;
     else
       ++index;
