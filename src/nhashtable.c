@@ -60,9 +60,15 @@ void *ht_get(const ht_t *table, const char *key, size_t key_size) {
     return NULL;
 
   while (strncmp(entry->key, key, key_size) != 0) {
-    entry = table->entries[index++];
+    entry = table->entries[index];
     if (entry == NULL)
       return NULL;
+
+    // Wrap to 0 if overflow
+    if (index >= table->capacity)
+      index = 0;
+    else
+      ++index;
   }
 
   return entry->value;
