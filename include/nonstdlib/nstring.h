@@ -3,16 +3,16 @@
 #include <stddef.h>
 
 typedef struct {
-  char *s; // Should not be NULL terminated
+  char *s; // NULL terminated
   size_t len;
 } string_t;
 
-#define string_of_lit(lit) string_of(lit, sizeof(lit) - 1)
-#define string_append_lit(dest, lit)                                           \
-  string_append(dest, &(string_t){lit, sizeof(lit) - 1})
+// Shortcut for making string_t structs from string literals or (null
+// terminated) char arrays - NOTE: does not work for char pointers
+#define string_of(slit)                                                        \
+  (string_t) { slit, sizeof(slit) - 1 }
 
-string_t *string_of(const char *s, size_t len);
-string_t *string_copy(const string_t *str);
+string_t *string_dup(const string_t *str);
 int string_compare(const string_t *s1, const string_t *s2);
 void string_clear(string_t *str);
 void string_free(string_t *str);

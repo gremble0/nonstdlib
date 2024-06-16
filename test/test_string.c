@@ -6,14 +6,14 @@
 #include "test.h"
 
 static void test_string_of(void) {
-  const char s[] = "Hello, World";
-  string_t *str = string_of(s, sizeof(s) - 1);
+  char s[] = "Hello, World";
+  string_t *str = string_dup(&string_of(s));
 
   DEBUG_ASSERT(strnlen(s, sizeof(s)) == str->len);
   DEBUG_ASSERT(strnlen(str->s, sizeof(s)) == str->len);
   DEBUG_ASSERT(strncmp(str->s, s, str->len) == 0);
 
-  string_t *str_copy = string_of(str->s, str->len);
+  string_t *str_copy = string_dup(str);
   DEBUG_ASSERT(str_copy->len == str->len);
   DEBUG_ASSERT(strncmp(str_copy->s, str->s, str_copy->len) == 0);
 
@@ -22,8 +22,8 @@ static void test_string_of(void) {
 }
 
 static void test_string_clear(void) {
-  const char s[] = "Nonstdlib";
-  string_t *str = string_of(s, sizeof(s) - 1);
+  char s[] = "Nonstdlib";
+  string_t *str = string_dup(&string_of(s));
 
   string_clear(str);
   DEBUG_ASSERT(str->s == NULL);
@@ -33,9 +33,9 @@ static void test_string_clear(void) {
 }
 
 static void test_string_set(void) {
-  const char s1[] = "Nonstdlib";
-  const char s2[] = "Nonstdlib version 2";
-  string_t *str = string_of(s1, sizeof(s1) - 1);
+  char s1[] = "Nonstdlib";
+  char s2[] = "Nonstdlib version 2";
+  string_t *str = string_dup(&string_of(s1));
 
   string_set(str, s2, sizeof(s2) - 1);
   DEBUG_ASSERT(strncmp(str->s, s2, str->len) == 0);
@@ -49,17 +49,17 @@ static void test_string_set(void) {
 }
 
 static void test_string_compare(void) {
-  const char s1[] = "Nonstdlib";
-  const char s2[] = "nonstdlib";
-  const char s3[] = "ns";
-  const char s4[] = "N";
-  const char s5[] = "N";
+  char s1[] = "Nonstdlib";
+  char s2[] = "nonstdlib";
+  char s3[] = "ns";
+  char s4[] = "N";
+  char s5[] = "N";
 
-  string_t *str1 = string_of(s1, sizeof(s1) - 1);
-  string_t *str2 = string_of(s2, sizeof(s2) - 1);
-  string_t *str3 = string_of(s3, sizeof(s3) - 1);
-  string_t *str4 = string_of(s4, sizeof(s4) - 1);
-  string_t *str5 = string_of(s5, sizeof(s5) - 1);
+  string_t *str1 = string_dup(&string_of(s1));
+  string_t *str2 = string_dup(&string_of(s2));
+  string_t *str3 = string_dup(&string_of(s3));
+  string_t *str4 = string_dup(&string_of(s4));
+  string_t *str5 = string_dup(&string_of(s5));
 
   DEBUG_ASSERT(string_compare(str1, str1) == 0);
   DEBUG_ASSERT(string_compare(str1, str2) == 1);
@@ -76,14 +76,14 @@ static void test_string_compare(void) {
 }
 
 static void test_string_append(void) {
-  const char s1[] = "Hello, ";
-  const char s2[] = "world";
+  char s1[] = "Hello, ";
+  char s2[] = "world";
 
-  string_t *str1 = string_of(s1, sizeof(s1) - 1);
-  string_t *str2 = string_of(s2, sizeof(s2) - 1);
-  string_t *str3 = string_of("", sizeof("") - 1);
-  string_t *expected1 = string_of("Hello, world", sizeof("Hello, world") - 1);
-  string_t *expected2 = string_of("Hello, world!", sizeof("Hello, world!") - 1);
+  string_t *str1 = string_dup(&string_of(s1));
+  string_t *str2 = string_dup(&string_of(s2));
+  string_t *str3 = string_dup(&string_of(""));
+  string_t *expected1 = string_dup(&string_of("Hello, world"));
+  string_t *expected2 = string_dup(&string_of("Hello, world!"));
 
   string_append(str1, str2);
   DEBUG_ASSERT(string_compare(str1, expected1) == 0);
@@ -93,12 +93,12 @@ static void test_string_append(void) {
   string_append_c(str1, '!');
   DEBUG_ASSERT(string_compare(str1, expected2) == 0);
 
-  const char no_null[] = {'h', 'e', 'l', 'l', 'o'};
-  const char no_null_appended[] = {'h', 'e', 'l', 'l', 'o', '!'};
-  // no -1 since there is no nullbyte
-  string_t *no_null_str = string_of(no_null, sizeof(no_null));
+  char no_null[] = {'h', 'e', 'l', 'l', 'o'};
+  char no_null_appended[] = {'h', 'e', 'l', 'l', 'o', '!'};
+  // no -1 since there is no nullbyte so cant use string_of
+  string_t *no_null_str = string_dup(&(string_t){no_null, sizeof(no_null)});
   string_t *no_null_str_appended =
-      string_of(no_null_appended, sizeof(no_null_appended));
+      string_dup(&(string_t){no_null_appended, sizeof(no_null_appended)});
 
   string_append_c(no_null_str, '!');
   DEBUG_ASSERT(string_compare(no_null_str, no_null_str_appended) == 0);
@@ -113,10 +113,10 @@ static void test_string_append(void) {
 }
 
 static void test_string_copy(void) {
-  const char s1[] = "Hello, ";
+  char s1[] = "Hello, ";
 
-  string_t *str1 = string_of(s1, sizeof(s1));
-  string_t *str1_copied = string_copy(str1);
+  string_t *str1 = string_dup(&string_of(s1));
+  string_t *str1_copied = string_dup(str1);
   // The strings str1 and str1_copied should:
   // - not be pointing to the same memory
   // - not contain char pointers pointing to the same memory
@@ -134,21 +134,6 @@ static void test_string_copy(void) {
   string_free(str1_copied);
 }
 
-static void test_string_lits(void) {
-  string_t *s = string_of_lit("hello");
-  string_t *same_as_s = string_of("hello", sizeof("hello") - 1);
-
-  DEBUG_ASSERT(string_compare(s, same_as_s) == 0);
-
-  string_append_lit(s, ", world");
-  string_append(same_as_s, &(string_t){", world", sizeof(", world") - 1});
-
-  DEBUG_ASSERT(string_compare(s, same_as_s) == 0);
-
-  string_free(s);
-  string_free(same_as_s);
-}
-
 void test_string(void) {
   TEST_MODULE_START("string");
 
@@ -158,7 +143,6 @@ void test_string(void) {
   test_string_compare();
   test_string_append();
   test_string_copy();
-  test_string_lits();
 
   TEST_MODULE_END("string");
 }

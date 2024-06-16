@@ -5,37 +5,12 @@
 #include "nonstdlib/nstring.h"
 
 /**
- * @brief Make a `string_t` by copying `len` bytes from `s`
- *
- * @param s string to copy
- * @param len amount of bytes to copy from `s`
- * @return malloc'd `string_t`
- * @see string_of_no_null
- */
-string_t *string_of(const char *s, size_t len) {
-  string_t *str = malloc(sizeof(*str));
-  if (str == NULL)
-    err_malloc_fail();
-
-  // +1 for nullbyte
-  str->s = malloc((len + 1) * sizeof(char));
-  if (str->s == NULL)
-    err_malloc_fail();
-
-  memcpy(str->s, s, len);
-  str->s[len] = '\0';
-  str->len = len;
-
-  return str;
-}
-
-/**
  * @brief Deep copy `str` into an identical `string_t`
  *
  * @param str string to copy
  * @return copied string
  */
-string_t *string_copy(const string_t *str) {
+string_t *string_dup(const string_t *str) {
   string_t *copied = malloc(sizeof(*copied));
   if (copied == NULL)
     err_malloc_fail();
