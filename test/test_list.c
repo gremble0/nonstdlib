@@ -42,8 +42,7 @@ static void test_list_push_pop(void) {
   // list should be: ["zozo", "yoyo", "lololololololoo very long long long
   // string :)))))"]
 
-  DEBUG_ASSERT(strcmp(list_pop_front(list),
-                      "lololololololoo very long long long string :)))))") ==
+  DEBUG_ASSERT(strcmp(list_pop_front(list), "lololololololoo very long long long string :)))))") ==
                0);
 
   DEBUG_ASSERT(yoyo == list_pop_back(list) && strcmp(yoyo, "yoyo") == 0);

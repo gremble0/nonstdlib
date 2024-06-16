@@ -154,8 +154,7 @@ void ll_print(ll_t *ll) {
 
   int index = 0;
   while (entry != NULL) {
-    printf("[%u]: %p ->, prev -> %p, next -> %p\n", index++, entry, entry->prev,
-           entry->next);
+    printf("[%u]: %p ->, prev -> %p, next -> %p\n", index++, entry, entry->prev, entry->next);
     entry = entry->next;
   }
 }

@@ -103,8 +103,7 @@ ht_t *ht_init(size_t init_capacity) {
 void ht_expand(ht_t *table) {
   size_t prev_capacity = table->capacity;
   table->capacity *= 2;
-  table->entries =
-      realloc(table->entries, table->capacity * sizeof(table->entries));
+  table->entries = realloc(table->entries, table->capacity * sizeof(table->entries));
   if (table->entries == NULL)
     err_malloc_fail();
 
@@ -145,13 +144,12 @@ void ht_print(const ht_t *table) {
       printf("[%zu]: --empty--\n", i);
     } else {
       ht_entry_t *entry = table->entries[i];
-      printf("[%zu]: key: %.*s, value: %p\n", i, (int)entry->key->len,
-             entry->key->s, entry->value);
+      printf("[%zu]: key: %.*s, value: %p\n", i, (int)entry->key->len, entry->key->s, entry->value);
     }
   }
 }
 
-static ht_entry_t *ht_create_entry(string_t *key, void *value, size_t hash) {
+static ht_entry_t *ht_create_entry(const string_t *key, void *value, size_t hash) {
   ht_entry_t *entry = malloc(sizeof(*entry));
   if (entry == NULL)
     err_malloc_fail();

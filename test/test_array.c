@@ -37,18 +37,12 @@ static void test_arr_contains(void) {
   int absent1 = 0;
   int absent2 = 5;
 
-  DEBUG_ASSERT(arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &present1,
-                            sizeof(int)));
-  DEBUG_ASSERT(arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &present2,
-                            sizeof(int)));
-  DEBUG_ASSERT(arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &present3,
-                            sizeof(int)));
-  DEBUG_ASSERT(arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &present4,
-                            sizeof(int)));
-  DEBUG_ASSERT(!arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &absent1,
-                             sizeof(int)));
-  DEBUG_ASSERT(!arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &absent2,
-                             sizeof(int)));
+  DEBUG_ASSERT(arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &present1, sizeof(int)));
+  DEBUG_ASSERT(arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &present2, sizeof(int)));
+  DEBUG_ASSERT(arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &present3, sizeof(int)));
+  DEBUG_ASSERT(arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &present4, sizeof(int)));
+  DEBUG_ASSERT(!arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &absent1, sizeof(int)));
+  DEBUG_ASSERT(!arr_contains(nums, sizeof(nums) / sizeof(nums[0]), &absent2, sizeof(int)));
 }
 
 static void test_arr_equals(void) {
@@ -61,11 +55,9 @@ static void test_arr_equals(void) {
   char chars[] = {'a', 'b', 'c'};
   const size_t chars_size = sizeof(chars) / sizeof(chars[0]);
 
-  DEBUG_ASSERT(arr_equals(nums, nums_size, nums2, nums2_size, sizeof(int)) ==
-               1);
+  DEBUG_ASSERT(arr_equals(nums, nums_size, nums2, nums2_size, sizeof(int)) == 1);
   DEBUG_ASSERT(arr_equals(nums, nums_size, nums, nums_size, sizeof(int)) == 1);
-  DEBUG_ASSERT(arr_equals(nums, nums_size, chars, chars_size, sizeof(int)) ==
-               0);
+  DEBUG_ASSERT(arr_equals(nums, nums_size, chars, chars_size, sizeof(int)) == 0);
 
   int *nested[] = {nums, nums2};
   const size_t nested_size = sizeof(nested) / sizeof(nested[0]);
@@ -76,10 +68,8 @@ static void test_arr_equals(void) {
   int *nested3[] = {nums, nums2};
   const size_t nested3_size = sizeof(nested3) / sizeof(nested3[0]);
 
-  DEBUG_ASSERT(
-      arr_equals(nested, nested_size, nested2, nested2_size, sizeof(int)) == 0);
-  DEBUG_ASSERT(
-      arr_equals(nested, nested_size, nested3, nested3_size, sizeof(int)) == 1);
+  DEBUG_ASSERT(arr_equals(nested, nested_size, nested2, nested2_size, sizeof(int)) == 0);
+  DEBUG_ASSERT(arr_equals(nested, nested_size, nested3, nested3_size, sizeof(int)) == 1);
 }
 
 static void test_arr_reverse(void) {

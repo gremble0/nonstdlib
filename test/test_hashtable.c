@@ -58,8 +58,7 @@ static void test_hashtable_string(void) {
 
   ht_put(table, &string_of(longstring), "POPO");
   DEBUG_ASSERT(table->size == 5);
-  ht_put(table, &string_of(""),
-         "qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfj");
+  ht_put(table, &string_of(""), "qwertyblajsdflkjasdkljfklasjdfkjalskdfjlkasjdflkjaslkdfj");
   DEBUG_ASSERT(table->size == 6);
   DEBUG_ASSERT(table->capacity == 20);
 

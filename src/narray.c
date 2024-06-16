@@ -11,8 +11,7 @@
  * @param type_size amount of bytes used for each element in arr
  * @return 1 if arr contains val 0 if not
  */
-int arr_contains(const void *arr, size_t arr_size, const void *val,
-                 size_t type_size) {
+int arr_contains(const void *arr, size_t arr_size, const void *val, size_t type_size) {
   for (size_t i = 0; i < arr_size; ++i)
     // Move i * val_type_size and compare val_type_size bytes each iteration
     if (memcmp(&arr[i * type_size], val, type_size) == 0)
@@ -31,8 +30,8 @@ int arr_contains(const void *arr, size_t arr_size, const void *val,
  * @param type_size amount of bytes used for each element in arr1 and arr2
  * @return 1 if arrays are equal 0 if not
  */
-int arr_equals(const void *arr1, size_t arr1_size, const void *arr2,
-               size_t arr2_size, size_t type_size) {
+int arr_equals(const void *arr1, size_t arr1_size, const void *arr2, size_t arr2_size,
+               size_t type_size) {
   if (arr1_size != arr2_size)
     return 0;
 

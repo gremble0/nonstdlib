@@ -16,16 +16,14 @@ void err_print_stacktrace() {
     fprintf(stderr, "%s\n", strs[i]);
 
   if (errno != 0)
-    fprintf(stderr, "Detected non zero errno(%d): %s\n", errno,
-            strerror(errno));
+    fprintf(stderr, "Detected non zero errno(%d): %s\n", errno, strerror(errno));
 
   free(strs);
 }
 
 _Noreturn void err_io_fail(const char *file_path) {
   err_print_stacktrace();
-  fprintf(stderr, "ERROR_IO_FAIL: IO operation to file '%s' failed\n",
-          file_path);
+  fprintf(stderr, "ERROR_IO_FAIL: IO operation to file '%s' failed\n", file_path);
   exit(1);
 }
 
