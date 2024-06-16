@@ -171,7 +171,7 @@ static ht_entry_t *ht_create_entry(const string_t *key, void *value, size_t hash
  * ownership and memory management for this
  * @param value_size size of value to put in
  */
-void ht_put(ht_t *table, string_t *key, void *value) {
+void ht_put(ht_t *table, const string_t *key, void *value) {
   // Table should at maximum be at 50% capacity to avoid collisions
   if (table->size + 1 > table->capacity / 2)
     ht_expand(table);

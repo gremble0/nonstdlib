@@ -23,4 +23,4 @@ ht_t *ht_init(size_t init_size);
 void ht_expand(ht_t *table);
 void ht_free(ht_t *table);
 void ht_print(const ht_t *table);
-void ht_put(ht_t *table, string_t *key, void *value);
+void ht_put(ht_t *table, const string_t *key, void *value);
