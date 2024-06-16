@@ -125,8 +125,10 @@ void ht_expand(ht_t *table) {
  */
 void ht_free(ht_t *table) {
   for (size_t i = 0; i < table->capacity; ++i)
-    if (table->entries[i] != NULL)
+    if (table->entries[i] != NULL) {
+      string_free(table->entries[i]->key);
       free(table->entries[i]);
+    }
 
   free(table->entries);
   free(table);
@@ -151,7 +153,10 @@ void ht_print(const ht_t *table) {
 
 static ht_entry_t *ht_create_entry(string_t *key, void *value, size_t hash) {
   ht_entry_t *entry = malloc(sizeof(*entry));
-  entry->key = key;
+  if (entry == NULL)
+    err_malloc_fail();
+
+  entry->key = string_dup(key);
   entry->value = value;
   entry->hash = hash;
 
@@ -159,12 +164,13 @@ static ht_entry_t *ht_create_entry(string_t *key, void *value, size_t hash) {
 }
 
 /**
- * @brief Put (insert) a value into a hash table
+ * @brief Put (insert) a value into a hash table.
  *
  * @param table table to put into
- * @param key key to put in
+ * @param key key to put in, will be copied and managed by the hashtable module
  * @param key_size string length of the key (including nullbyte)
- * @param value value to put in
+ * @param value value to put in, caller of the function is responsible for
+ * ownership and memory management for this
  * @param value_size size of value to put in
  */
 void ht_put(ht_t *table, string_t *key, void *value) {
@@ -182,7 +188,8 @@ void ht_put(ht_t *table, string_t *key, void *value) {
     ++table->size;
 
   } else if (string_compare(existing_entry->key, key) != 0) {
-    // New key, but hash_index is occupied (collision)
+    // New key, but hash_index is occupied (collision). Insert at first
+    // available index after the occupied (open addressing with linear probing)
     while (table->entries[hash_index] != NULL) {
       ++hash_index;
 
