@@ -4,6 +4,7 @@
 
 #include "nonstdlib/nerror.h"
 #include "nonstdlib/nhashtable.h"
+#include "nonstdlib/nstring.h"
 
 /**
  * @brief Rehashes entry at old_hash_index and inserts it into the new hash
@@ -36,11 +37,11 @@ static void ht_rehash_index(ht_t *table, size_t old_hash_index) {
  * @return the key hashed. (needs to be %'d by table size to get index into
  * a hashtable)
  */
-uint32_t ht_hash(const char *key, size_t key_size) {
+uint32_t ht_hash(const string_t *key) {
   uint32_t hash = 5381;
 
-  for (size_t i = 0; i < key_size; ++i)
-    hash = hash * 33 + key[i];
+  for (size_t i = 0; i < key->len; ++i)
+    hash = hash * 33 + key->s[i];
 
   return hash;
 }
@@ -53,14 +54,12 @@ uint32_t ht_hash(const char *key, size_t key_size) {
  * @param len string length of the key
  * @return value of the given key
  */
-void *ht_get(const ht_t *table, const char *key, size_t len) {
-  size_t index = ht_hash(key, len) % table->capacity;
+void *ht_get(const ht_t *table, const string_t *key) {
+  size_t index = ht_hash(key) % table->capacity;
   ht_entry_t *entry = table->entries[index];
 
   while (entry != NULL) {
-    // NOTE: cannot do strncmp, because it will be 0 if we for example call `strncmp("hello",
-    // "hello, world", 4)`. This is not what we want
-    if (strcmp(entry->key, key) == 0)
+    if (string_compare(entry->key, key) == 0)
       return entry->value;
 
     // Wrap to 0 on overflow
@@ -144,12 +143,13 @@ void ht_print(const ht_t *table) {
       printf("[%zu]: --empty--\n", i);
     } else {
       ht_entry_t *entry = table->entries[i];
-      printf("[%zu]: key: %s, value: %p\n", i, entry->key, entry->value);
+      printf("[%zu]: key: %.*s, value: %p\n", i, (int)entry->key->len,
+             entry->key->s, entry->value);
     }
   }
 }
 
-static ht_entry_t *ht_create_entry(char *key, void *value, size_t hash) {
+static ht_entry_t *ht_create_entry(string_t *key, void *value, size_t hash) {
   ht_entry_t *entry = malloc(sizeof(*entry));
   entry->key = key;
   entry->value = value;
@@ -167,12 +167,12 @@ static ht_entry_t *ht_create_entry(char *key, void *value, size_t hash) {
  * @param value value to put in
  * @param value_size size of value to put in
  */
-void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
+void ht_put(ht_t *table, string_t *key, void *value) {
   // Table should at maximum be at 50% capacity to avoid collisions
   if (table->size + 1 > table->capacity / 2)
     ht_expand(table);
 
-  uint32_t hash = ht_hash(key, key_size);
+  uint32_t hash = ht_hash(key);
   size_t hash_index = hash % table->capacity;
   const ht_entry_t *existing_entry = table->entries[hash_index];
 
@@ -181,7 +181,7 @@ void ht_put(ht_t *table, char *key, size_t key_size, void *value) {
     table->entries[hash_index] = ht_create_entry(key, value, hash);
     ++table->size;
 
-  } else if (strncmp(existing_entry->key, key, key_size) != 0) {
+  } else if (string_compare(existing_entry->key, key) != 0) {
     // New key, but hash_index is occupied (collision)
     while (table->entries[hash_index] != NULL) {
       ++hash_index;
