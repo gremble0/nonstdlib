@@ -35,7 +35,7 @@ cd ../../src
 cc main.c -L../nonstdlib/src -I../nonstdlib/include -lnonstdlib
 ```
 
-And then use it in main.c like this (this should print "this is in a hashtable" and "this is in a list" to stdout):
+To test that the library works you can copy this and verify that it compiles and that the assertions pass:
 ```c
 #include <stdio.h>
 #include <string.h>
@@ -45,7 +45,7 @@ And then use it in main.c like this (this should print "this is in a hashtable" 
 #include "nonstdlib/nlist.h"
 #include "nonstdlib/nstring.h"
 
-void test_demo(void) {
+int main(void) {
   // Small hashtable demo
   ht_t *table = ht_init(8);
   ht_put(table, &string_of("key"), &string_of("value"));
