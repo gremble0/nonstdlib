@@ -77,10 +77,10 @@ int main(void) {
 
 ## Modules
 List of currently implemented modules:
-- `nhashtable.h`: Type and functions for a typical hashtable data structure.
+- `nhashtable.h`: An implementation of the hashtable datastructure - associate a key with some given value with. O(1) insertion complexity, O(1) lookup complexity.
 - `nerror.h`: Contains some functions for handling typical errors and printing more useful debug information. Also has a custom assert macro that uses nonstdlib's error handling on error
-- `nlinked_list.h`: Type and functions for the linked list data structure.
-- `nlist.h` (WIP): Type and functions for the list data structure.
-- `narray.h`: Utilities for normal C arrays.
-- `nstring.h`: Simple string interface that saves the length of strings instead of relying on nullbytes.
+- `nlinked_list.h`: An implementation of the linked list datastructure - specifically a doubly ended linked list. O(1) insertion complexity, O(n) lookup complexity.
+- `nlist.h`: An implementation of the dynamic array datastructure - something akin to ArrayLists in java or lists in python. O(1) insertion complexity, O(1) lookup complexity.
+- `narray.h`: Some handy utilities for managing builtin C arrays.
+- `nstring.h`: Simple string interface that saves the length of strings instead of relying on nullbytes, as well as some handy utilities for managing strings.
 - `nsort.h`: Some sorting algorithms for builtin C arrays.
