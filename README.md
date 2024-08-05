@@ -50,7 +50,7 @@ int main(void) {
   ht_t *table = ht_init(8);
   ht_put(table, &string_of("key"), &string_of("value"));
 
-  string_t *result = ht_get(table, &string_of("key"));
+  const string_t *result = ht_get(table, &string_of("key"));
   ASSERT(result != NULL);
   ASSERT(string_compare(&string_of("value"), result) == 0);
 
@@ -63,7 +63,7 @@ int main(void) {
   list_t *list = list_init(8);
   list_push_back(list, &(list_element){.x = 10, .s = "my list element"});
 
-  list_element *popped = list_pop_front(list);
+  const list_element *popped = list_pop_front(list);
   ASSERT(popped != NULL);
   ASSERT(popped->x == 10);
   ASSERT(strcmp(popped->s, "my list element") == 0);
