@@ -20,4 +20,5 @@ void test_hashtable_generic(void);
 void test_linked_list(void);
 void test_list(void);
 void test_string(void);
+void test_arena(void);
 void test_demo(void);
