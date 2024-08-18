@@ -18,7 +18,11 @@ arena_t *arena_init(size_t init_size) {
 }
 
 static void arena_expand(arena_t *arena) {
-  arena->memory = realloc(arena, arena->capacity *= 2);
+  size_t new_capacity = arena->capacity * 2;
+  while (new_capacity < arena->size)
+    new_capacity *= 2;
+
+  arena->memory = realloc(arena, new_capacity);
   if (arena->memory == NULL)
     err_malloc_fail();
 }

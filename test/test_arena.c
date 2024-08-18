@@ -15,6 +15,7 @@ static void test_arena_alloc(void) {
 
   char *arena_string = arena_alloc(arena, sizeof(hello_world));
   strncpy(arena_string, "hello", sizeof("hello"));
+  DEBUG_ASSERT(strncmp(arena_string, "hello", sizeof("hello")) == 0);
 
   arena_free(arena);
 }
