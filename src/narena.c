@@ -17,13 +17,16 @@ arena_t *arena_init(size_t init_size) {
   return arena;
 }
 
+static void arena_expand(arena_t *arena) {
+  arena->memory = realloc(arena, arena->capacity *= 2);
+  if (arena->memory == NULL)
+    err_malloc_fail();
+}
+
 void *arena_alloc(arena_t *arena, size_t num_bytes) {
   arena->size += num_bytes;
-  if (arena->size > arena->capacity) {
-    arena->memory = realloc(arena, arena->capacity *= 2);
-    if (arena->memory == NULL)
-      err_malloc_fail();
-  }
+  if (arena->size > arena->capacity)
+    arena_expand(arena);
 
   return arena->memory + arena->size;
 }
