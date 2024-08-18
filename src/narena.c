@@ -22,9 +22,10 @@ static void arena_expand(arena_t *arena) {
   while (new_capacity < arena->size)
     new_capacity *= 2;
 
-  arena->memory = realloc(arena, new_capacity);
+  arena->memory = realloc(arena->memory, new_capacity);
   if (arena->memory == NULL)
     err_malloc_fail();
+  arena->capacity = new_capacity;
 }
 
 void *arena_alloc(arena_t *arena, size_t num_bytes) {

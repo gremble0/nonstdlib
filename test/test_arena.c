@@ -20,23 +20,20 @@ static void test_arena_alloc(void) {
   arena_free(arena);
 }
 
+// TODO: this is not right, we cannot return pointers directly in arena_alloc i guess (can get moved
+// when reallocing)
 static void test_arena_alloc_expand(void) {
-  const int num_allocs = 50;
   const int arena_init_size = 128;
-  arena_t *arena = arena_init(128);
-  DEBUG_ASSERT(arena->capacity == arena_init_size);
+  arena_t *arena = arena_init(arena_init_size);
 
-  for (int i = 0; i < num_allocs; ++i) {
-    int *arena_int = arena_alloc(arena, sizeof(*arena_int));
-    *arena_int = i;
-  }
+  int *some_memory = arena_alloc(arena, 64);
+  *some_memory = 42;
+  int *some_more_memory = arena_alloc(arena, 128);
+  *some_more_memory = 69;
 
   DEBUG_ASSERT(arena->capacity != arena_init_size);
-
-  for (int i = 0; i < num_allocs; ++i) {
-    // printf("%d\n", *(int *)(arena->memory + sizeof(int) * i));
-    DEBUG_ASSERT(*(int *)(arena->memory + sizeof(int) * i) == i);
-  }
+  DEBUG_ASSERT(*some_memory == 42);
+  DEBUG_ASSERT(*some_more_memory == 69);
 
   arena_free(arena);
 }

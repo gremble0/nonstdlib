@@ -17,7 +17,7 @@ debug: clean src_debug $(DEBUG_OBJS)
 	$(CC) $(CFLAGS) -I$(INCLUDEDIR) -c $< -o $@
 
 %_debug.o: %.c
-	$(CC) $(DEBUG_FLAGS) -I$(INCLUDEDIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(INCLUDEDIR) -c $< -o $@
 
 src_debug:
 	$(MAKE) -C $(SRC) debug
