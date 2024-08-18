@@ -5,7 +5,7 @@ CFLAGS := -Wall -Wextra -I$(INCLUDEDIR)
 RELEASE_FLAGS := $(CFLAGS) -O3
 DEBUG_FLAGS := $(CFLAGS) -g -O0
 
-OBJS := nhashtable.o nlinked_list.o nsort.o narray.o nlist.o nerror.o nstring.o
+OBJS := nhashtable.o nlinked_list.o nsort.o narray.o nlist.o nerror.o nstring.o narena.o
 DEBUG_OBJS := $(OBJS:.o=_debug.o)
 LIB := libnonstdlib.a
 
