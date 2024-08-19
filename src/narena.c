@@ -10,6 +10,7 @@ arena_t *arena_init(size_t init_size) {
 
   arena->size = 0;
   arena->capacity = init_size;
+  arena->next = NULL;
   arena->memory = malloc(init_size);
   if (arena->memory == NULL)
     err_malloc_fail();
@@ -17,21 +18,27 @@ arena_t *arena_init(size_t init_size) {
   return arena;
 }
 
-static void arena_expand(arena_t *arena) {
-  size_t new_capacity = arena->capacity * 2;
-  while (new_capacity < arena->size)
-    new_capacity *= 2;
+static arena_t *arena_first_available(arena_t *arena, size_t num_bytes) {
+  arena_t *iter = arena;
+  while (iter->size + num_bytes > iter->capacity)
+    if (iter->next == NULL) {
+      size_t next_capacity = iter->capacity * 2;
+      // Just in case we need some ridiculously large amount of memory in one chunk
+      while (next_capacity <= num_bytes)
+        next_capacity *= 2;
+      iter->next = arena_init(next_capacity);
+      iter = iter->next;
+      break;
+    } else {
+      iter = iter->next;
+    }
 
-  arena->memory = realloc(arena->memory, new_capacity);
-  if (arena->memory == NULL)
-    err_malloc_fail();
-  arena->capacity = new_capacity;
+  return iter;
 }
 
 void *arena_alloc(arena_t *arena, size_t num_bytes) {
+  arena = arena_first_available(arena, num_bytes);
   arena->size += num_bytes;
-  if (arena->size > arena->capacity)
-    arena_expand(arena);
 
   return arena->memory + arena->size;
 }
