@@ -14,7 +14,7 @@ static void test_arena_alloc(void) {
   const char hello_world[] = "hello, world";
 
   char *arena_string = arena_alloc(arena, sizeof(hello_world));
-  strncpy(arena_string, "hello", sizeof("hello"));
+  memcpy(arena_string, "hello", sizeof("hello"));
   DEBUG_ASSERT(strncmp(arena_string, "hello", sizeof("hello")) == 0);
 
   arena_free(arena);
@@ -51,6 +51,7 @@ static void test_arena_alloc_expand(void) {
   DEBUG_ASSERT(*lots_of_memory == 420);
   DEBUG_ASSERT(arena->next->next != NULL);
   DEBUG_ASSERT(arena->next->next->size == 1024);
+  // Capacity should be the same as the second arena squared until its larger than allocation size
   DEBUG_ASSERT(arena->next->next->capacity == 128 * 2 * 2 * 2 * 2);
   // Should be at the start of the third arenas memory
   DEBUG_ASSERT(lots_of_memory == arena->next->next->memory);
