@@ -38,9 +38,10 @@ static arena_t *arena_first_available(arena_t *arena, size_t num_bytes) {
 
 void *arena_alloc(arena_t *arena, size_t num_bytes) {
   arena = arena_first_available(arena, num_bytes);
+  void *allocation = arena->memory + arena->size;
   arena->size += num_bytes;
 
-  return arena->memory + arena->size;
+  return allocation;
 }
 
 void arena_free(arena_t *arena) {

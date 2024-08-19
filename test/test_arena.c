@@ -31,6 +31,8 @@ static void test_arena_alloc_expand(void) {
   DEBUG_ASSERT(arena->size == 64);
   DEBUG_ASSERT(arena->capacity == arena_init_size);
   DEBUG_ASSERT(arena->next == NULL);
+  // Should be at the start of the first arenas memory
+  DEBUG_ASSERT(some_memory == arena->memory);
 
   // Second allocation should need a minor expansion and end up allocating in a second linked arena
   int *some_more_memory = arena_alloc(arena, 128);
@@ -39,6 +41,8 @@ static void test_arena_alloc_expand(void) {
   DEBUG_ASSERT(arena->next != NULL);
   DEBUG_ASSERT(arena->next->size == 128);
   DEBUG_ASSERT(arena->next->capacity == arena_init_size * 2);
+  // Should be at the start of the second arenas memory
+  DEBUG_ASSERT(some_more_memory == arena->next->memory);
 
   // Third allocation should need another major expansion and end up allocating in a third linked
   // arena
@@ -48,6 +52,15 @@ static void test_arena_alloc_expand(void) {
   DEBUG_ASSERT(arena->next->next != NULL);
   DEBUG_ASSERT(arena->next->next->size == 1024);
   DEBUG_ASSERT(arena->next->next->capacity == 128 * 2 * 2 * 2 * 2);
+  // Should be at the start of the third arenas memory
+  DEBUG_ASSERT(lots_of_memory == arena->next->next->memory);
+
+  // Smaller allocations should fit into the first available arena
+  int *a_little_memory = arena_alloc(arena, 16);
+  *a_little_memory = 19;
+  DEBUG_ASSERT(*a_little_memory == 19);
+  DEBUG_ASSERT(arena->size == 64 + 16);
+  DEBUG_ASSERT(a_little_memory == arena->memory + 64);
 
   arena_free(arena);
 }
