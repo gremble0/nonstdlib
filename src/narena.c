@@ -45,12 +45,9 @@ void *arena_alloc(arena_t *arena, size_t num_bytes) {
 }
 
 void arena_free(arena_t *arena) {
-  if (arena->next == NULL) {
-    free(arena->memory);
-    free(arena);
-  } else {
+  if (arena->next != NULL)
     arena_free(arena->next);
-    free(arena->memory);
-    free(arena);
-  }
+
+  free(arena->memory);
+  free(arena);
 }
