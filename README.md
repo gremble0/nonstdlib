@@ -77,6 +77,7 @@ int main(void) {
 
 ## Modules
 List of currently implemented modules:
+- `narena.h`: An implementation of an arena allocator that simplifies memory management by grouping allocations into larger blocks instead of multiple smaller allocations with a convenient free function for freeing the entire block at once.
 - `nhashtable.h`: An implementation of the hashtable datastructure - associate a key with some given value with. O(1) insertion complexity, O(1) lookup complexity.
 - `nerror.h`: Contains some functions for handling typical errors and printing more useful debug information. Also has a custom assert macro that uses nonstdlib's error handling on error
 - `nlinked_list.h`: An implementation of the linked list datastructure - specifically a doubly ended linked list. O(1) insertion complexity, O(n) lookup complexity.
